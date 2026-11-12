@@ -1,584 +1,593 @@
 <!DOCTYPE html>
-<!-- EduDocsIA v1.0 -->
+<!-- EduDocsIA v2.0 · archivo único · backend: Back4App · IA: Gemini · hosting: GitHub Pages -->
 <html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="EduDocs IA - Revisor, analizador y chat de documentos escolares con IA.">
+<meta name="description" content="EduDocs IA v2 - Revisor, analizador y chat de documentos escolares con IA (Gemini). Sube por arrastrar y soltar, guarda en la nube y pregunta a tus documentos.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#0d8a7d" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0c1518" media="(prefers-color-scheme: dark)">
 <title>EduDocs IA · Documentos y Chat para tu Escuela</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230d8a7d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 9.5 12 4.5l10 5-10 5-10-5z'/%3E%3Cpath d='M6 11.8V16c0 1.3 2.7 2.7 6 2.7s6-1.4 6-2.7v-4.2'/%3E%3C/svg%3E">
-<script>try{var t=localStorage.getItem('edudocs_theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme='light';}</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230d8a7d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 2v6h6'/%3E%3Cpath d='M9 15l2 2 4-4'/%3E%3C/svg%3E">
 <style>
-/* ============ Variables de tema ============ */
-:root{
-  --bg:#f2f6f6; --surface:#ffffff; --surface2:#eaf1f0; --surface3:#e0ebe9;
-  --text:#16262c; --muted:#5d7280; --border:#d8e4e3;
-  --accent:#0d8a7d; --accent-hover:#0b7166; --accent-text:#0a6f65; --accent-soft:#dff1ee;
-  --good:#188a4f; --good-soft:#e0f3e7; --warn:#b06a08; --warn-soft:#fbeed9; --bad:#d0342c; --bad-soft:#fbe3e1;
-  --glass:rgba(255,255,255,.86); --ink-on-accent:#ffffff;
-  --shadow:0 1px 2px rgba(22,38,44,.06),0 10px 28px rgba(22,38,44,.07);
-  --radius:16px; --radius-sm:10px;
-}
-[data-theme="dark"]{
-  --bg:#0c1518; --surface:#112025; --surface2:#182c31; --surface3:#1f373e;
-  --text:#e4edef; --muted:#8ba4a9; --border:#254047;
-  --accent:#2ec6b4; --accent-hover:#43d8c6; --accent-text:#43d8c6; --accent-soft:#103330;
-  --good:#37c376; --good-soft:#12301f; --warn:#e5a83c; --warn-soft:#32260f; --bad:#ef6a61; --bad-soft:#341715;
-  --glass:rgba(12,21,24,.86); --ink-on-accent:#06201d;
-  --shadow:0 1px 2px rgba(0,0,0,.45),0 12px 30px rgba(0,0,0,.38);
-}
-/* ============ Base ============ */
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0; min-height:100vh; display:flex; flex-direction:column;
-  background:var(--bg); color:var(--text);
-  font:15px/1.55 "Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
-  -webkit-font-smoothing:antialiased;
-}
+/* ================= Base y variables ================= */
+*,*::before,*::after{box-sizing:border-box}
 [hidden]{display:none !important}
-button{font:inherit; color:inherit; cursor:pointer; background:none; border:none; padding:0}
-input,select,textarea{font:inherit; color:inherit}
-a{color:var(--accent-text)}
-code,.mono{font-family:ui-monospace,"Cascadia Code",Consolas,Menlo,monospace; font-size:.92em}
-code{background:var(--surface2); padding:1px 6px; border-radius:6px}
-:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:6px}
-::selection{background:var(--accent-soft)}
-h1,h2,h3,h4{margin:0 0 .35em; line-height:1.25}
-h2{font-size:1.12rem}
-h3{font-size:1rem}
-.hint{color:var(--muted); font-size:.86rem; margin:.15em 0 .8em}
-@media (prefers-reduced-motion:no-preference){
-  .spin{animation:girar .8s linear infinite}
-  .cursor{animation:parpadeo 1s steps(1) infinite}
-  .pill,.btn,.tab,.card,.dot,.sdot{transition:background .18s,color .18s,border-color .18s,box-shadow .18s,transform .18s}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans',Ubuntu,'Helvetica Neue',Arial,sans-serif;
+  font-size:15px;line-height:1.55;color:var(--tx);background:var(--bg);transition:background .25s,color .25s}
+button,input,select,textarea{font:inherit;color:inherit}
+img,svg{vertical-align:middle}
+:root{
+  --ok:#16a34a; --warn:#d97706; --bad:#dc2626; --link:#0b6f65;
 }
-@keyframes girar{to{transform:rotate(360deg)}}
-@keyframes parpadeo{50%{opacity:0}}
-.spin{display:inline-block; width:15px; height:15px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; vertical-align:-2px}
-.cursor{display:inline-block; width:8px; height:1.05em; background:var(--accent); border-radius:2px; vertical-align:text-bottom; margin-left:2px}
-/* ============ Barra superior ============ */
-.topbar{position:sticky; top:0; z-index:40; background:var(--glass); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--border)}
-.topbar-in{max-width:1120px; margin:0 auto; padding:10px 16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:space-between}
-.brand{display:flex; align-items:center; gap:10px; min-width:0}
-.brand-ico{width:40px; height:40px; border-radius:12px; background:var(--accent); color:var(--ink-on-accent); display:grid; place-items:center; flex:none}
-.brand-ico svg{width:24px; height:24px}
-.brand-txt{display:flex; flex-direction:column; line-height:1.2; min-width:0}
-.brand-txt strong{font-size:1.08rem; letter-spacing:.2px}
-.brand-txt span{font-size:.78rem; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:44vw}
-.pills{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
-.pill{display:inline-flex; align-items:center; gap:7px; padding:6px 12px; border-radius:999px; border:1px solid var(--border); background:var(--surface); font-size:.8rem; font-weight:600}
-.pill:hover{border-color:var(--accent)}
-.pill .plbl{white-space:nowrap}
-.iconbtn{width:38px; height:38px; border-radius:11px; border:1px solid var(--border); background:var(--surface); display:grid; place-items:center; flex:none}
-.iconbtn:hover{border-color:var(--accent); color:var(--accent-text)}
-.iconbtn svg{width:19px; height:19px}
-.iconbtn.on{background:var(--accent-soft); border-color:var(--accent); color:var(--accent-text)}
-.dot,.sdot{width:9px; height:9px; border-radius:50%; background:var(--muted); flex:none}
-.dot[data-st="ok"],.sdot[data-st="ok"]{background:var(--good); box-shadow:0 0 0 3px var(--good-soft)}
-.dot[data-st="bad"],.sdot[data-st="bad"]{background:var(--bad); box-shadow:0 0 0 3px var(--bad-soft)}
-.dot[data-st="warn"],.sdot[data-st="warn"]{background:var(--warn); box-shadow:0 0 0 3px var(--warn-soft)}
-.dot[data-st="wait"],.sdot[data-st="wait"]{background:var(--muted); animation:latido 1.2s ease-in-out infinite}
-@keyframes latido{50%{opacity:.35}}
-/* ============ Banner de estado ============ */
-.banner{max-width:1120px; margin:16px auto 0; padding:0 16px; display:grid; grid-template-columns:repeat(3,1fr); gap:12px; width:100%}
-.scard{display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:13px 15px; box-shadow:var(--shadow)}
-.scard .sdot{width:12px; height:12px}
-.sinfo{min-width:0; flex:1}
-.sinfo small{display:block; color:var(--muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.6px; font-weight:700}
-.sinfo strong{display:block; font-size:.95rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.sinfo em{display:block; font-style:normal; color:var(--muted); font-size:.76rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.scard .mini{flex:none}
-/* ============ Pestañas ============ */
-.tabs{max-width:1120px; margin:14px auto 0; padding:0 16px; display:flex; gap:8px; overflow-x:auto; width:100%; scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{display:inline-flex; align-items:center; gap:8px; padding:9px 16px; border-radius:999px; border:1px solid var(--border); background:var(--surface); font-weight:600; font-size:.88rem; white-space:nowrap; color:var(--muted)}
-.tab svg{width:17px; height:17px}
-.tab:hover{border-color:var(--accent); color:var(--text)}
-.tab[aria-selected="true"]{background:var(--accent); border-color:var(--accent); color:var(--ink-on-accent)}
-/* ============ Contenido ============ */
-main{flex:1; width:100%}
-.sec{max-width:1120px; margin:16px auto 0; padding:0 16px 26px}
-.card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); min-width:0}
-.card-soft{background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px}
-.grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start}
-.cardhead{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:10px}
-.cardhead h2{margin:0}
-.count{display:inline-grid; place-items:center; min-width:22px; height:22px; padding:0 7px; border-radius:999px; background:var(--accent-soft); color:var(--accent-text); font-size:.78rem; font-weight:700; vertical-align:2px}
-/* ============ Botones y campos ============ */
-.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 16px; border-radius:var(--radius-sm); font-weight:700; font-size:.9rem; border:1px solid transparent; min-height:42px}
-.btn.primary{background:var(--accent); color:var(--ink-on-accent)}
-.btn.primary:hover{background:var(--accent-hover)}
-.btn.ghost{border-color:var(--border); background:var(--surface); color:var(--text)}
-.btn.ghost:hover{border-color:var(--accent); color:var(--accent-text)}
-.btn.danger{background:var(--bad); color:#fff}
-.btn.danger:hover{filter:brightness(1.08)}
-.btn.sm{padding:7px 13px; min-height:36px; font-size:.84rem}
-.btn:disabled{opacity:.55; cursor:not-allowed}
-.mini{display:inline-flex; align-items:center; gap:6px; padding:5px 11px; border-radius:8px; font-size:.78rem; font-weight:700; border:1px solid var(--border); background:var(--surface); color:var(--text); min-height:30px}
-.mini:hover{border-color:var(--accent); color:var(--accent-text)}
-.mini.danger{color:var(--bad)}
-.mini.danger:hover{border-color:var(--bad); background:var(--bad-soft)}
-.frow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
-.fgrid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
-.lbl{display:flex; flex-direction:column; gap:5px; font-size:.8rem; font-weight:700; color:var(--muted)}
-.in{width:100%; padding:10px 12px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--surface2); color:var(--text); min-height:42px}
-.in:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
-.in.sm{min-height:36px; padding:7px 11px; width:auto}
-select.in{appearance:none; background-image:linear-gradient(45deg,transparent 49%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 49%); background-position:calc(100% - 18px) 55%,calc(100% - 13px) 55%; background-size:5px 5px; background-repeat:no-repeat; padding-right:34px}
-textarea.in{resize:none; min-height:44px; max-height:180px}
-/* ============ Zona de subida ============ */
-.dropzone{border:2px dashed var(--border); border-radius:var(--radius); padding:26px 16px; text-align:center; color:var(--muted); display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; background:var(--surface2)}
-.dropzone svg{width:34px; height:34px; color:var(--accent)}
-.dropzone strong{color:var(--text); font-size:.98rem}
-.dropzone span{font-size:.82rem}
-.dropzone:hover,.dropzone:focus-visible{border-color:var(--accent)}
-.dropzone.drag{border-color:var(--accent); background:var(--accent-soft); color:var(--accent-text)}
-.dz-lock{display:flex; gap:12px; align-items:center; margin-top:12px; padding:12px 14px; border:1px solid var(--warn); background:var(--warn-soft); border-radius:var(--radius-sm); font-size:.85rem; color:var(--text)}
-.dz-lock svg{width:20px; height:20px; color:var(--warn); flex:none}
-.dz-lock div{flex:1; display:flex; flex-direction:column}
-.dz-lock strong{font-size:.87rem}
-.uplog{margin-top:12px; display:flex; flex-direction:column; gap:6px; font-size:.84rem}
-.uplog .uprow{display:flex; align-items:center; gap:8px; padding:8px 11px; border:1px solid var(--border); border-radius:8px; background:var(--surface2)}
-.uplog .uprow b{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600}
-.uplog .st-ok{color:var(--good); font-weight:700}
-.uplog .st-bad{color:var(--bad); font-weight:700}
-.uplog .st-wait{color:var(--muted)}
-/* ============ Lista de documentos ============ */
-.dlist{display:flex; flex-direction:column}
-.ditem{display:flex; align-items:center; gap:12px; padding:11px 4px; border-bottom:1px solid var(--border)}
-.ditem:last-child{border-bottom:none}
-.dicon{width:40px; height:40px; border-radius:11px; background:var(--accent-soft); color:var(--accent-text); display:grid; place-items:center; font-size:.62rem; font-weight:800; letter-spacing:.4px; flex:none}
-.dmain{min-width:0; flex:1}
-.dname{font-weight:600; font-size:.92rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-.dmeta{font-size:.76rem; color:var(--muted); display:flex; gap:6px; flex-wrap:wrap; align-items:center}
-.dact{display:flex; gap:6px; flex:none}
-.dact .mini{min-height:30px; padding:5px 9px}
-.dbadge{display:inline-block; padding:1px 8px; border-radius:999px; font-size:.68rem; font-weight:800; letter-spacing:.3px}
-.dbadge.ok{background:var(--good-soft); color:var(--good)}
-.dbadge.warn{background:var(--warn-soft); color:var(--warn)}
-.dbadge.bad{background:var(--bad-soft); color:var(--bad)}
-.subh{margin:14px 0 4px; font-size:.85rem; color:var(--warn)}
-.empty{display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center; padding:30px 14px; color:var(--muted)}
-.empty svg{width:34px; height:34px; opacity:.55}
-.empty strong{color:var(--text)}
-.empty.sm{padding:16px}
-/* ============ Chat ============ */
-.chatcard{display:flex; flex-direction:column}
-.chatactions{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
-.ctxdetails{position:relative}
-.ctxdetails summary{list-style:none; cursor:pointer; padding:6px 12px; border:1px solid var(--border); border-radius:8px; font-size:.78rem; font-weight:700; background:var(--surface2); white-space:nowrap}
-.ctxdetails summary::-webkit-details-marker{display:none}
-.ctxdetails[open] summary{border-color:var(--accent); color:var(--accent-text)}
-.ctxlist{position:absolute; right:0; top:calc(100% + 6px); z-index:30; width:min(340px,86vw); max-height:260px; overflow:auto; background:var(--surface); border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow); padding:10px}
-.ctxrow{display:flex; align-items:center; gap:9px; padding:6px 4px; font-size:.84rem}
-.ctxrow input{accent-color:var(--accent); width:16px; height:16px; flex:none}
-.ctxrow span{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-.ctxnone{font-size:.8rem; color:var(--muted); padding:6px}
-.chatbox{height:min(56vh,520px); min-height:240px; overflow-y:auto; padding:6px 4px; display:flex; flex-direction:column; gap:10px; scrollbar-width:thin}
-.chatbox::-webkit-scrollbar{width:8px}
-.chatbox::-webkit-scrollbar-thumb{background:var(--border); border-radius:8px}
-.msg{display:flex; max-width:100%}
-.msg.user{justify-content:flex-end}
-.bubble{max-width:82%; padding:11px 14px; border-radius:14px; border:1px solid var(--border); background:var(--surface2); font-size:.92rem; overflow-wrap:break-word; min-width:0}
-.msg.user .bubble{background:var(--accent); color:var(--ink-on-accent); border-color:var(--accent); border-bottom-right-radius:4px}
-.msg.ia .bubble{border-bottom-left-radius:4px}
-.msg.err .bubble{background:var(--bad-soft); border-color:var(--bad); color:var(--text)}
-.bubble.raw{white-space:pre-wrap}
-.sugs{display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 4px}
-.sug{padding:6px 12px; border:1px solid var(--border); border-radius:999px; font-size:.8rem; color:var(--muted); background:var(--surface2)}
-.sug:hover{border-color:var(--accent); color:var(--accent-text)}
-.chatin{display:flex; gap:10px; align-items:flex-end; margin-top:8px}
-.chatin textarea{flex:1}
-.sendbtn{width:44px; height:44px; border-radius:12px; background:var(--accent); color:var(--ink-on-accent); display:grid; place-items:center; flex:none}
-.sendbtn:hover{background:var(--accent-hover)}
-.sendbtn.stop{background:var(--bad); color:#fff}
-.sendbtn:disabled{opacity:.5; cursor:not-allowed}
-.sendbtn svg{width:20px; height:20px}
-/* ============ Markdown ============ */
-.md p{margin:.4em 0}
-.md h3,.md h4{margin:.85em 0 .35em}
-.md ul{margin:.35em 0 .6em; padding-left:1.35em}
-.md li{margin:.2em 0}
-.md hr{border:none; border-top:1px solid var(--border); margin:.9em 0}
-.md pre.code{background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:12px; overflow:auto; white-space:pre-wrap; word-break:break-word; margin:.5em 0}
-.md table{border-collapse:collapse; margin:.5em 0; width:100%; font-size:.88em}
-.md th,.md td{border:1px solid var(--border); padding:6px 9px; text-align:left; vertical-align:top}
-.md th{background:var(--surface2)}
-.md a{text-decoration:underline}
-/* ============ Analizar ============ */
-.anabar{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px}
-.anabar select{flex:1; min-width:220px}
-.anabtns{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px}
-.anabtn{padding:12px; border:1px solid var(--border); border-radius:12px; background:var(--surface2); text-align:left; display:flex; flex-direction:column; gap:2px}
-.anabtn:hover{border-color:var(--accent)}
-.anabtn b{font-size:.88rem}
-.anabtn span{font-size:.74rem; color:var(--muted)}
-.anabtn:disabled{opacity:.5; cursor:not-allowed}
-.anameta{display:flex; align-items:center; justify-content:space-between; gap:10px; margin:14px 0 8px; font-size:.78rem; color:var(--muted); flex-wrap:wrap}
-/* ============ Admin ============ */
-.adminhead{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px}
-.adminhead h2{margin:0}
-.statgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-bottom:14px}
-.stat-top{display:flex; align-items:center; gap:10px; margin-bottom:10px}
-.stat-top .sdot{width:11px; height:11px}
-.stat-top h3{margin:0; flex:1}
-.stat-body{font-size:.86rem; color:var(--muted); display:flex; flex-direction:column; gap:4px; overflow-wrap:anywhere}
-.stat-body b{color:var(--text); font-weight:600}
-.mini-log{margin-top:10px; padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:var(--surface2); font-size:.8rem; color:var(--muted); display:flex; flex-direction:column; gap:4px; overflow-wrap:anywhere; white-space:pre-wrap}
-.mini-log:empty{display:none}
-.notes{margin:0; padding-left:1.2em; display:flex; flex-direction:column; gap:9px; font-size:.87rem; color:var(--muted)}
-.notes b{color:var(--text)}
-.guia{margin-top:14px; border-top:1px dashed var(--border); padding-top:12px}
-.guia h4{margin:.6em 0 .3em; font-size:.88rem}
-.guia ol{margin:0 0 10px; padding-left:1.35em; display:flex; flex-direction:column; gap:7px; font-size:.86rem}
-.guia .note{font-size:.78rem; color:var(--warn); background:var(--warn-soft); border:1px solid var(--warn); border-radius:8px; padding:8px 11px; margin:8px 0 0}
-.cmd{background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:9px 11px; font-size:.78rem; overflow:auto; white-space:pre; margin:4px 0}
-/* ============ Modal y toasts ============ */
-.overlay{position:fixed; inset:0; z-index:50; background:rgba(8,14,16,.55); backdrop-filter:blur(3px); display:grid; place-items:center; padding:16px}
-.modal{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); width:min(480px,94vw); padding:20px; max-height:88vh; overflow:auto}
-.modal.wide{width:min(760px,94vw)}
-.mhead{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px}
-.mhead h3{margin:0}
-.err{color:var(--bad); font-size:.82rem; font-weight:600; margin:8px 0 0}
-.docmeta{font-size:.78rem; color:var(--muted); margin-bottom:10px; overflow-wrap:anywhere}
-.docview{max-height:52vh; overflow:auto}
-.toasts{position:fixed; right:14px; bottom:14px; z-index:60; display:flex; flex-direction:column; gap:8px; max-width:min(380px,92vw)}
-.toast{background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--muted); border-radius:11px; padding:11px 14px; box-shadow:var(--shadow); font-size:.86rem; overflow-wrap:anywhere}
-.toast.ok{border-left-color:var(--good)}
-.toast.warn{border-left-color:var(--warn)}
-.toast.bad{border-left-color:var(--bad)}
-/* ============ Pie ============ */
-.foot{margin-top:auto; border-top:1px solid var(--border); padding:16px; display:flex; justify-content:center; gap:8px; flex-wrap:wrap; color:var(--muted); font-size:.78rem; background:var(--surface)}
-.foot span+span::before{content:"·"; margin-right:8px; color:var(--border)}
-/* ============ Responsive ============ */
-@media (max-width:900px){
-  .grid2,.statgrid{grid-template-columns:1fr}
-  .banner{grid-template-columns:1fr}
-  .bubble{max-width:92%}
+html[data-theme="light"]{
+  --bg:#eef4f2; --bg2:#e4ece9; --surface:#ffffff; --surface2:#f5faf8; --border:#d7e3df;
+  --tx:#17252b; --tx2:#4e6167; --tx3:#7b8d93;
+  --pri:#0d8a7d; --pri2:#0b6f65; --prisoft:#e0f0ed; --pritx:#ffffff;
+  --hero1:#0d8a7d; --hero2:#0a5f5b; --shadow:0 8px 28px rgba(13,60,55,.10); --shadow2:0 2px 10px rgba(13,60,55,.08);
 }
-@media (max-width:560px){
-  .topbar-in{padding:9px 12px; gap:8px}
-  .brand-txt span{max-width:38vw}
-  .pill{padding:6px 9px; font-size:.74rem}
-  .sec,.banner{padding-left:12px; padding-right:12px}
-  .card{padding:15px}
-  .fgrid{grid-template-columns:1fr}
-  .chatin{gap:7px}
-  .dact .mini{padding:5px 7px}
-  .dact .mini span{display:none}
+html[data-theme="dark"]{
+  --bg:#0c1518; --bg2:#0a1113; --surface:#121f23; --surface2:#16262b; --border:#23383e;
+  --tx:#e8f0ee; --tx2:#a7b8bd; --tx3:#7d9198;
+  --pri:#2fc2b0; --pri2:#2aa897; --prisoft:#143029; --pritx:#062019;
+  --hero1:#134e48; --hero2:#0c3433; --shadow:0 10px 30px rgba(0,0,0,.45); --shadow2:0 2px 10px rgba(0,0,0,.35);
+  --link:#4fd8c6;
 }
-@media print{.topbar,.tabs,.banner,.toasts,.foot{display:none}}
+a{color:var(--link)}
+h1,h2,h3,h4{margin:0;line-height:1.25}
+small{color:var(--tx2)}
+code{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:1px 5px;font-size:.92em}
+hr{border:0;border-top:1px solid var(--border)}
+::selection{background:var(--pri);color:var(--pritx)}
+
+/* ================= Layout general ================= */
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+main{min-height:calc(100vh - 210px);padding-bottom:28px}
+.sec{margin-top:18px;animation:fadein .25s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+/* ================= Cabecera ================= */
+header.app{position:sticky;top:0;z-index:40;background:color-mix(in srgb, var(--bg) 86%, transparent);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.hbar{display:flex;align-items:center;gap:12px;height:58px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:34px;height:34px;flex:none;border-radius:10px;background:linear-gradient(135deg,var(--hero1),var(--hero2));
+  display:grid;place-items:center;color:#fff;box-shadow:var(--shadow2)}
+.brand b{font-size:16.5px;letter-spacing:.2px;white-space:nowrap}
+.vchip{font-size:11px;font-weight:700;color:var(--pri);background:var(--prisoft);border:1px solid var(--border);
+  padding:1.5px 7px;border-radius:999px;white-space:nowrap}
+nav.tabs{display:flex;gap:4px;margin-left:6px;overflow-x:auto;scrollbar-width:none;flex:1}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{border:0;background:transparent;cursor:pointer;color:var(--tx2);padding:8px 13px;border-radius:10px;
+  font-weight:600;font-size:13.8px;display:flex;align-items:center;gap:7px;white-space:nowrap;transition:.18s}
+.tab svg{width:16px;height:16px;flex:none}
+.tab:hover{color:var(--tx);background:var(--surface2)}
+.tab[aria-selected="true"]{color:var(--pri);background:var(--prisoft)}
+.hact{display:flex;align-items:center;gap:8px;margin-left:auto}
+.pills{display:flex;gap:6px}
+.pill{display:flex;align-items:center;gap:7px;border:1px solid var(--border);background:var(--surface);cursor:pointer;
+  padding:5px 11px;border-radius:999px;font-size:12.4px;font-weight:600;color:var(--tx2);transition:.18s}
+.pill:hover{border-color:var(--pri);color:var(--tx)}
+.pill .dot,.sdot{width:9px;height:9px;border-radius:50%;background:var(--tx3);flex:none;position:relative}
+.pill[data-st="ok"] .dot,.sdot[data-st="ok"]{background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 22%,transparent)}
+.pill[data-st="bad"] .dot,.sdot[data-st="bad"]{background:var(--bad);box-shadow:0 0 0 3px color-mix(in srgb,var(--bad) 20%,transparent)}
+.pill[data-st="warn"] .dot,.sdot[data-st="warn"]{background:var(--warn);box-shadow:0 0 0 3px color-mix(in srgb,var(--warn) 22%,transparent)}
+.pill[data-st="wait"] .dot,.sdot[data-st="wait"]{background:var(--tx3);animation:pulse 1.2s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.iconbtn{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--surface);cursor:pointer;
+  display:grid;place-items:center;color:var(--tx2);transition:.18s;flex:none}
+.iconbtn:hover{color:var(--pri);border-color:var(--pri)}
+.iconbtn.on{color:var(--pri);border-color:var(--pri);background:var(--prisoft)}
+.iconbtn svg{width:18px;height:18px}
+@media (max-width:760px){
+  .pill .plbl{display:none}
+  .pill{padding:5px 8px}
+  .brand b{display:none}
+  .hbar{height:54px;gap:8px}
+}
+
+/* ================= Botones y campos ================= */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;cursor:pointer;
+  background:var(--pri);color:var(--pritx);font-weight:700;font-size:14px;padding:10px 16px;border-radius:12px;transition:.18s;text-decoration:none}
+.btn:hover{background:var(--pri2)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--pri);border-color:var(--pri)}
+.btn.ghost:hover{background:var(--prisoft)}
+.btn.soft{background:var(--surface);color:var(--tx);border-color:var(--border)}
+.btn.soft:hover{border-color:var(--pri);color:var(--pri)}
+.btn.danger{background:var(--bad)}
+.btn.danger:hover{filter:brightness(.92)}
+.btn svg{width:17px;height:17px}
+.mini{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border);background:var(--surface);color:var(--tx2);
+  cursor:pointer;font-size:12.2px;font-weight:600;padding:5px 10px;border-radius:9px;text-decoration:none;transition:.15s}
+.mini:hover{border-color:var(--pri);color:var(--pri)}
+.mini.danger:hover{border-color:var(--bad);color:var(--bad)}
+.mini svg{width:13px;height:13px}
+.lbl{display:block;font-size:12.6px;font-weight:700;color:var(--tx2);margin-bottom:5px}
+.in{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:9.5px 12px;outline:none;transition:.15s}
+.in:focus{border-color:var(--pri);box-shadow:0 0 0 3px color-mix(in srgb,var(--pri) 18%,transparent)}
+textarea.in{resize:vertical}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.8px}
+.hint{color:var(--tx2);font-size:12.8px}
+.spin{display:inline-block;width:15px;height:15px;border:2px solid var(--border);border-top-color:var(--pri);border-radius:50%;
+  animation:spin .8s linear infinite;vertical-align:-2px;margin-right:7px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ================= Tarjetas ================= */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:var(--shadow2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media (max-width:920px){ .grid3,.grid4{grid-template-columns:1fr 1fr} }
+@media (max-width:620px){ .grid2,.grid3,.grid4{grid-template-columns:1fr} }
+.sectitle{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:22px 0 10px;flex-wrap:wrap}
+.sectitle h2{font-size:17px}
+.sectitle .hint{margin:0}
+
+/* ================= Hero (Inicio) ================= */
+.hero{display:grid;grid-template-columns:1.25fr .95fr;gap:0;overflow:hidden;border-radius:18px;border:1px solid var(--border);
+  background:var(--surface);box-shadow:var(--shadow2)}
+.hero-l{padding:30px 28px;background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;display:flex;flex-direction:column;gap:14px;justify-content:center;min-width:0}
+.hero-l .kicker{font-size:12px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;opacity:.85}
+.hero-l h1{font-size:27px;line-height:1.2}
+.hero-l p{margin:0;opacity:.92;max-width:46ch}
+.hero-l .ctas{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.hero-l .btn.main{background:#fff;color:var(--pri2)}
+.hero-l .btn.main:hover{background:#f2fffc}
+.hero-l .btn.line{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.45)}
+.hero-l .btn.line:hover{background:rgba(255,255,255,.22)}
+.hero-r{padding:20px;display:flex;flex-direction:column;gap:10px;justify-content:center;background:var(--surface);min-width:0}
+.scard{display:flex;align-items:center;gap:12px;border:1px solid var(--border);border-radius:14px;padding:11px 14px;background:var(--surface2);min-width:0}
+.sdot{width:11px;height:11px}
+.sinfo{min-width:0;flex:1}
+.sinfo small{display:block;font-size:11.4px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--tx3)}
+.sinfo strong{display:block;font-size:14.6px}
+.sinfo em{display:block;font-style:normal;font-size:12.2px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sbtn{border:1px solid var(--border);background:var(--surface);border-radius:9px;font-size:12px;font-weight:600;color:var(--tx2);
+  cursor:pointer;padding:5px 10px;flex:none;transition:.15s}
+.sbtn:hover{color:var(--pri);border-color:var(--pri)}
+@media (max-width:860px){ .hero{grid-template-columns:1fr} .hero-l{padding:24px 20px} }
+.feat{display:flex;flex-direction:column;gap:8px}
+.feat .fic{width:36px;height:36px;border-radius:10px;background:var(--prisoft);color:var(--pri);display:grid;place-items:center}
+.feat .fic svg{width:19px;height:19px}
+.feat b{font-size:14.5px}
+.feat span{font-size:12.8px;color:var(--tx2)}
+.steps{display:flex;flex-direction:column;gap:10px}
+.step{display:flex;gap:12px;align-items:flex-start}
+.step .n{width:26px;height:26px;border-radius:50%;background:var(--pri);color:var(--pritx);font-weight:800;font-size:13px;
+  display:grid;place-items:center;flex:none}
+.step div b{font-size:13.8px}
+.step div span{display:block;font-size:12.6px;color:var(--tx2)}
+</style>
+<style>
+/* ================= Zona de subida ================= */
+.dz{border:2px dashed var(--border);border-radius:16px;background:var(--surface2);padding:26px 18px;text-align:center;
+  cursor:pointer;transition:.18s;position:relative;outline:none}
+.dz:hover,.dz:focus{border-color:var(--pri);background:var(--prisoft)}
+.dz.drag{border-color:var(--pri);background:var(--prisoft);transform:scale(1.005)}
+.dz .dzic{width:52px;height:52px;border-radius:14px;background:var(--prisoft);color:var(--pri);display:grid;place-items:center;margin:0 auto 10px}
+.dz .dzic svg{width:26px;height:26px}
+.dz b{font-size:15.5px}
+.dz .hint{margin-top:4px}
+.dz .dzacts{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.dz .dzacts .btn,.dz .dzacts .mini{pointer-events:auto}
+.dzlock{position:absolute;inset:0;border-radius:16px;background:color-mix(in srgb,var(--bg) 55%,transparent);
+  backdrop-filter:blur(2px);display:grid;place-items:center;z-index:2}
+.dzlock .inner{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);
+  padding:10px 16px;border-radius:13px;box-shadow:var(--shadow);font-weight:600}
+.dzlock svg{width:18px;height:18px;color:var(--pri)}
+.uplog{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.uprow{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border:1px solid var(--border);
+  border-radius:11px;padding:8px 12px;font-size:13px}
+.uprow b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st{flex:none;font-weight:700;font-size:12px}
+.st-wait{color:var(--warn)} .st-ok{color:var(--ok)} .st-bad{color:var(--bad)}
+
+/* ================= Lista de documentos ================= */
+.toolbar{display:flex;align-items:center;gap:10px;margin:14px 0;flex-wrap:wrap}
+.toolbar .in{max-width:320px}
+.count{font-size:12.6px;color:var(--tx2);font-weight:600;background:var(--surface);border:1px solid var(--border);
+  padding:4px 11px;border-radius:999px}
+.dlist{display:flex;flex-direction:column;gap:9px}
+.ditem{display:flex;align-items:center;gap:13px;background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:11px 14px;transition:.15s}
+.ditem:hover{border-color:var(--pri);box-shadow:var(--shadow2)}
+.dicon{width:42px;height:42px;border-radius:11px;background:var(--prisoft);color:var(--pri);font-weight:800;font-size:10.6px;
+  display:grid;place-items:center;flex:none;letter-spacing:.4px}
+.dmain{flex:1;min-width:0}
+.dname{font-weight:700;font-size:14.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dmeta{display:flex;gap:9px;align-items:center;flex-wrap:wrap;font-size:12.2px;color:var(--tx2);margin-top:2px}
+.dbadge{font-size:10.8px;font-weight:800;padding:1.5px 8px;border-radius:999px;letter-spacing:.3px}
+.dbadge.ok{color:var(--ok);background:color-mix(in srgb,var(--ok) 13%,transparent)}
+.dbadge.warn{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)}
+.dact{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.empty{text-align:center;padding:34px 16px;color:var(--tx2);border:1.5px dashed var(--border);border-radius:16px;background:var(--surface2)}
+.empty strong{display:block;font-size:15px;color:var(--tx);margin-bottom:3px}
+.empty.sm{padding:20px}
+
+/* ================= Análisis ================= */
+.anabtns{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.anaout{margin-top:16px}
+.anameta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.anameta small{font-weight:700}
+.mdout{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:16px 18px;max-height:560px;overflow:auto}
+.mdout h2,.mdout h3,.mdout h4,.mdout h5{margin:14px 0 7px;color:var(--pri2)}
+html[data-theme="dark"] .mdout h2,html[data-theme="dark"] .mdout h3,html[data-theme="dark"] .mdout h4,html[data-theme="dark"] .mdout h5{color:var(--pri)}
+.mdout h2:first-child,.mdout h3:first-child{margin-top:0}
+.mdout p{margin:7px 0}
+.mdout ul{margin:7px 0;padding-left:22px}
+.mdout li{margin:3.5px 0}
+.mdout table{border-collapse:collapse;width:100%;margin:10px 0;font-size:13.4px}
+.mdout td{border:1px solid var(--border);padding:6px 9px}
+.mdout pre.code{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:11px 13px;overflow:auto;
+  font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.6px;margin:9px 0}
+
+/* ================= Chat ================= */
+.chatgrid{display:grid;grid-template-columns:260px 1fr;gap:14px;align-items:start}
+@media (max-width:860px){ .chatgrid{grid-template-columns:1fr} .ctxpanel{order:2} }
+.ctxpanel{position:sticky;top:74px}
+.ctxlist{display:flex;flex-direction:column;gap:4px;max-height:300px;overflow:auto;margin-top:8px}
+.ctxrow{display:flex;gap:9px;align-items:center;font-size:13.2px;padding:7px 9px;border-radius:9px;cursor:pointer}
+.ctxrow:hover{background:var(--surface2)}
+.ctxrow input{accent-color:var(--pri);width:15px;height:15px;flex:none}
+.ctxrow span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ctxnone{font-size:12.8px;color:var(--tx2);padding:6px 2px}
+.chatbox{display:flex;flex-direction:column;height:calc(100vh - 235px);min-height:420px;background:var(--surface);
+  border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow2)}
+.msgs{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;background:var(--surface2)}
+.msg{display:flex;max-width:88%}
+.msg.user{align-self:flex-end;justify-content:flex-end}
+.msg .bubble{padding:10px 14px;border-radius:15px;font-size:14px;position:relative;overflow-wrap:anywhere}
+.msg.ia .bubble{background:var(--surface);border:1px solid var(--border);border-top-left-radius:5px;width:fit-content;max-width:100%}
+.msg.ia .bubble p:first-child{margin-top:0}
+.msg.ia .bubble p:last-child{margin-bottom:0}
+.msg.ia.err .bubble{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 7%,var(--surface))}
+.msg.user .bubble{background:var(--pri);color:var(--pritx);border-top-right-radius:5px}
+.cursor{display:inline-block;width:8px;height:15px;background:var(--pri);margin-left:3px;vertical-align:-2px;animation:pulse .8s infinite}
+.msgbar{display:flex;align-items:center;gap:9px;padding:11px 13px;border-top:1px solid var(--border);background:var(--surface)}
+.msgbar textarea{flex:1;max-height:170px;border-radius:12px}
+.sugs{display:flex;gap:8px;flex-wrap:wrap;padding:0 13px 11px;background:var(--surface)}
+.sug{border:1px solid var(--border);background:var(--surface2);color:var(--tx2);border-radius:999px;padding:6px 13px;
+  font-size:12.6px;font-weight:600;cursor:pointer;transition:.15s}
+.sug:hover{border-color:var(--pri);color:var(--pri);background:var(--prisoft)}
+.mcopy{position:absolute;top:6px;right:6px;opacity:0;transition:.15s;border:1px solid var(--border);background:var(--surface);
+  border-radius:8px;padding:3px 8px;font-size:11px;font-weight:700;cursor:pointer;color:var(--tx2)}
+.msg.ia:hover .mcopy{opacity:1}
+.mcopy:hover{color:var(--pri);border-color:var(--pri)}
+
+/* ================= Admin ================= */
+.statcard{border:1px solid var(--border);border-radius:16px;padding:15px 16px;background:var(--surface);box-shadow:var(--shadow2)}
+.statcard .stat-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.statcard h3{font-size:14.6px;flex:1}
+.statcard .body{font-size:12.9px;color:var(--tx2);display:flex;flex-direction:column;gap:3px;overflow-wrap:anywhere}
+.statcard .body b{color:var(--tx);font-weight:700}
+.statcard .acts{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+@media (max-width:700px){ .formgrid{grid-template-columns:1fr} }
+.logbox{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:10px 12px;font-family:ui-monospace,Menlo,Consolas,monospace;
+  font-size:11.8px;white-space:pre-wrap;max-height:150px;overflow:auto;color:var(--tx2);margin-top:9px}
+.snippet{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:10px 12px;
+  font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.8px;color:var(--tx2);resize:vertical;min-height:74px}
+.guia li{margin:7px 0;font-size:13.4px;color:var(--tx2)}
+.guia{padding-left:20px;margin:8px 0}
+.guia b{color:var(--tx)}
+
+/* ================= Modales y toasts ================= */
+.overlay{position:fixed;inset:0;z-index:60;background:rgba(8,20,22,.55);backdrop-filter:blur(3px);
+  display:grid;place-items:center;padding:18px}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;max-width:680px;width:100%;
+  max-height:86vh;overflow:auto;box-shadow:var(--shadow);animation:fadein .2s ease}
+.mhead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 18px;border-bottom:1px solid var(--border)}
+.mhead h3{font-size:16px}
+.mbody{padding:16px 18px}
+#toasts{position:fixed;right:16px;bottom:16px;z-index:80;display:flex;flex-direction:column;gap:8px;max-width:min(360px,86vw)}
+.toast{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--pri);border-radius:12px;
+  padding:10px 14px;font-size:13.2px;box-shadow:var(--shadow);animation:fadein .2s ease}
+.toast.ok{border-left-color:var(--ok)} .toast.bad{border-left-color:var(--bad)} .toast.warn{border-left-color:var(--warn)}
+
+/* ================= Pie y modo embebido ================= */
+footer.app{border-top:1px solid var(--border);margin-top:26px;padding:16px 0 22px;color:var(--tx2);font-size:12.6px}
+footer.app .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+body.embed footer.app{display:none}
+body.embed .hero-l{padding:20px}
+body.embed main{min-height:0}
+@media (max-width:620px){
+  .ditem{flex-wrap:wrap}
+  .dact{width:100%;justify-content:flex-start}
+  .msg{max-width:96%}
+  .hero-l h1{font-size:22px}
+}
 </style>
 </head>
 <body>
-<header class="topbar">
-  <div class="topbar-in">
-    <div class="brand">
-      <span class="brand-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9.5 12 4.5l10 5-10 5-10-5z"/><path d="M6 11.8V16c0 1.3 2.7 2.7 6 2.7s6-1.4 6-2.7v-4.2"/><path d="M22 9.5V15"/></svg></span>
-      <div class="brand-txt">
-        <strong>EduDocs IA</strong>
-        <span id="brandSchool">Mi Escuela</span>
+<header class="app"><div class="wrap hbar">
+  <div class="brand">
+    <span class="logo" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/></svg></span>
+    <b>EduDocs IA</b>
+    <span class="vchip" id="vchip">v2.0</span>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button class="tab" data-tab="inicio" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Inicio</button>
+    <button class="tab" data-tab="docs" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Documentos</button>
+    <button class="tab" data-tab="analizar" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Análisis</button>
+    <button class="tab" data-tab="chat" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>Chat</button>
+    <button class="tab" data-tab="admin" aria-selected="false" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admin</button>
+  </nav>
+  <div class="hact">
+    <div class="pills" role="status" aria-live="polite">
+      <button class="pill" id="pillPagina" data-st="wait" title="Estado de la página y tu conexión"><span class="dot"></span><span class="plbl">Página</span></button>
+      <button class="pill" id="pillB4a" data-st="wait" title="Estado de Back4App (clic para probar)"><span class="dot"></span><span class="plbl">Back4App</span></button>
+      <button class="pill" id="pillIa" data-st="wait" title="Estado de la IA Gemini (clic para probar)"><span class="dot"></span><span class="plbl">IA Gemini</span></button>
+    </div>
+    <button class="iconbtn" id="btnTheme" title="Cambiar tema claro / oscuro" aria-label="Cambiar tema">
+      <svg id="icoMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
+      <svg id="icoSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" hidden><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.9" y1="4.9" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.1" y2="19.1"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.9" y1="19.1" x2="6.3" y2="17.7"/><line x1="17.7" y1="6.3" x2="19.1" y2="4.9"/></svg>
+    </button>
+    <button class="iconbtn" id="btnAdmin" title="Modo administrador" aria-label="Modo administrador">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </button>
+  </div>
+</div></header>
+
+<main><div class="wrap">
+
+<!-- ================= INICIO ================= -->
+<section id="sec-inicio" class="sec" role="tabpanel">
+  <div class="hero">
+    <div class="hero-l">
+      <span class="kicker">Plataforma escolar · <span id="brandSchool">Mi Escuela</span></span>
+      <h1>Tus documentos escolares,<br>revisados y entendidos con IA</h1>
+      <p>Sube reglamentos, planes de estudio, circulares o tareas con arrastrar y soltar. La IA los analiza, los resume y responde tus preguntas al instante.</p>
+      <div class="ctas">
+        <button class="btn main" id="heroSubir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>Subir documentos</button>
+        <button class="btn line" id="heroAnalizar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analizar con IA</button>
       </div>
     </div>
-    <div class="pills">
-      <button class="pill" id="pillPagina" data-st="wait" title="Estado de la página"><span class="dot"></span><span class="plbl">Página</span></button>
-      <button class="pill" id="pillB4a" data-st="wait" title="Estado de Back4App (clic para probar)"><span class="dot"></span><span class="plbl">Back4App</span></button>
-      <button class="pill" id="pillIa" data-st="wait" title="Estado de la IA (clic para probar)"><span class="dot"></span><span class="plbl">IA Gemini</span></button>
-      <button class="iconbtn" id="btnTheme" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema">
-        <svg id="icoSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
-        <svg id="icoMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" hidden><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 7 7 0 1 0 20 14.5z"/></svg>
-      </button>
-      <button class="iconbtn" id="btnAdmin" title="Modo administrador" aria-label="Modo administrador">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-      </button>
+    <div class="hero-r" role="status" aria-live="polite">
+      <div class="scard">
+        <span class="sdot" id="sdPagina" data-st="wait"></span>
+        <div class="sinfo"><small>Página</small><strong id="bPaginaVal">Verificando…</strong><em id="bPaginaSub">conexión del navegador</em></div>
+      </div>
+      <div class="scard">
+        <span class="sdot" id="sdB4a" data-st="wait"></span>
+        <div class="sinfo"><small>Back4App · documentos</small><strong id="bB4aVal">Verificando…</strong><em id="bB4aSub">base de datos en la nube</em></div>
+        <button class="sbtn" id="btnChkB4a">Probar</button>
+      </div>
+      <div class="scard">
+        <span class="sdot" id="sdIa" data-st="wait"></span>
+        <div class="sinfo"><small>IA Gemini</small><strong id="bIaVal">Verificando…</strong><em id="bIaSub">análisis y chat</em></div>
+        <button class="sbtn" id="btnChkIa">Probar</button>
+      </div>
     </div>
   </div>
-</header>
 
-<section class="banner" aria-label="Estado del sistema">
-  <div class="scard">
-    <span class="sdot" id="sdPagina" data-st="wait"></span>
-    <div class="sinfo"><small>Página</small><strong id="bPaginaVal">Cargando…</strong><em id="bPaginaSub">aplicación local</em></div>
+  <div class="sectitle"><h2>Qué puedes hacer</h2></div>
+  <div class="grid4">
+    <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></span><b>Arrastra y suelta</b><span>Sube PDF, DOCX, TXT, CSV o imágenes desde tu computadora o carpeta completa.</span></div>
+    <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg></span><b>Análisis con IA</b><span>Resumen ejecutivo, puntos clave, cuestionarios y mapa de ideas en un clic.</span></div>
+    <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span><b>Chat con tus documentos</b><span>Pregunta en lenguaje natural; la IA responde citando el documento de origen.</span></div>
+    <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><b>Sin trucos raros</b><span>La subida se configura sola en Back4App y el chat se guarda solo en tu navegador.</span></div>
   </div>
-  <div class="scard">
-    <span class="sdot" id="sdB4a" data-st="wait"></span>
-    <div class="sinfo"><small>Back4App (nube)</small><strong id="bB4aVal">Verificando…</strong><em id="bB4aSub">base de datos de documentos</em></div>
-    <button class="mini ghost" id="btnCheckB4a">Probar</button>
-  </div>
-  <div class="scard">
-    <span class="sdot" id="sdIa" data-st="wait"></span>
-    <div class="sinfo"><small>IA Gemini</small><strong id="bIaVal">Verificando…</strong><em id="bIaSub">análisis y chat</em></div>
-    <button class="mini ghost" id="btnCheckIa">Probar</button>
+
+  <div class="grid2" style="margin-top:14px">
+    <div class="card">
+      <h3 style="font-size:15px;margin-bottom:12px">Cómo funciona</h3>
+      <div class="steps">
+        <div class="step"><span class="n">1</span><div><b>Entra como administrador</b><span>Usa el candado de la esquina y la contraseña de tu escuela.</span></div></div>
+        <div class="step"><span class="n">2</span><div><b>Sube tus documentos</b><span>Arrastra y suelta, elige archivos o una carpeta completa.</span></div></div>
+        <div class="step"><span class="n">3</span><div><b>Analiza y pregunta</b><span>Genera resúmenes, cuestionarios o conversa con los documentos en el Chat.</span></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px">
+        <h3 style="font-size:15px;margin:0">Documentos recientes</h3>
+        <button class="mini" data-goto="docs"><span>Ver todos</span></button>
+      </div>
+      <div class="dlist" id="recentList"></div>
+      <div class="empty sm" id="recentEmpty"><strong>Aún no hay documentos</strong><span>Sube el primero desde la sección Documentos.</span></div>
+    </div>
   </div>
 </section>
 
-<nav class="tabs" role="tablist" aria-label="Secciones">
-  <button class="tab" role="tab" data-tab="docs" aria-selected="true">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 13h6M9 17h6"/></svg>
-    Documentos</button>
-  <button class="tab" role="tab" data-tab="analizar" aria-selected="false">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M12 3l1.9 5.4L19.5 10l-5.6 1.6L12 17l-1.9-5.4L4.5 10l5.6-1.6z"/></svg>
-    Analizar</button>
-  <button class="tab" role="tab" data-tab="chat" aria-selected="false">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>
-    Chat IA</button>
-  <button class="tab" role="tab" data-tab="admin" aria-selected="false" hidden>
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3m0 13v3M2.5 12h3m13 0h3M5.3 5.3l2.1 2.1m9.2 9.2 2.1 2.1M18.7 5.3l-2.1 2.1m-9.2 9.2-2.1 2.1"/></svg>
-    Admin</button>
-</nav>
-
-<main>
-  <!-- ============ DOCUMENTOS ============ -->
-  <section id="sec-docs" class="sec" role="tabpanel">
-    <div class="grid2">
-      <div class="card">
-        <h2>Subir documentos</h2>
-        <p class="hint">PDF, DOCX, TXT, MD, CSV, JSON o imágenes · máx. 25 MB por archivo · se guardan en Back4App</p>
-        <div id="dz" class="dropzone" tabindex="0" role="button" aria-label="Subir documentos: arrastra y suelta o haz clic">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4m0 0L7.5 8.5M12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
-          <strong>Arrastra y suelta aquí</strong>
-          <span>o haz clic para elegir archivos de tu equipo</span>
-        </div>
-        <input type="file" id="fileInput" multiple hidden accept=".pdf,.docx,.txt,.md,.csv,.json,.log,.xml,.srt,.png,.jpg,.jpeg,.webp,.gif,image/*,text/*,application/json">
-        <div class="dz-lock" id="dzLock" hidden>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-          <div><strong>Requiere modo administrador</strong><span>Ingresa la contraseña para poder subir documentos.</span></div>
-          <button class="btn primary sm" id="btnIrLogin">Entrar</button>
-        </div>
-        <div id="uplog" class="uplog" hidden></div>
-        <button class="btn ghost sm" id="btnSync" hidden style="margin-top:12px">Reintentar sincronización con la nube</button>
+<!-- ================= DOCUMENTOS ================= -->
+<section id="sec-docs" class="sec" role="tabpanel" hidden>
+  <div class="card">
+    <div class="dz" id="dz" tabindex="0" role="button" aria-label="Zona para subir documentos">
+      <div class="dzlock" id="dzLock"><div class="inner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><div><div><strong>Requiere modo administrador</strong></div><span class="hint">Ingresa la contraseña para poder subir documentos.</span></div><button class="mini" id="btnIrLogin"><span>Ingresar</span></button></div></div>
+      <span class="dzic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></span>
+      <b>Arrastra tus documentos aquí</b>
+      <p class="hint">o haz clic para seleccionarlos · PDF, DOCX, TXT, MD, CSV, JSON o imágenes · máx. 25 MB por archivo · se guardan en Back4App</p>
+      <div class="dzacts">
+        <button class="btn soft" id="btnFiles"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Elegir archivos</button>
+        <button class="mini" id="btnFolder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Elegir carpeta</button>
       </div>
-      <div class="card">
-        <div class="cardhead">
-          <h2>Documentos <span id="docCount" class="count">0</span></h2>
-          <input id="docFilter" class="in sm" type="search" placeholder="Buscar por nombre…" aria-label="Buscar documentos">
-        </div>
-        <div id="listaNube" class="dlist"></div>
-        <h3 class="subh" id="hLocal" hidden>Solo en este dispositivo (pendientes de sincronizar)</h3>
-        <div id="listaLocal" class="dlist"></div>
-        <div id="emptyDocs" class="empty">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 13h6M9 17h6"/></svg>
-          <strong>Aún no hay documentos</strong>
-          <span>1. Entra como admin (candado) · 2. Sube tus documentos · 3. Analízalos o pregunta en el Chat IA</span>
-        </div>
+      <input type="file" id="fileInput" multiple accept=".pdf,.docx,.txt,.md,.csv,.json,.log,.xml,.srt,.png,.jpg,.jpeg,.webp,.gif" hidden>
+      <input type="file" id="folderInput" webkitdirectory multiple hidden>
+    </div>
+    <div class="uplog" id="uplog" hidden></div>
+  </div>
+
+  <div class="toolbar">
+    <input type="search" id="docFilter" class="in" placeholder="Buscar documento por nombre…" style="flex:1;min-width:200px;max-width:none">
+    <span class="count" id="docCount">0</span>
+    <button class="btn soft" id="btnSync" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Subir pendientes</button>
+    <button class="mini" id="btnCheckB4a" title="Volver a cargar documentos desde la nube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg><span>Actualizar</span></button>
+  </div>
+  <div class="dlist" id="listaNube"></div>
+  <div class="sectitle" id="hLocal" hidden><h2>En este dispositivo</h2><p class="hint">Se subirán automáticamente cuando haya conexión (o pulsa "Subir pendientes").</p></div>
+  <div class="dlist" id="listaLocal"></div>
+  <div class="empty" id="emptyDocs" hidden><strong>Sin documentos todavía</strong><span>Sube PDF, DOCX, TXT o imágenes con el panel de arriba (requiere modo administrador).</span></div>
+</section>
+
+<!-- ================= ANÁLISIS ================= -->
+<section id="sec-analizar" class="sec" role="tabpanel" hidden>
+  <div class="card">
+    <h2 style="font-size:17px">Análisis con IA</h2>
+    <p class="hint" style="margin:4px 0 0">Elige un documento y un tipo de análisis. La IA lo procesa con Gemini y devuelve el resultado en español.</p>
+    <div style="margin-top:14px">
+      <label class="lbl" for="selDoc">Documento</label>
+      <select id="selDoc" class="in"></select>
+    </div>
+    <div class="empty sm" id="anaEmpty" style="margin-top:12px"><strong>Sin documentos</strong><span>Sube documentos (modo admin) para analizarlos aquí.</span></div>
+    <div class="anabtns" id="anabtns">
+      <button class="btn soft anabtn" data-ana="resumen">Resumen ejecutivo</button>
+      <button class="btn soft anabtn" data-ana="claves">Puntos clave</button>
+      <button class="btn soft anabtn" data-ana="academico">Análisis académico</button>
+      <button class="btn soft anabtn" data-ana="cuestionario">Cuestionario</button>
+      <button class="btn soft anabtn" data-ana="ideas">Mapa de ideas</button>
+    </div>
+    <div class="anaout" id="anaWrap" hidden>
+      <div class="anameta"><small id="anaMeta"></small><button class="mini" id="btnAnaCopy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copiar</span></button></div>
+      <div class="mdout" id="anaOut"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CHAT ================= -->
+<section id="sec-chat" class="sec" role="tabpanel" hidden>
+  <div class="chatgrid">
+    <div class="card ctxpanel">
+      <h3 style="font-size:14.5px">Contexto del chat</h3>
+      <p class="hint" style="margin:4px 0 0">La IA responderá con base en: <b id="ctxSummary">todos los documentos</b></p>
+      <div class="ctxlist" id="ctxList"></div>
+      <div style="margin-top:10px"><button class="mini danger" id="btnClearChat"><span>Borrar conversación</span></button></div>
+    </div>
+    <div class="chatbox">
+      <div class="msgs" id="chatBox"></div>
+      <div class="sugs" id="sugs"></div>
+      <div class="msgbar">
+        <textarea id="chatInput" class="in" rows="1" placeholder="Pregunta algo sobre tus documentos… (Enter para enviar)"></textarea>
+        <button class="btn" id="btnSend" title="Enviar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+        <button class="btn danger" id="btnStop" title="Detener respuesta" hidden>Detener</button>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ============ ANALIZAR ============ -->
-  <section id="sec-analizar" class="sec" role="tabpanel" hidden>
-    <div class="card">
-      <h2>Analizar documento</h2>
-      <p class="hint">Elige un documento y un tipo de análisis. La IA responde con base únicamente en el contenido del documento.</p>
-      <div class="anabar">
-        <select id="selDoc" class="in" aria-label="Documento a analizar"></select>
-      </div>
-      <div class="anabtns" id="anabtns">
-        <button class="anabtn" data-ana="resumen"><b>Resumen ejecutivo</b><span>Lo esencial en pocos párrafos</span></button>
-        <button class="anabtn" data-ana="claves"><b>Puntos clave</b><span>Datos, fechas y cifras importantes</span></button>
-        <button class="anabtn" data-ana="academico"><b>Análisis académico</b><span>Objetivos, temas y actividades</span></button>
-        <button class="anabtn" data-ana="cuestionario"><b>Cuestionario</b><span>Preguntas de repaso con respuestas</span></button>
-        <button class="anabtn" data-ana="ideas"><b>Mapa de ideas</b><span>Esquema jerárquico del contenido</span></button>
-      </div>
-      <div id="anaEmpty" class="empty sm"><strong>Sin documentos</strong><span>Sube documentos (modo admin) para analizarlos aquí.</span></div>
-      <div id="anaWrap" hidden>
-        <div class="anameta"><span id="anaMeta"></span><button class="mini ghost" id="btnAnaCopy">Copiar resultado</button></div>
-        <div id="anaOut" class="md card-soft"></div>
-      </div>
+<!-- ================= ADMIN ================= -->
+<section id="sec-admin" class="sec" role="tabpanel" hidden>
+  <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+    <div><h2 style="font-size:17px">Panel de administración</h2><p class="hint" style="margin:2px 0 0">Conexiones, configuración y publicación. La sesión vive solo en este navegador.</p></div>
+    <button class="btn soft" id="btnLogout">Cerrar sesión</button>
+  </div>
+
+  <div class="grid2">
+    <div class="statcard">
+      <div class="stat-top"><span class="sdot" id="stAppDot" data-st="ok"></span><h3>Aplicación</h3><button class="mini" id="btnTestApp"><span>Actualizar</span></button></div>
+      <div class="body" id="stAppBody"></div>
     </div>
-  </section>
-
-  <!-- ============ CHAT ============ -->
-  <section id="sec-chat" class="sec" role="tabpanel" hidden>
-    <div class="card chatcard">
-      <div class="cardhead">
-        <h2>Chat con la IA</h2>
-        <div class="chatactions">
-          <details class="ctxdetails">
-            <summary id="ctxSummary">Contexto: todos</summary>
-            <div class="ctxlist">
-              <div id="ctxList"></div>
-              <div class="ctxnone">Si no eliges documentos, la IA responderá sin contexto escolar.</div>
-            </div>
-          </details>
-          <button class="mini ghost" id="btnClearChat">Vaciar chat</button>
-        </div>
-      </div>
-      <div id="chatBox" class="chatbox" aria-live="polite"></div>
-      <div id="sugs" class="sugs"></div>
-      <div class="chatin">
-        <textarea id="chatInput" class="in" rows="1" placeholder="Escribe tu pregunta… (Enter para enviar, Shift+Enter salto de línea)" aria-label="Mensaje para la IA"></textarea>
-        <button class="sendbtn stop" id="btnStop" aria-label="Detener respuesta" hidden>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
-        </button>
-        <button class="sendbtn" id="btnSend" aria-label="Enviar mensaje">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3 3.8 10.2l6.6 2.4L12.8 19z"/><path d="M21 3 10.4 12.6"/></svg>
-        </button>
-      </div>
+    <div class="statcard">
+      <div class="stat-top"><span class="sdot" id="stB4aDot" data-st="wait"></span><h3>Back4App</h3><button class="mini" id="btnTestB4a"><span>Probar</span></button></div>
+      <div class="body" id="stB4aBody"></div>
+      <div class="acts"><button class="mini" id="btnInitSchema"><span>Inicializar esquema</span></button><button class="mini" id="btnReloadDocs"><span>Recargar documentos</span></button></div>
+      <div class="logbox" id="b4aLog" hidden></div>
     </div>
-  </section>
-
-  <!-- ============ ADMIN ============ -->
-  <section id="sec-admin" class="sec" role="tabpanel" hidden>
-    <div class="adminhead card">
-      <div><h2>Panel de administración</h2><p class="hint" style="margin:0">Sesión activa en este navegador. Aquí gestionas conexiones, configuración y publicación.</p></div>
-      <button class="btn danger sm" id="btnLogout">Cerrar sesión</button>
+    <div class="statcard">
+      <div class="stat-top"><span class="sdot" id="stIaDot" data-st="wait"></span><h3>Gemini (IA)</h3><button class="mini" id="btnTestIa"><span>Probar</span></button></div>
+      <div class="body" id="stIaBody"></div>
     </div>
-
-    <div class="statgrid">
-      <div class="card stat">
-        <div class="stat-top"><span class="sdot" id="stAppDot" data-st="ok"></span><h3>Aplicación</h3><button class="mini ghost" id="btnTestApp">Info</button></div>
-        <div class="stat-body" id="stAppBody">—</div>
-      </div>
-      <div class="card stat">
-        <div class="stat-top"><span class="sdot" id="stB4aDot" data-st="wait"></span><h3>Back4App</h3><button class="mini ghost" id="btnTestB4a">Probar</button></div>
-        <div class="stat-body" id="stB4aBody">—</div>
-      </div>
-      <div class="card stat">
-        <div class="stat-top"><span class="sdot" id="stIaDot" data-st="wait"></span><h3>Gemini (IA)</h3><button class="mini ghost" id="btnTestIa">Probar</button></div>
-        <div class="stat-body" id="stIaBody">—</div>
-      </div>
-      <div class="card stat">
-        <div class="stat-top"><span class="sdot" id="stGhDot" data-st="wait"></span><h3>GitHub</h3><button class="mini ghost" id="btnTestGh">Probar</button></div>
-        <div class="stat-body" id="stGhBody">Sin verificar</div>
-      </div>
+    <div class="statcard">
+      <div class="stat-top"><span class="sdot" id="stGhDot" data-st="wait"></span><h3>GitHub Pages</h3><button class="mini" id="btnTestGh"><span>Verificar</span></button></div>
+      <div class="body" id="stGhBody">Consultando…</div>
+      <div class="acts"><a class="mini" id="btnOpenRepo" href="https://github.com/argos4all/Ometecuhtli-Normatividad-IA" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg><span>Ver repositorio</span></a></div>
     </div>
+  </div>
 
-    <div class="grid2">
-      <div class="card">
-        <h3>Configuración</h3>
-        <p class="hint">Los valores se guardan en este navegador (localStorage) y se aplican de inmediato.</p>
-        <div class="fgrid">
-          <label class="lbl">Nombre de la escuela<input id="cfgSchool" class="in"></label>
-          <label class="lbl">Modelo de IA<input id="cfgModel" class="in mono" list="modelList" placeholder="gemini-3.5-flash-lite o auto">
-            <datalist id="modelList">
-              <option value="auto"></option><option value="gemini-3.5-flash-lite"></option><option value="gemini-3.8-flash"></option><option value="gemini-3.5-flash"></option><option value="gemini-3.0-flash-lite"></option><option value="gemini-2.5-flash-lite"></option><option value="gemini-2.5-flash"></option><option value="gemini-2.0-flash"></option>
-            </datalist>
-          </label>
-          <label class="lbl">Back4App · App ID<input id="cfgB4aApp" class="in mono" spellcheck="false"></label>
-          <label class="lbl">Back4App · JavaScript Key<input id="cfgB4aJs" class="in mono" spellcheck="false"></label>
-          <label class="lbl">Gemini · API Key<input id="cfgGemini" class="in mono" spellcheck="false"></label>
-          <label class="lbl">Contexto máximo por consulta (caracteres)<input id="cfgMaxCtx" class="in mono" type="number" min="20000" max="900000" step="10000"></label>
-          <label class="lbl">Temperatura de la IA (<span id="cfgTempVal">0.4</span>)<input id="cfgTemp" type="range" min="0" max="1" step="0.1" style="width:100%; accent-color:var(--accent); margin-top:14px"></label>
-        </div>
-        <div class="frow">
-          <button class="btn primary" id="btnSaveCfg">Guardar configuración</button>
-          <button class="btn ghost" id="btnResetCfg">Restaurar valores de fábrica</button>
-        </div>
+  <div class="sectitle"><h2>Configuración</h2><p class="hint">Se guarda solo en este navegador (localStorage).</p></div>
+  <div class="card">
+    <div class="formgrid">
+      <div><label class="lbl" for="cfgSchool">Nombre de la escuela</label><input id="cfgSchool" class="in" placeholder="Mi Escuela"></div>
+      <div><label class="lbl" for="cfgModel">Modelo de IA<input id="cfgModel" class="in mono" list="modelList" placeholder="gemini-3.5-flash-lite o auto" spellcheck="false" style="margin-top:5px"></label>
+        <datalist id="modelList"><option value="auto"></option><option value="gemini-3.5-flash-lite"></option><option value="gemini-3.8-flash"></option><option value="gemini-3.5-flash"></option><option value="gemini-3.0-flash-lite"></option><option value="gemini-2.5-flash-lite"></option><option value="gemini-2.5-flash"></option><option value="gemini-2.0-flash"></option></datalist>
       </div>
-
-      <div class="card">
-        <h3>Back4App · mantenimiento</h3>
-        <p class="hint">Clase <code>Documento</code> · columnas: <code>archivo</code>, <code>nombre</code>, <code>tipo</code>, <code>tamano</code>, <code>texto</code>, <code>subidoPor</code>. Se crea automáticamente al subir el primer documento.</p>
-        <div class="frow">
-          <button class="btn ghost" id="btnInitSchema">Inicializar esquema</button>
-          <button class="btn ghost" id="btnReloadDocs">Recargar documentos</button>
-          <button class="btn ghost" id="btnDiag">Exportar diagnóstico</button>
-        </div>
-        <div id="b4aLog" class="mini-log"></div>
-      </div>
-
-      <div class="card" style="grid-column:1/-1">
-        <h3>Publicación en GitHub Pages (frontend)</h3>
-        <p class="hint">Cuenta: <code>argos4all</code> · correo de la cuenta: <code>argos4all@gmail.com</code> · sitio resultante: <code>https://argos4all.github.io/&lt;repositorio&gt;/</code></p>
-        <div class="fgrid">
-          <label class="lbl">Usuario de GitHub<input id="ghUser" class="in mono" spellcheck="false"></label>
-          <label class="lbl">Repositorio<input id="ghRepo" class="in mono" spellcheck="false" placeholder="escuela-ia"></label>
-          <label class="lbl">Rama<input id="ghBranch" class="in mono" spellcheck="false"></label>
-          <label class="lbl">Token (PAT) · solo este dispositivo<input id="ghPat" class="in mono" type="password" spellcheck="false" placeholder="github_pat_…"></label>
-        </div>
-        <div class="frow">
-          <button class="btn primary" id="btnGhPublish">Publicar index.html</button>
-          <button class="btn ghost" id="btnGhCheck">Verificar repositorio</button>
-          <button class="btn ghost" id="btnGhClear">Borrar token</button>
-        </div>
-        <div id="ghStatus" class="mini-log"></div>
-        <div class="guia">
-          <h4>Indicaciones paso a paso (primera publicación)</h4>
-          <ol>
-            <li><b>Crea el repositorio:</b> entra a <a href="https://github.com/new" target="_blank" rel="noopener noreferrer">github.com/new</a> con tu cuenta <code>argos4all</code>. Nombre sugerido: <code>escuela-ia</code>. Visibilidad: <b>Público</b>. Pulsa <b>Create repository</b>.</li>
-            <li><b>Sube el archivo:</b> dentro del repositorio pulsa <b>Add file → Upload files</b>, arrastra el archivo <code>index.html</code> (esta aplicación) y pulsa <b>Commit changes</b>.</li>
-            <li><b>Activa GitHub Pages:</b> en <b>Settings → Pages</b>, en "Build and deployment" elige Source: <b>Deploy from a branch</b>, Branch: <code>main</code> y carpeta <code>/ (root)</code>. Pulsa <b>Save</b>.</li>
-            <li><b>Espera 1 a 2 minutos</b> y abre <code>https://argos4all.github.io/escuela-ia/</code> (si usaste otro nombre de repositorio, ajusta la dirección). Cada vez que actualices <code>index.html</code> en la rama <code>main</code>, el sitio se actualiza solo.</li>
-          </ol>
-          <h4>Publicación automática desde esta página (opcional)</h4>
-          <ol>
-            <li>Crea un token en <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">github.com/settings/personal-access-tokens/new</a> (Fine-grained). En <b>Repository access</b> elige <b>Only select repositories</b> y selecciona tu repositorio. En <b>Permissions → Repository permissions → Contents</b> marca <b>Read and write</b>. Genera y copia el token (empieza con <code>github_pat_…</code>).</li>
-            <li>Pega el token en el campo <b>Token (PAT)</b> de arriba. Se guarda únicamente en este navegador; nunca se incluye en el código publicado.</li>
-            <li>Pulsa <b>Publicar index.html</b>: la aplicación crea o actualiza <code>index.html</code> en tu repositorio mediante la API de GitHub, y GitHub Pages publica la versión nueva automáticamente en 1 a 2 minutos.</li>
-          </ol>
-          <p class="note">Por seguridad, esta aplicación nunca guarda ni usa tu contraseña de GitHub: desde 2021 GitHub solo permite automatización con tokens (PAT). Si usas una computadora compartida, pulsa "Borrar token" al terminar.</p>
-        </div>
-      </div>
-
-      <div class="card" style="grid-column:1/-1">
-        <h3>Notas de funcionamiento y seguridad</h3>
-        <ul class="notes">
-          <li><b>Back4App · subida de archivos:</b> si el servidor responde error 130 ("File upload by public is disabled"), la aplicación crea automáticamente un usuario de sesión en tu app de Back4App y reintenta la subida; no necesitas hacer nada. Alternativa manual: en back4app.com → tu app → <b>App Settings → Security &amp; Privacy</b>, activa la subida pública de archivos.</li>
-          <li><b>Back4App · almacenamiento:</b> al eliminar un documento de la lista, el registro se borra, pero el archivo puede permanecer en el almacenamiento de Back4App (su eliminación definitiva requiere la Master Key). Límpialos desde el dashboard si lo necesitas.</li>
-          <li><b>Back4App · usuario de prueba:</b> durante la validación se creó el usuario <code>edudocs_prueba_tmp</code> en tu app. Puedes eliminarlo desde el dashboard (Users) o dejarlo; no se usa.</li>
-          <li><b>Gemini:</b> la clave viaja en el código público de GitHub Pages. Recomendación: en Google AI Studio, restringe la clave por sitio web (<code>https://argos4all.github.io</code>) y rotala si sospechas fuga; luego actualízala aquí sin tocar el código.</li>
-          <li><b>Gemini:</b> si ves "User location is not supported", la red desde la que se abre la página bloquea la API de Google; abre el sitio desde tu navegador habitual (otra red). Si ves "API key not valid", corrige la clave en Configuración.</li>
-          <li><b>Acceso admin:</b> la contraseña se verifica localmente con hash SHA-256; nunca se envía a ningún servidor. Tras 5 intentos fallidos, el acceso se bloquea 60 segundos.</li>
-          <li><b>Privacidad:</b> los documentos y el historial del chat se guardan en Back4App y en este navegador. La aplicación no usa analítica ni rastreo.</li>
-        </ul>
-      </div>
+      <div><label class="lbl" for="cfgMaxCtx">Límite de contexto (caracteres)</label><input id="cfgMaxCtx" class="in mono" type="number" min="20000" max="900000" step="10000"></div>
+      <div><label class="lbl" for="cfgTemp">Temperatura · <span id="cfgTempVal">0.4</span></label><input id="cfgTemp" type="range" min="0" max="1" step="0.1" style="width:100%;accent-color:var(--pri)"></div>
+      <div><label class="lbl" for="cfgB4aApp">Back4App · App ID</label><input id="cfgB4aApp" class="in mono" spellcheck="false"></div>
+      <div><label class="lbl" for="cfgB4aJs">Back4App · JavaScript Key</label><input id="cfgB4aJs" class="in mono" spellcheck="false"></div>
+      <div style="grid-column:1/-1"><label class="lbl" for="cfgGemini">Gemini · API Key</label><input id="cfgGemini" class="in mono" spellcheck="false"></div>
     </div>
-  </section>
-</main>
+    <div style="display:flex;gap:9px;margin-top:14px;flex-wrap:wrap">
+      <button class="btn" id="btnSaveCfg">Guardar configuración</button>
+      <button class="btn soft" id="btnResetCfg">Restaurar valores</button>
+      <button class="btn soft" id="btnDiag">Exportar diagnóstico</button>
+    </div>
+  </div>
 
-<footer class="foot">
-  <span>EduDocs IA <span id="fVer"></span></span>
+  <div class="sectitle"><h2>Publicación y modo embebido</h2></div>
+  <div class="card">
+    <p class="hint" style="margin:0 0 8px">Esta versión <b>no usa tokens de acceso (PAT)</b>: la publicación la realiza quien administra el repositorio <b>argos4all/Ometecuhtli-Normatividad-IA</b> reemplazando <code>index.html</code> (por Git o con "Add file" en GitHub). GitHub Pages despliega el sitio automáticamente en 1 o 2 minutos. Para insertar la app en otra página (sitio del colegio, intranet), copia este código:</p>
+    <textarea id="embedCode" class="snippet" readonly></textarea>
+    <div style="margin-top:9px"><button class="mini" id="btnCopyEmbed"><span>Copiar código</span></button></div>
+  </div>
+
+  <div class="sectitle"><h2>Notas y seguridad</h2></div>
+  <div class="card">
+    <ul class="guia">
+      <li><b>Back4App · subida de archivos:</b> si el servidor responde error 130 ("File upload by public is disabled"), la aplicación inicia sesión con un usuario de servicio y reintenta la subida de forma automática; no necesitas hacer nada.</li>
+      <li><b>Back4App · almacenamiento:</b> al eliminar un documento se borra el registro; el archivo puede permanecer en el almacenamiento de Back4App (su borrado definitivo requiere la Master Key desde el dashboard).</li>
+      <li><b>Gemini:</b> la clave viaja en el código público de GitHub Pages. Recomendación: en Google AI Studio restringe la clave al sitio <code>https://argos4all.github.io</code> y rótala si sospechas fuga; luego actualízala en Configuración sin tocar el código.</li>
+      <li><b>Gemini:</b> si ves "User location is not supported", la red actual bloquea la API de Google; abre el sitio desde tu navegador y red habituales.</li>
+      <li><b>Acceso admin:</b> la contraseña se verifica localmente con hash SHA-256; nunca se envía a ningún servidor. Tras 5 intentos fallidos, el acceso se bloquea 60 segundos.</li>
+      <li><b>Privacidad:</b> los documentos se guardan en Back4App y el historial del chat en este navegador. La aplicación no usa analítica ni rastreo.</li>
+    </ul>
+  </div>
+</section>
+
+</div></main>
+
+<footer class="app"><div class="wrap">
+  <span>EduDocs IA · Documentos escolares con IA para <b id="fSchool">Mi Escuela</b></span>
   <span>IA: Gemini · Datos: Back4App · Frontend: GitHub Pages</span>
-</footer>
+</div></footer>
 
-<!-- ============ MODALES ============ -->
+<!-- Modal: login admin -->
 <div class="overlay" id="modalLogin" hidden>
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tLogin">
-    <div class="mhead"><h3 id="tLogin">Modo administrador</h3>
-      <button class="iconbtn" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  <div class="modal" style="max-width:420px">
+    <div class="mhead"><h3 id="tLogin">Modo administrador</h3><button class="iconbtn" data-close title="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="mbody">
+      <p class="hint" style="margin:0 0 10px">Ingresa la contraseña de administrador para subir documentos, eliminarlos y configurar la aplicación.</p>
+      <input type="password" id="loginPwd" class="in" placeholder="Contraseña de administrador" autocomplete="current-password">
+      <p class="hint" id="loginErr" style="color:var(--bad);font-weight:600;margin:8px 0 0" hidden></p>
+      <div style="margin-top:12px"><button class="btn" id="btnLogin" style="width:100%">Entrar</button></div>
     </div>
-    <p class="hint">Ingresa la contraseña de administrador para subir documentos, eliminarlos y configurar la aplicación.</p>
-    <input type="password" id="loginPwd" class="in" placeholder="Contraseña de administrador" autocomplete="current-password">
-    <p class="err" id="loginErr" hidden></p>
-    <div class="frow"><button class="btn primary" id="btnLogin" style="flex:1">Entrar</button></div>
   </div>
 </div>
 
+<!-- Modal: ver documento -->
 <div class="overlay" id="modalDoc" hidden>
-  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="tDoc">
-    <div class="mhead"><h3 id="tDoc">Documento</h3>
-      <button class="iconbtn" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  <div class="modal">
+    <div class="mhead"><h3 id="tDoc">Documento</h3><button class="iconbtn" data-close title="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="mbody">
+      <p class="hint" id="docViewMeta" style="margin:0 0 10px"></p>
+      <div class="mdout" id="docViewBody" style="max-height:420px"></div>
     </div>
-    <div class="docmeta" id="docViewMeta"></div>
-    <div class="md card-soft docview" id="docViewBody"></div>
   </div>
 </div>
 
-<div id="toasts" class="toasts" aria-live="polite"></div>
+<div id="toasts" aria-live="polite"></div>
 <noscript><p style="padding:20px">Esta aplicación necesita JavaScript para funcionar.</p></noscript>
 <script>
 'use strict';
 /* ================================================================
-   EduDocs IA v1.0 — Documentos escolares con IA (archivo único)
+   EduDocs IA v2.0 — Documentos escolares con IA (archivo único)
    Backend: Back4App (Parse REST) · IA: Gemini REST · Frontend: GitHub Pages
+   Publicación: sin tokens PAT (se publica reemplazando index.html en el repo)
    ================================================================ */
 
 /* ---------- Constantes ---------- */
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '2.0.0';
 const LS = {
-  cfg:'edudocs_cfg_v1', localDocs:'edudocs_local_docs', chat:'edudocs_chat_v1',
-  theme:'edudocs_theme', lock:'edudocs_lock', admin:'edudocs_admin_sess'
+  cfg:'edudocs2_cfg', localDocs:'edudocs2_local_docs', chat:'edudocs2_chat',
+  theme:'edudocs2_theme', lock:'edudocs2_lock', admin:'edudocs2_admin_sess'
 };
 const ADMIN_HASH = '26851fcd3b5ccdfe4654d7ff65b20e630a2fab2b322454a9705732ae0040b8e7';
 const B4A_URL = 'https://parseapi.back4app.com';
 const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta';
 const MAX_FILE_MB = 25;
 const MAX_STORE_CHARS = 350000;
+const MAX_VISION_MB = 14;
 const MODEL_FALLBACKS = ['gemini-3.5-flash-lite','gemini-3.8-flash','gemini-3.5-flash','gemini-3.0-flash-lite','gemini-2.5-flash-lite','gemini-2.5-flash','gemini-2.0-flash'];
 const DEFAULTS = {
   school:'Mi Escuela',
@@ -587,9 +596,10 @@ const DEFAULTS = {
   geminiKey:'AQ.Ab8RN6JoWWCB6QeMvnyhn6Ei-LMeo1PS2yhNXFq70P18j0Osdw',
   model:'gemini-3.5-flash-lite',
   temp:0.4, maxCtx:180000,
-  ghUser:'argos4all', ghRepo:'escuela-ia', ghBranch:'main', ghPat:'',
-  b4aSess:null
+  ghUser:'argos4all', ghRepo:'Ometecuhtli-Normatividad-IA', ghBranch:'main',
+  b4aService:{ user:'docaula_service', pass:'Dca!Serv-2026#x' }
 };
+const EMBED = (()=>{ try{ return new URLSearchParams(location.search).has('embed'); }catch(e){ return false; } })();
 
 /* ---------- Estado ---------- */
 let cfg = { ...DEFAULTS };
@@ -598,7 +608,7 @@ const state = {
   filter:'', ctxIds:null, abort:null, busy:false,
   status:{ pagina:'wait', b4a:'wait', b4aMsg:'Verificando…', b4aSub:'', ia:'wait', iaMsg:'Verificando…', iaSub:'' },
   docsTotal:null, b4aTok:null, iaModels:null, iaMs:null, runtimeModel:null,
-  gh:null, ghBody:'', lastAna:null
+  gh:'wait', ghBody:'Consultando…', lastAna:null
 };
 
 /* ---------- Utilidades ---------- */
@@ -609,6 +619,7 @@ function fmtBytes(n){ if(n==null) return '—'; if(n<1024) return n+' B'; if(n<1
 function fmtFecha(iso){ try{ return new Date(iso).toLocaleString('es-MX',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); }catch(e){ return ''; } }
 function resumirErr(e){ return String((e && e.message) || e).slice(0,90); }
 async function sha256Hex(txt){
+  if(!(window.crypto && crypto.subtle)) return 'nosubtle-' + txt;
   const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt));
   return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');
 }
@@ -616,7 +627,6 @@ function toast(msg, tipo){
   const d = document.createElement('div');
   d.className = 'toast ' + (tipo||'');
   d.textContent = msg;
-  d.style.transition = 'opacity .3s';
   $('#toasts').appendChild(d);
   setTimeout(()=>{ d.style.opacity='0'; setTimeout(()=>d.remove(), 320); }, 4600);
 }
@@ -633,7 +643,7 @@ function maskKey(k){ k=(k||'').trim(); return k? k.slice(0,7)+'…'+k.slice(-4) 
 function localStorageUsed(){ let t=0; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); t += ((localStorage.getItem(k)||'').length + k.length)*2; } return t; }
 
 /* ---------- Configuración ---------- */
-function loadCfg(){ let c={}; try{ c=JSON.parse(localStorage.getItem(LS.cfg)||'{}')||{}; }catch(e){} cfg={ ...DEFAULTS, ...c }; }
+function loadCfg(){ let c={}; try{ c=JSON.parse(localStorage.getItem(LS.cfg)||'{}')||{}; }catch(e){} cfg={ ...DEFAULTS, ...c }; if(!cfg.b4aService) cfg.b4aService={...DEFAULTS.b4aService}; }
 function saveCfg(){ try{ localStorage.setItem(LS.cfg, JSON.stringify(cfg)); }catch(e){ toast('No se pudo guardar la configuración local','warn'); } }
 function saveCfgField(k,v){ cfg[k]=v; saveCfg(); }
 
@@ -649,10 +659,12 @@ function applyTheme(t){
 /* ---------- Pestañas ---------- */
 function showTab(name){
   $$('.tab').forEach(b=>b.setAttribute('aria-selected', String(b.dataset.tab===name)));
-  ['docs','analizar','chat','admin'].forEach(t=>{ const s=$('#sec-'+t); if(s) s.hidden = (t!==name); });
+  ['inicio','docs','analizar','chat','admin'].forEach(t=>{ const s=$('#sec-'+t); if(s) s.hidden = (t!==name); });
+  if(name==='inicio'){ renderRecent(); }
   if(name==='analizar') refreshSelDoc();
   if(name==='admin') fillAdmin();
   if(name==='chat'){ renderCtx(); const ta=$('#chatInput'); if(ta) ta.focus(); }
+  window.scrollTo({ top:0, behavior:'smooth' });
 }
 
 /* ---------- Cliente Back4App (REST) ---------- */
@@ -667,21 +679,29 @@ async function b4aFetch(path, opts={}){
   if(!res.ok){ const er=new Error((j && j.error) || ('HTTP '+res.status)); er.code=j&&j.code; er.status=res.status; throw er; }
   return j || {};
 }
-/* Sesión automática: Back4App bloquea subida pública de archivos (error 130);
-   la app crea o inicia sesión de un usuario de servicio y reintenta. */
+/* Sesión automática: Back4App puede bloquear la subida pública de archivos (error 130).
+   La app inicia sesión con el usuario de servicio; si no existe lo crea;
+   como último recurso crea uno temporal y lo recuerda en este navegador. */
 async function b4aToken(force){
   if(state.b4aTok && !force) return state.b4aTok;
-  const s = cfg.b4aSess;
+  const s = cfg.b4aService;
   if(s && s.user && s.pass){
     try{
       const j = await b4aFetch('/login', { method:'POST', body: JSON.stringify({username:s.user, password:s.pass}) });
       state.b4aTok = j.sessionToken; return state.b4aTok;
-    }catch(e){ /* credenciales locales inválidas: se crea un usuario nuevo */ }
+    }catch(e){
+      if(e.code===101){
+        try{
+          const su = await b4aFetch('/users', { method:'POST', body: JSON.stringify({username:s.user, password:s.pass}) });
+          state.b4aTok = su.sessionToken; return state.b4aTok;
+        }catch(e2){ /* continúa con el último recurso */ }
+      }
+    }
   }
   const user = 'edudocs_' + Math.random().toString(36).slice(2,8);
   const pass = 'Ed-' + Math.random().toString(36).slice(2,12) + '-' + Date.now().toString(36);
   const j = await b4aFetch('/users', { method:'POST', body: JSON.stringify({username:user, password:pass}) });
-  saveCfgField('b4aSess', { user, pass });
+  saveCfgField('b4aService', { user, pass });
   state.b4aTok = j.sessionToken;
   toast('Back4App: sesión automática creada para subir archivos','ok');
   return state.b4aTok;
@@ -699,8 +719,7 @@ async function b4aCreateDoc(doc, file, tok){
     if(fj.name && fj.url){ body.archivo = { __type:'File', name:fj.name, url:fj.url }; url = fj.url; }
   }
   /* Creación del objeto: primero pública (la clase lo permite); si el servidor
-     la restringe, se reintenta con la sesión. El token no se usa de inmediato
-     tras el login para evitar la condición intermitente 209 de Back4App. */
+     la restringe, se reintenta con la sesión. */
   let oj=null, err1=null;
   try{ oj = await b4aFetch('/classes/Documento', { method:'POST', body: JSON.stringify(body) }); }
   catch(e){ err1=e; }
@@ -720,39 +739,33 @@ async function b4aDeleteDoc(id, tok){
   catch(e){ if(!tok) throw e; await b4aFetch('/classes/Documento/' + encodeURIComponent(id), { method:'DELETE', tok }); }
 }
 
-/* ---------- Estado global (píldoras + banner + panel) ---------- */
+/* ---------- Estado global (píldoras + tarjetas + panel) ---------- */
 function updateStatusUI(){
   const st = state.status;
+  const setD=(sel,val)=>{ const el=$(sel); if(el) el.dataset.st=val; };
+  const setT=(sel,val)=>{ const el=$(sel); if(el) el.textContent=val; };
+  const setH=(sel,val)=>{ const el=$(sel); if(el) el.innerHTML=val; };
   const pillP=$('#pillPagina'), pillB=$('#pillB4a'), pillI=$('#pillIa');
   if(pillP) pillP.dataset.st = st.pagina;
   if(pillB) pillB.dataset.st = st.b4a;
   if(pillI) pillI.dataset.st = st.ia;
-  const setT=(sel,val)=>{ const el=$(sel); if(el) el.textContent=val; };
-  const setH=(sel,val)=>{ const el=$(sel); if(el) el.innerHTML=val; };
-  const setD=(sel,val)=>{ const el=$(sel); if(el) el.dataset.st=val; };
-  setD('#sdPagina', st.pagina);
-  setT('#bPaginaVal', st.pagina==='ok' ? 'En línea' : (st.pagina==='bad' ? 'Sin conexión' : 'Cargando…'));
+  setD('#sdPagina', st.pagina); setT('#bPaginaVal', st.pagina==='ok' ? 'En línea' : (st.pagina==='bad' ? 'Sin conexión' : 'Cargando…'));
   setT('#bPaginaSub', st.pagina==='ok' ? 'aplicación activa en este navegador' : 'revisa tu conexión a internet');
-  setD('#sdB4a', st.b4a);   setT('#bB4aVal', st.b4aMsg);  setT('#bB4aSub', st.b4aSub);
-  setD('#sdIa', st.ia);     setT('#bIaVal', st.iaMsg);    setT('#bIaSub', st.iaSub);
-  setD('#stAppDot','ok');
-  setH('#stAppBody', appInfoHtml());
+  setD('#sdB4a', st.b4a); setT('#bB4aVal', st.b4aMsg); setT('#bB4aSub', st.b4aSub);
+  setD('#sdIa', st.ia);  setT('#bIaVal', st.iaMsg);  setT('#bIaSub', st.iaSub);
+  setD('#stAppDot','ok'); setH('#stAppBody', appInfoHtml());
   setD('#stB4aDot', st.b4a); setH('#stB4aBody', b4aInfoHtml());
   setD('#stIaDot', st.ia);   setH('#stIaBody', iaInfoHtml());
-  setD('#stGhDot', state.gh || (cfg.ghPat ? 'wait' : 'warn'));
-  setH('#stGhBody', state.ghBody || (cfg.ghPat
-    ? 'Token presente. Pulsa <b>Probar</b> para verificar el repositorio.'
-    : 'Sin token PAT: la verificación y publicación automática requieren uno (guía más abajo).'));
+  setD('#stGhDot', state.gh); setH('#stGhBody', state.ghBody);
 }
 function appInfoHtml(){
-  const lineas = [
+  return [
     '<b>Versión</b> ' + APP_VERSION + ' · <b>Red</b> ' + (navigator.onLine ? 'en línea' : 'sin conexión'),
     '<b>Documentos</b> ' + state.docs.length + ' en la nube · ' + state.localDocs.length + ' locales',
     '<b>Chat</b> ' + state.chat.length + ' mensajes guardados · <b>localStorage</b> ≈ ' + fmtBytes(localStorageUsed()),
     '<b>Sesión admin</b> ' + (state.admin ? 'activa' : 'inactiva'),
     '<b>Navegador</b> ' + esc(navigator.userAgent.slice(0,80)) + '…'
-  ];
-  return lineas.join('<br>');
+  ].join('<br>');
 }
 function b4aInfoHtml(){
   const st = state.status;
@@ -760,7 +773,7 @@ function b4aInfoHtml(){
     '<b>Estado</b> ' + esc(st.b4aMsg) + (st.b4aSub ? ' · ' + esc(st.b4aSub) : ''),
     '<b>App ID</b> ' + esc(maskKey(cfg.b4aApp)) + ' · <b>JS Key</b> ' + esc(maskKey(cfg.b4aJs)),
     '<b>Servidor</b> parseapi.back4app.com',
-    '<b>Usuario de sesión</b> ' + (cfg.b4aSess && cfg.b4aSess.user ? esc(cfg.b4aSess.user) : 'se creará automáticamente al subir archivos si el servidor lo exige'),
+    '<b>Usuario de servicio</b> ' + (cfg.b4aService && cfg.b4aService.user ? esc(cfg.b4aService.user) : 'se creará automáticamente al subir archivos'),
     '<b>Documentos en la nube</b> ' + (state.docsTotal==null ? '—' : state.docsTotal)
   ].join('<br>');
 }
@@ -776,6 +789,7 @@ function iaInfoHtml(){
 }
 
 /* ---------- Verificaciones ---------- */
+function setPageStatus(){ state.status.pagina = navigator.onLine ? 'ok' : 'bad'; updateStatusUI(); }
 async function checkB4a(){
   state.status.b4a='wait'; state.status.b4aMsg='Verificando…'; state.status.b4aSub='';
   updateStatusUI();
@@ -803,8 +817,39 @@ async function loadDocs(){
   }));
   renderDocs();
 }
+async function ghCheck(){
+  state.gh='wait'; state.ghBody='Consultando GitHub…'; updateStatusUI();
+  try{
+    const u=(cfg.ghUser||'').trim(), r=(cfg.ghRepo||'').trim();
+    if(!u || !r) throw new Error('Configura usuario y repositorio en el código (DEFAULTS).');
+    const res = await fetch('https://api.github.com/repos/'+encodeURIComponent(u)+'/'+encodeURIComponent(r), { cache:'no-store' });
+    const j = await res.json().catch(()=>null);
+    if(!res.ok) throw new Error((j && j.message) || ('HTTP '+res.status));
+    const sitio = 'https://'+u+'.github.io/'+r+'/';
+    let sitioSt='sin verificar';
+    try{ const p = await fetch(sitio+'?v='+Date.now(), { cache:'no-store' }); sitioSt = p.ok ? 'en línea' : ('HTTP '+p.status); }
+    catch(e){ sitioSt='sin conexión desde este navegador'; }
+    state.gh = (j.has_pages && sitioSt==='en línea') ? 'ok' : (j.has_pages ? 'warn' : 'warn');
+    state.ghBody = '<b>Repositorio</b> <a href="https://github.com/'+esc(u)+'/'+esc(r)+'" target="_blank" rel="noopener noreferrer">'+esc(j.full_name)+'</a>'+(j.private?' (privado)':' (público)')
+      +'<br><b>Rama</b> '+esc(j.default_branch)+' · <b>Último envío</b> '+fmtFecha(j.pushed_at)
+      +'<br><b>GitHub Pages</b> '+(j.has_pages?'activa':'sin activar')+' · <b>Sitio</b> '+esc(sitioSt)
+      +'<br><b>Publicación</b> sin tokens PAT: reemplaza index.html en el repositorio';
+  }catch(e){
+    state.gh='bad';
+    const m = resumirErr(e);
+    state.ghBody='<b>Error</b> ' + esc(/rate limit/i.test(m)
+      ? 'No se pudo verificar ahora (límite de la API pública de GitHub). Intenta de nuevo en unos minutos.'
+      : m);
+  }
+  updateStatusUI();
+}
+</script>
+<script>
+/* ================================================================
+   Parte 2 · Documentos, subida, admin, Gemini, chat y análisis
+   ================================================================ */
 
-/* ---------- Documentos: cola local y sincronización ---------- */
+/* ---------- Cola local y sincronización ---------- */
 function loadLocalDocs(){ try{ state.localDocs=JSON.parse(localStorage.getItem(LS.localDocs)||'[]')||[]; }catch(e){ state.localDocs=[]; } }
 function persistLocalDocs(){ try{ localStorage.setItem(LS.localDocs, JSON.stringify(state.localDocs)); }catch(e){ toast('No se pudo guardar la cola local (espacio lleno)','warn'); } }
 function findDoc(id){ return state.docs.find(d=>d.id===id) || state.localDocs.find(d=>d.id===id); }
@@ -820,7 +865,7 @@ async function syncPendientes(){
   for(const d of [...state.localDocs]){
     try{
       let tok=null;
-      try{ tok=await b4aToken(); }catch(e){ /* sin sesión: intento público */ }
+      try{ tok=await b4aToken(); }catch(e){ /* intento público */ }
       const r = await b4aCreateDoc({nombre:d.nombre, tipo:d.tipo, tamano:d.tamano, texto:d.texto}, null, tok);
       const nd = { ...d, id:r.id, url:r.url, fuente:'nube', pendiente:false };
       state.docs.unshift(nd);
@@ -866,6 +911,11 @@ function renderDocs(){
   $('#btnSync').hidden = !(state.localDocs.length && state.status.b4a==='ok');
   refreshSelDoc(); renderCtx();
 }
+function renderRecent(){
+  const todos = [...state.docs, ...state.localDocs].slice(0,4);
+  $('#recentList').innerHTML = todos.map(docItem).join('');
+  $('#recentEmpty').hidden = todos.length > 0;
+}
 async function docAction(act, id){
   const d = findDoc(id);
   if(!d) return;
@@ -875,7 +925,7 @@ async function docAction(act, id){
     const t = d.texto || '';
     $('#docViewBody').innerHTML = t
       ? mdRender('# Contenido extraído\n\n' + t.slice(0, 12000) + (t.length>12000 ? '\n\n*(…texto truncado para vista previa; la IA analiza hasta '+fmtBytes((d.texto||'').length)+' caracteres…)*' : ''))
-      : mdRender('*(Este documento no tiene texto extraído: es una imagen o un PDF escaneado. La IA lo leerá directamente como imagen/PDF al analizarlo o preguntarle.)*');
+      : mdRender('*(Este documento no tiene texto extraído: es una imagen o un PDF escaneado. La IA lo leerá directamente como imagen o PDF al analizarlo o preguntarle.)*');
     $('#modalDoc').hidden = false;
   }
   else if(act==='analizar'){ showTab('analizar'); $('#selDoc').value = d.id; }
@@ -888,7 +938,7 @@ async function docAction(act, id){
       state.docs = state.docs.filter(x=>x.id!==d.id);
       state.localDocs = state.localDocs.filter(x=>x.id!==d.id);
       delete state.visionMem[d.id];
-      persistLocalDocs(); renderDocs(); checkB4a();
+      persistLocalDocs(); renderDocs(); renderRecent(); checkB4a();
       toast('Documento eliminado','ok');
     }catch(e){ toast('No se pudo eliminar: '+resumirErr(e),'bad'); }
   }
@@ -900,7 +950,7 @@ function applyAdminUI(){
   if(tabA) tabA.hidden = !state.admin;
   $('#btnAdmin').classList.toggle('on', state.admin);
   $('#dzLock').hidden = state.admin;
-  renderDocs();
+  renderDocs(); renderRecent();
   if(state.admin) fillAdmin();
 }
 function openLogin(){
@@ -941,11 +991,8 @@ function logout(){
   try{ sessionStorage.removeItem(LS.admin); }catch(e){}
   applyAdminUI();
   toast('Sesión de administrador cerrada','ok');
-  showTab('docs');
+  showTab('inicio');
 }
-/* ================================================================
-   Parte 4 · Extracción de texto, Gemini, Markdown, Chat y Análisis
-   ================================================================ */
 
 /* ---------- Carga de bibliotecas con respaldo (CDN) ---------- */
 function loadScript(urls){
@@ -1021,10 +1068,10 @@ async function extractText(file, ext){
     let texto = '';
     try{ texto = await pdfTexto(buf); }
     catch(e){ texto = ''; }
-    if(texto.trim().length >= 80 && buf.byteLength <= 25*1048576){
+    if(texto.trim().length >= 80 && buf.byteLength <= MAX_FILE_MB*1048576){
       return { texto, vision: null };
     }
-    if(buf.byteLength <= 14*1048576){
+    if(buf.byteLength <= MAX_VISION_MB*1048576){
       return { texto: texto || '', vision: { mime:'application/pdf', data: abToB64(buf) } };
     }
     return { texto: texto || '', vision: null };
@@ -1037,7 +1084,7 @@ async function extractText(file, ext){
   const esImg = ['png','jpg','jpeg','webp','gif'].includes(ext) || /^image\//.test(file.type||'');
   if(esImg){
     const buf = await file.arrayBuffer();
-    if(buf.byteLength > 14*1048576) return { texto:'(imagen sin texto)', vision:null };
+    if(buf.byteLength > MAX_VISION_MB*1048576) return { texto:'(imagen sin texto)', vision:null };
     return { texto:'(imagen: la IA la leerá directamente)', vision:{ mime: file.type || ('image/'+ext), data: abToB64(buf) } };
   }
   if(['doc','xls','xlsx','ppt','pptx','pages','odt','ods'].includes(ext))
@@ -1061,64 +1108,47 @@ async function procesarFiles(files){
     log.appendChild(row);
     await procesarArchivo(f, row);
   }
-  persistLocalDocs(); renderDocs(); checkB4a();
+  persistLocalDocs(); renderDocs(); renderRecent(); checkB4a();
 }
 async function procesarArchivo(file, row){
+  let doc=null, ex=null;
   try{
     rowSet(row,'wait','Leyendo y extrayendo texto…');
     if(file.size > MAX_FILE_MB*1048576) throw new Error('El archivo supera '+MAX_FILE_MB+' MB.');
     const ext = (file.name.split('.').pop()||'').toLowerCase();
-    const ex = await extractText(file, ext);
-    const doc = {
-      id:'loc_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),
-      nombre:file.name, tipo:file.type || tipoPorExt(ext), tamano:file.size,
+    ex = await extractText(file, ext);
+    const idPrevio = 'loc_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+    doc = {
+      id:idPrevio, nombre:file.name, tipo:file.type || tipoPorExt(ext), tamano:file.size,
       texto:(ex.texto||'').slice(0, MAX_STORE_CHARS), fuente:'local', pendiente:true,
       creado:new Date().toISOString()
     };
-    if(ex.vision) state.visionMem[doc.id] = ex.vision;
+    if(ex.vision) state.visionMem[idPrevio] = ex.vision;
     rowSet(row,'wait','Guardando en Back4App…');
-    let guardado = false;
-    const idPrevio = doc.id;
+    let tok=null;
+    try{ tok = await b4aToken(); }catch(e){ /* intento público */ }
     try{
-      let tok=null;
-      try{ tok = await b4aToken(); }catch(e){ /* intento público */ }
       const r = await b4aCreateDoc(doc, file, tok);
       doc.id=r.id; doc.url=r.url; doc.fuente='nube'; doc.pendiente=false;
-      if(ex.vision){ delete state.visionMem[idPrevio]; state.visionMem[doc.id]=ex.vision; }
       rowSet(row,'ok','Guardado en Back4App');
-      guardado = true;
     }catch(e1){
       if(e1.code===130 || /public is disabled/i.test(e1.message||'')){
         rowSet(row,'wait','Creando sesión automática en Back4App…');
-        const tok = await b4aToken(true);
-        const r = await b4aCreateDoc(doc, file, tok);
+        const tok2 = await b4aToken(true);
+        const r = await b4aCreateDoc(doc, file, tok2);
         doc.id=r.id; doc.url=r.url; doc.fuente='nube'; doc.pendiente=false;
-        if(ex.vision){ delete state.visionMem[idPrevio]; state.visionMem[doc.id]=ex.vision; }
         rowSet(row,'ok','Guardado en Back4App (con sesión automática)');
-        guardado = true;
       } else { throw e1; }
     }
-    if(guardado){ state.docs.unshift(doc); toast('Documento subido: '+file.name,'ok'); }
-    else { throw new Error('No se pudo guardar'); }
-  }catch(e1){
-    // Fallback local: conserva el texto y lo marca como pendiente
-    try{
-      const ext=(file.name.split('.').pop()||'').toLowerCase();
-      const ex=await extractText(file, ext).catch(()=>({texto:'',vision:null}));
-      const doc={
-        id:'loc_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),
-        nombre:file.name, tipo:file.type||tipoPorExt(ext), tamano:file.size,
-        texto:(ex.texto||'').slice(0,MAX_STORE_CHARS), fuente:'local', pendiente:true,
-        creado:new Date().toISOString()
-      };
-      if(ex.vision) state.visionMem[doc.id]=ex.vision;
-      state.localDocs.unshift(doc);
-      rowSet(row,'bad','Sin conexión con la nube · guardado local (pendiente)');
-      toast('No se pudo subir "'+file.name+'": '+resumirErr(e1)+' — quedó guardado en este dispositivo.','warn');
-    }catch(e2){
-      rowSet(row,'bad','Error: '+resumirErr(e2));
-      toast('Error al procesar "'+file.name+'": '+resumirErr(e2),'bad');
+    if(doc.fuente==='nube'){
+      if(ex.vision){ delete state.visionMem[idPrevio]; state.visionMem[doc.id]=ex.vision; }
+      state.docs.unshift(doc);
+      toast('Documento subido: '+file.name,'ok');
     }
+  }catch(e1){
+    if(doc){ state.localDocs.unshift(doc); }
+    rowSet(row,'bad','Sin conexión con la nube · guardado local (pendiente)');
+    toast('No se pudo subir "'+file.name+'": '+resumirErr(e1)+' — quedó guardado en este dispositivo.','warn');
   }
 }
 
@@ -1267,7 +1297,7 @@ async function ensureVision(d){
     const res = await fetch(d.url);
     if(!res.ok) return;
     const buf = await res.arrayBuffer();
-    if(buf.byteLength > 14*1048576) return;
+    if(buf.byteLength > MAX_VISION_MB*1048576) return;
     state.visionMem[d.id] = { mime: isImg ? (d.tipo||'image/png') : 'application/pdf', data: abToB64(buf) };
   }catch(e){ /* sin visión: se usa solo el texto */ }
 }
@@ -1357,11 +1387,11 @@ const SUGS = [
 ];
 function loadChat(){ try{ state.chat = JSON.parse(localStorage.getItem(LS.chat)||'[]')||[]; }catch(e){ state.chat=[]; } }
 function saveChat(){ try{ localStorage.setItem(LS.chat, JSON.stringify(state.chat.slice(-40))); }catch(e){} }
-function msgHtml(m){
+function msgHtml(m, i){
   const cls = m.role==='user' ? 'user' : (m.err ? 'ia err' : 'ia');
   const body = m.role==='user' ? esc(m.text) : (m.done===false ? esc(m.text)+'<span class="cursor"></span>' : mdRender(m.text));
-  const raw = (m.role!=='user' && m.done===false) ? ' raw' : '';
-  return '<div class="msg '+cls+'"><div class="bubble'+raw+'">'+body+'</div></div>';
+  const copiar = (m.role!=='user' && m.done===true && m.text) ? '<button class="mcopy" data-mi="'+i+'" title="Copiar respuesta">Copiar</button>' : '';
+  return '<div class="msg '+cls+'"><div class="bubble">'+body+copiar+'</div></div>';
 }
 function renderChat(){
   const box = $('#chatBox');
@@ -1376,7 +1406,7 @@ function bubbleAppend(delta){
   if(last){ last.textContent += delta; box.scrollTop = box.scrollHeight; }
 }
 function ctxLabel(){
-  return !state.ctxIds ? 'Contexto: todos' : (state.ctxIds.size ? 'Contexto: '+state.ctxIds.size+' doc(s)' : 'Contexto: ninguno');
+  return !state.ctxIds ? 'todos los documentos' : (state.ctxIds.size ? state.ctxIds.size+' documento(s)' : 'ninguno');
 }
 function renderCtx(){
   const sum = $('#ctxSummary');
@@ -1486,11 +1516,8 @@ async function runAnalysis(tipo){
     setBusy(false);
   }
 }
-/* ================================================================
-   Parte 5 · Panel de administración, GitHub Pages y arranque
-   ================================================================ */
 
-/* ---------- Formulario de configuración ---------- */
+/* ---------- Panel admin: formulario y mantenimiento ---------- */
 function fillAdmin(){
   $('#cfgSchool').value = cfg.school || '';
   $('#cfgModel').value  = cfg.model || '';
@@ -1499,10 +1526,6 @@ function fillAdmin(){
   $('#cfgGemini').value = cfg.geminiKey || '';
   $('#cfgMaxCtx').value = cfg.maxCtx || 180000;
   $('#cfgTemp').value   = cfg.temp; $('#cfgTempVal').textContent = cfg.temp;
-  $('#ghUser').value   = cfg.ghUser || '';
-  $('#ghRepo').value   = cfg.ghRepo || '';
-  $('#ghBranch').value = cfg.ghBranch || 'main';
-  $('#ghPat').value    = cfg.ghPat || '';
   updateStatusUI();
 }
 function guardarConfig(){
@@ -1513,13 +1536,10 @@ function guardarConfig(){
   cfg.geminiKey= $('#cfgGemini').value.trim();
   cfg.maxCtx   = Math.min(900000, Math.max(20000, Number($('#cfgMaxCtx').value)||180000));
   cfg.temp     = Number($('#cfgTemp').value)||0.4;
-  cfg.ghUser   = $('#ghUser').value.trim();
-  cfg.ghRepo   = $('#ghRepo').value.trim();
-  cfg.ghBranch = $('#ghBranch').value.trim() || 'main';
-  cfg.ghPat    = $('#ghPat').value.trim();
   saveCfg();
   state.b4aTok=null; state.iaModels=null; state.runtimeModel=null;
   $('#brandSchool').textContent = cfg.school;
+  $('#fSchool').textContent = cfg.school;
   toast('Configuración guardada en este navegador','ok');
   updateStatusUI();
   checkB4a().catch(()=>{});
@@ -1531,6 +1551,7 @@ function restaurarConfig(){
   saveCfg();
   fillAdmin();
   $('#brandSchool').textContent = cfg.school;
+  $('#fSchool').textContent = cfg.school;
   state.b4aTok=null; state.iaModels=null; state.runtimeModel=null;
   toast('Configuración restaurada','ok');
   checkB4a().catch(()=>{});
@@ -1539,10 +1560,9 @@ function restaurarConfig(){
 function logTo(sel, txt){
   const el = $(sel);
   if(!el) return;
+  el.hidden = false;
   el.textContent = '['+new Date().toLocaleTimeString('es-MX')+'] '+txt+'\n'+el.textContent;
 }
-
-/* ---------- Mantenimiento Back4App ---------- */
 async function initSchema(){
   logTo('#b4aLog','Inicializando esquema (prueba de escritura y lectura)…');
   try{
@@ -1564,7 +1584,7 @@ function diagExport(){
     config: {
       school:cfg.school, model:cfg.model, temp:cfg.temp, maxCtx:cfg.maxCtx,
       b4aApp:maskKey(cfg.b4aApp), b4aJs:maskKey(cfg.b4aJs), geminiKey:maskKey(cfg.geminiKey),
-      ghUser:cfg.ghUser, ghRepo:cfg.ghRepo, ghBranch:cfg.ghBranch, ghPat:cfg.ghPat?'(presente)':'(vacío)'
+      ghUser:cfg.ghUser, ghRepo:cfg.ghRepo
     },
     estado: {
       pagina:state.status.pagina, b4a:state.status.b4a, ia:state.status.ia, github:state.gh,
@@ -1583,123 +1603,12 @@ function diagExport(){
   toast('Diagnóstico exportado (claves enmascaradas)','ok');
 }
 
-/* ---------- GitHub Pages ---------- */
-function ghHeaders(){
-  if(!(cfg.ghPat||'').trim()) throw new Error('Sin token PAT: crea uno con la guía de abajo.');
-  return {
-    'Authorization':'Bearer '+cfg.ghPat.trim(),
-    'Accept':'application/vnd.github+json',
-    'X-GitHub-Api-Version':'2022-11-28',
-    'Content-Type':'application/json'
-  };
-}
-function ghRepoUrl(){
-  const u=(cfg.ghUser||'').trim(), r=(cfg.ghRepo||'').trim();
-  if(!u || !r) throw new Error('Completa usuario y repositorio de GitHub.');
-  return 'https://api.github.com/repos/'+encodeURIComponent(u)+'/'+encodeURIComponent(r);
-}
-async function testGh(){
-  if(!(cfg.ghPat||'').trim()){
-    state.gh='warn';
-    state.ghBody='Sin token PAT. La verificación y publicación automática requieren uno (guía más abajo); mientras tanto puedes publicar manualmente con "Upload files".';
-    updateStatusUI();
-    return;
-  }
-  await ghCheck();
-}
-async function ghCheck(){
-  const log=$('#ghStatus');
-  try{
-    const repo = ghRepoUrl();
-    if(log) log.textContent='Consultando repositorio…';
-    const r = await fetch(repo, { headers: ghHeaders() });
-    const j = await r.json().catch(()=>null);
-    if(!r.ok){
-      if(r.status===404) throw new Error('Repositorio no encontrado. Créalo en github.com/new (público) y revisa usuario/nombre.');
-      if(r.status===401 || r.status===403) throw new Error('Token inválido o sin permisos (necesita Contents: Read and write).');
-      throw new Error((j && j.message) || ('HTTP '+r.status));
-    }
-    let pagesTxt='sin configurar (actívala en Settings → Pages)';
-    try{
-      const p = await fetch(repo+'/pages', { headers: ghHeaders() });
-      if(p.ok){ const pj = await p.json(); pagesTxt='activa → '+pj.html_url; }
-    }catch(e){ /* Pages sin verificar */ }
-    state.gh='ok';
-    state.ghBody = '<b>Repositorio</b> '+esc(j.full_name)+(j.private?' (privado)':' (público)')
-      +'<br><b>Rama</b> '+esc(j.default_branch)+' · <b>Último envío</b> '+fmtFecha(j.pushed_at)
-      +'<br><b>GitHub Pages</b> '+esc(pagesTxt)
-      +'<br><b>Sitio esperado</b> https://'+esc(cfg.ghUser)+'.github.io/'+esc(cfg.ghRepo)+'/';
-    if(log) log.textContent='Repositorio verificado correctamente.';
-    toast('GitHub: repositorio verificado','ok');
-    updateStatusUI();
-  }catch(e){
-    state.gh='bad';
-    state.ghBody='<b>Error</b> '+esc(resumirErr(e));
-    if(log) log.textContent='Error: '+resumirErr(e);
-    toast('GitHub: '+resumirErr(e),'bad');
-    updateStatusUI();
-  }
-}
-function utf8ToB64(s){
-  const b = new TextEncoder().encode(s);
-  let bin='';
-  const CH=0x8000;
-  for(let i=0;i<b.length;i+=CH) bin += String.fromCharCode.apply(null, b.subarray(i,i+CH));
-  return btoa(bin);
-}
-async function ownSource(){
-  try{
-    const res = await fetch(location.href, { cache:'no-store' });
-    if(res.ok){
-      const t = await res.text();
-      if(t.includes('EduDocsIA')) return t;
-    }
-  }catch(e){ /* archivo local: no accesible por fetch */ }
-  toast('No se pudo leer el archivo original; se usará una reconstrucción del DOM. Para la primera publicación, sube index.html manualmente (guía paso 2).','warn');
-  return '<!DOCTYPE html>\n<!-- EduDocsIA v'+APP_VERSION+' (reconstruido desde el navegador) -->\n'+document.documentElement.outerHTML;
-}
-async function ghPublish(){
-  const log=$('#ghStatus');
-  try{
-    if(log) log.textContent='Preparando contenido…';
-    const src = await ownSource();
-    const b64 = utf8ToB64(src);
-    let sha=null;
-    if(log) log.textContent='Verificando archivo existente…';
-    const g = await fetch(ghRepoUrl()+'/contents/index.html?ref='+encodeURIComponent(cfg.ghBranch||'main'), { headers: ghHeaders() });
-    if(g.ok){ const j = await g.json(); sha = j.sha; }
-    else if(g.status!==404){ const j = await g.json().catch(()=>null); throw new Error((j && j.message) || ('HTTP '+g.status)); }
-    if(log) log.textContent=(sha?'Actualizando':'Creando')+' index.html en '+cfg.ghUser+'/'+cfg.ghRepo+'…';
-    const put = await fetch(ghRepoUrl()+'/contents/index.html', {
-      method:'PUT', headers: ghHeaders(),
-      body: JSON.stringify({
-        message:'EduDocs IA '+APP_VERSION+' — publicación automática ('+new Date().toLocaleString('es-MX')+')',
-        content: b64, branch: cfg.ghBranch||'main', ...(sha?{sha}:{})
-      })
-    });
-    const pj = await put.json().catch(()=>null);
-    if(!put.ok) throw new Error((pj && pj.message) || ('HTTP '+put.status));
-    state.gh='ok';
-    const sitio = 'https://'+cfg.ghUser+'.github.io/'+cfg.ghRepo+'/';
-    state.ghBody='<b>Publicado</b> index.html · <b>Sitio</b> '+esc(sitio)+' · <b>Repositorio</b> https://github.com/'+esc(cfg.ghUser)+'/'+esc(cfg.ghRepo);
-    if(log) log.textContent='Publicación enviada. GitHub Pages desplegará la versión nueva en 1-2 minutos.\nSitio: '+sitio+'\nRepositorio: https://github.com/'+cfg.ghUser+'/'+cfg.ghRepo;
-    toast('index.html publicado en GitHub','ok');
-    updateStatusUI();
-  }catch(e){
-    state.gh='bad';
-    state.ghBody='<b>Error</b> '+esc(resumirErr(e));
-    if(log) log.textContent='Error: '+resumirErr(e)+'\n\nPrimera vez: 1) crea el repositorio en github.com/new (público), 2) revisa que el token tenga Contents: Read and write, 3) verifica usuario, repositorio y rama.';
-    toast('No se pudo publicar: '+resumirErr(e),'bad');
-    updateStatusUI();
-  }
-}
-
 /* ---------- Vinculación de eventos ---------- */
 function bind(){
   $('#btnTheme').addEventListener('click', ()=>applyTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
 
   $('#btnAdmin').addEventListener('click', ()=>{ if(state.admin) showTab('admin'); else openLogin(); });
-  $('#btnIrLogin').addEventListener('click', openLogin);
+  $('#btnIrLogin').addEventListener('click', e=>{ e.stopPropagation(); openLogin(); });
   $('#btnLogin').addEventListener('click', loginAdmin);
   $('#loginPwd').addEventListener('keydown', e=>{ if(e.key==='Enter') loginAdmin(); });
   $('#btnLogout').addEventListener('click', logout);
@@ -1711,25 +1620,40 @@ function bind(){
   document.addEventListener('keydown', e=>{ if(e.key==='Escape') $$('.overlay').forEach(ov=>ov.hidden=true); });
 
   $$('.tab').forEach(b=>b.addEventListener('click', ()=>showTab(b.dataset.tab)));
+  document.addEventListener('click', e=>{
+    const g = e.target.closest('[data-goto]');
+    if(g) showTab(g.dataset.goto);
+  });
 
+  $('#pillPagina').addEventListener('click', ()=>{ setPageStatus(); });
   $('#pillB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
   $('#pillIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
-  $('#btnCheckB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
-  $('#btnCheckIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
+  $('#btnChkB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
+  $('#btnChkIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
+  $('#heroSubir').addEventListener('click', ()=>{ showTab('docs'); if(!state.admin) openLogin(); });
+  $('#heroAnalizar').addEventListener('click', ()=>showTab('analizar'));
 
-  const dz=$('#dz'), fi=$('#fileInput');
-  dz.addEventListener('click', ()=>{ if(state.admin) fi.click(); else openLogin(); });
+  const dz=$('#dz'), fi=$('#fileInput'), fo=$('#folderInput');
+  dz.addEventListener('click', e=>{
+    if(e.target.closest('button') || e.target.closest('a') || e.target.closest('input')) return;
+    if(!state.admin){ openLogin(); return; }
+    fi.click();
+  });
   dz.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); if(state.admin) fi.click(); else openLogin(); } });
-  ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.add('drag'); }));
+  ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); if(!state.admin) return; dz.classList.add('drag'); }));
   ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.remove('drag'); }));
   dz.addEventListener('drop', e=>{ const fs=Array.from((e.dataTransfer && e.dataTransfer.files)||[]); if(fs.length) procesarFiles(fs); });
   document.addEventListener('dragover', e=>e.preventDefault());
   document.addEventListener('drop', e=>e.preventDefault());
+  $('#btnFiles').addEventListener('click', e=>{ e.stopPropagation(); if(!state.admin){ openLogin(); return; } fi.click(); });
+  $('#btnFolder').addEventListener('click', e=>{ e.stopPropagation(); if(!state.admin){ openLogin(); return; } fo.click(); });
   fi.addEventListener('change', ()=>{ const fs=Array.from(fi.files||[]); if(fs.length) procesarFiles(fs); fi.value=''; });
+  fo.addEventListener('change', ()=>{ const fs=Array.from(fo.files||[]); if(fs.length) procesarFiles(fs); fo.value=''; });
   $('#btnSync').addEventListener('click', ()=>syncPendientes().catch(()=>{}));
   $('#docFilter').addEventListener('input', e=>{ state.filter=e.target.value; renderDocs(); });
+  $('#btnCheckB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
 
-  ['listaNube','listaLocal'].forEach(id=>{
+  ['listaNube','listaLocal','recentList'].forEach(id=>{
     $('#'+id).addEventListener('click', e=>{
       const item = e.target.closest('.ditem');
       if(!item) return;
@@ -1748,6 +1672,12 @@ function bind(){
   ta.addEventListener('input', ()=>{ ta.style.height='auto'; ta.style.height=Math.min(180, ta.scrollHeight)+'px'; });
   ta.addEventListener('keydown', e=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendMsg(); } });
   $('#btnClearChat').addEventListener('click', ()=>{ state.chat=[]; saveChat(); renderChat(); });
+  $('#chatBox').addEventListener('click', e=>{
+    const c = e.target.closest('.mcopy');
+    if(!c) return;
+    const i = Number(c.dataset.mi);
+    if(state.chat[i] && state.chat[i].text) copyText(state.chat[i].text);
+  });
   $('#ctxList').addEventListener('change', e=>{
     if(e.target.id==='ctxAll'){ state.ctxIds = e.target.checked ? null : new Set(state.docs.map(d=>d.id)); renderCtx(); return; }
     const id=e.target.dataset.cid;
@@ -1766,24 +1696,17 @@ function bind(){
   $('#btnSaveCfg').addEventListener('click', guardarConfig);
   $('#btnResetCfg').addEventListener('click', restaurarConfig);
   $('#cfgTemp').addEventListener('input', e=>{ $('#cfgTempVal').textContent = e.target.value; });
-  $('#btnTestApp').addEventListener('click', ()=>{ updateStatusUI(); toast('Información actualizada','ok'); });
+  $('#btnTestApp').addEventListener('click', ()=>{ setPageStatus(); updateStatusUI(); toast('Información actualizada','ok'); });
   $('#btnTestB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
   $('#btnTestIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
-  $('#btnTestGh').addEventListener('click', testGh);
+  $('#btnTestGh').addEventListener('click', ()=>ghCheck().catch(()=>{}));
   $('#btnInitSchema').addEventListener('click', initSchema);
   $('#btnReloadDocs').addEventListener('click', async ()=>{ await checkB4a().catch(()=>{}); toast('Documentos recargados','ok'); });
   $('#btnDiag').addEventListener('click', diagExport);
-  $('#btnGhPublish').addEventListener('click', ghPublish);
-  $('#btnGhCheck').addEventListener('click', testGh);
-  $('#btnGhClear').addEventListener('click', ()=>{
-    cfg.ghPat=''; saveCfg(); $('#ghPat').value='';
-    state.gh=null; state.ghBody='';
-    updateStatusUI();
-    toast('Token borrado de este navegador','ok');
-  });
+  $('#btnCopyEmbed').addEventListener('click', ()=>copyText($('#embedCode').value));
 
-  window.addEventListener('online', ()=>{ state.status.pagina='ok'; updateStatusUI(); checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); });
-  window.addEventListener('offline', ()=>{ state.status.pagina='bad'; updateStatusUI(); });
+  window.addEventListener('online', ()=>{ setPageStatus(); checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); });
+  window.addEventListener('offline', ()=>{ setPageStatus(); });
 }
 
 /* ---------- Arranque ---------- */
@@ -1791,19 +1714,28 @@ function boot(){
   loadCfg();
   loadLocalDocs();
   loadChat();
-  applyTheme(document.documentElement.dataset.theme||'light');
+  let th = null;
+  try{ th = localStorage.getItem(LS.theme); }catch(e){}
+  if(!th){ th = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'; }
+  applyTheme(th);
+  if(EMBED) document.body.classList.add('embed');
   $('#brandSchool').textContent = cfg.school || 'Mi Escuela';
-  $('#fVer').textContent = 'v'+APP_VERSION;
+  $('#fSchool').textContent = cfg.school || 'Mi Escuela';
+  $('#vchip').textContent = 'v'+APP_VERSION.split('.').slice(0,2).join('.');
+  try{
+    const base = location.origin + location.pathname;
+    $('#embedCode').value = '<iframe src="'+base+'?embed=1" width="100%" height="720" style="border:0;border-radius:12px" loading="lazy" title="EduDocs IA"></iframe>';
+  }catch(e){ $('#embedCode').value = 'Abre la app publicada para generar el código de inserción.'; }
   try{ if(sessionStorage.getItem(LS.admin)==='1') state.admin=true; }catch(e){}
   bind();
   applyAdminUI();
-  showTab('docs');
+  showTab('inicio');
   renderChat();
-  state.status.pagina = navigator.onLine ? 'ok' : 'bad';
-  updateStatusUI();
+  setPageStatus();
   refreshSelDoc();
   checkB4a().catch(()=>{});
   pingGemini().catch(()=>{});
+  ghCheck().catch(()=>{});
   setInterval(()=>{
     if(navigator.onLine){ checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); }
   }, 5*60*1000);

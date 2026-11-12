@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<!-- EduDocsIA v1.0 -->
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="EduDocs IA - Revisor, analizador y chat de documentos escolares con IA.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0d8a7d" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0c1518" media="(prefers-color-scheme: dark)">
+<title>EduDocs IA · Documentos y Chat para tu Escuela</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230d8a7d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 9.5 12 4.5l10 5-10 5-10-5z'/%3E%3Cpath d='M6 11.8V16c0 1.3 2.7 2.7 6 2.7s6-1.4 6-2.7v-4.2'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('edudocs_theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme='light';}</script>
+<style>
+/* ============ Variables de tema ============ */
+:root{
+  --bg:#f2f6f6; --surface:#ffffff; --surface2:#eaf1f0; --surface3:#e0ebe9;
+  --text:#16262c; --muted:#5d7280; --border:#d8e4e3;
+  --accent:#0d8a7d; --accent-hover:#0b7166; --accent-text:#0a6f65; --accent-soft:#dff1ee;
+  --good:#188a4f; --good-soft:#e0f3e7; --warn:#b06a08; --warn-soft:#fbeed9; --bad:#d0342c; --bad-soft:#fbe3e1;
+  --glass:rgba(255,255,255,.86); --ink-on-accent:#ffffff;
+  --shadow:0 1px 2px rgba(22,38,44,.06),0 10px 28px rgba(22,38,44,.07);
+  --radius:16px; --radius-sm:10px;
+}
+[data-theme="dark"]{
+  --bg:#0c1518; --surface:#112025; --surface2:#182c31; --surface3:#1f373e;
+  --text:#e4edef; --muted:#8ba4a9; --border:#254047;
+  --accent:#2ec6b4; --accent-hover:#43d8c6; --accent-text:#43d8c6; --accent-soft:#103330;
+  --good:#37c376; --good-soft:#12301f; --warn:#e5a83c; --warn-soft:#32260f; --bad:#ef6a61; --bad-soft:#341715;
+  --glass:rgba(12,21,24,.86); --ink-on-accent:#06201d;
+  --shadow:0 1px 2px rgba(0,0,0,.45),0 12px 30px rgba(0,0,0,.38);
+}
+/* ============ Base ============ */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; min-height:100vh; display:flex; flex-direction:column;
+  background:var(--bg); color:var(--text);
+  font:15px/1.55 "Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+[hidden]{display:none !important}
+button{font:inherit; color:inherit; cursor:pointer; background:none; border:none; padding:0}
+input,select,textarea{font:inherit; color:inherit}
+a{color:var(--accent-text)}
+code,.mono{font-family:ui-monospace,"Cascadia Code",Consolas,Menlo,monospace; font-size:.92em}
+code{background:var(--surface2); padding:1px 6px; border-radius:6px}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:6px}
+::selection{background:var(--accent-soft)}
+h1,h2,h3,h4{margin:0 0 .35em; line-height:1.25}
+h2{font-size:1.12rem}
+h3{font-size:1rem}
+.hint{color:var(--muted); font-size:.86rem; margin:.15em 0 .8em}
+@media (prefers-reduced-motion:no-preference){
+  .spin{animation:girar .8s linear infinite}
+  .cursor{animation:parpadeo 1s steps(1) infinite}
+  .pill,.btn,.tab,.card,.dot,.sdot{transition:background .18s,color .18s,border-color .18s,box-shadow .18s,transform .18s}
+}
+@keyframes girar{to{transform:rotate(360deg)}}
+@keyframes parpadeo{50%{opacity:0}}
+.spin{display:inline-block; width:15px; height:15px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; vertical-align:-2px}
+.cursor{display:inline-block; width:8px; height:1.05em; background:var(--accent); border-radius:2px; vertical-align:text-bottom; margin-left:2px}
+/* ============ Barra superior ============ */
+.topbar{position:sticky; top:0; z-index:40; background:var(--glass); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--border)}
+.topbar-in{max-width:1120px; margin:0 auto; padding:10px 16px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:space-between}
+.brand{display:flex; align-items:center; gap:10px; min-width:0}
+.brand-ico{width:40px; height:40px; border-radius:12px; background:var(--accent); color:var(--ink-on-accent); display:grid; place-items:center; flex:none}
+.brand-ico svg{width:24px; height:24px}
+.brand-txt{display:flex; flex-direction:column; line-height:1.2; min-width:0}
+.brand-txt strong{font-size:1.08rem; letter-spacing:.2px}
+.brand-txt span{font-size:.78rem; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:44vw}
+.pills{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.pill{display:inline-flex; align-items:center; gap:7px; padding:6px 12px; border-radius:999px; border:1px solid var(--border); background:var(--surface); font-size:.8rem; font-weight:600}
+.pill:hover{border-color:var(--accent)}
+.pill .plbl{white-space:nowrap}
+.iconbtn{width:38px; height:38px; border-radius:11px; border:1px solid var(--border); background:var(--surface); display:grid; place-items:center; flex:none}
+.iconbtn:hover{border-color:var(--accent); color:var(--accent-text)}
+.iconbtn svg{width:19px; height:19px}
+.iconbtn.on{background:var(--accent-soft); border-color:var(--accent); color:var(--accent-text)}
+.dot,.sdot{width:9px; height:9px; border-radius:50%; background:var(--muted); flex:none}
+.dot[data-st="ok"],.sdot[data-st="ok"]{background:var(--good); box-shadow:0 0 0 3px var(--good-soft)}
+.dot[data-st="bad"],.sdot[data-st="bad"]{background:var(--bad); box-shadow:0 0 0 3px var(--bad-soft)}
+.dot[data-st="warn"],.sdot[data-st="warn"]{background:var(--warn); box-shadow:0 0 0 3px var(--warn-soft)}
+.dot[data-st="wait"],.sdot[data-st="wait"]{background:var(--muted); animation:latido 1.2s ease-in-out infinite}
+@keyframes latido{50%{opacity:.35}}
+/* ============ Banner de estado ============ */
+.banner{max-width:1120px; margin:16px auto 0; padding:0 16px; display:grid; grid-template-columns:repeat(3,1fr); gap:12px; width:100%}
+.scard{display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:13px 15px; box-shadow:var(--shadow)}
+.scard .sdot{width:12px; height:12px}
+.sinfo{min-width:0; flex:1}
+.sinfo small{display:block; color:var(--muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.6px; font-weight:700}
+.sinfo strong{display:block; font-size:.95rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.sinfo em{display:block; font-style:normal; color:var(--muted); font-size:.76rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.scard .mini{flex:none}
+/* ============ Pestañas ============ */
+.tabs{max-width:1120px; margin:14px auto 0; padding:0 16px; display:flex; gap:8px; overflow-x:auto; width:100%; scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{display:inline-flex; align-items:center; gap:8px; padding:9px 16px; border-radius:999px; border:1px solid var(--border); background:var(--surface); font-weight:600; font-size:.88rem; white-space:nowrap; color:var(--muted)}
+.tab svg{width:17px; height:17px}
+.tab:hover{border-color:var(--accent); color:var(--text)}
+.tab[aria-selected="true"]{background:var(--accent); border-color:var(--accent); color:var(--ink-on-accent)}
+/* ============ Contenido ============ */
+main{flex:1; width:100%}
+.sec{max-width:1120px; margin:16px auto 0; padding:0 16px 26px}
+.card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); min-width:0}
+.card-soft{background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start}
+.cardhead{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:10px}
+.cardhead h2{margin:0}
+.count{display:inline-grid; place-items:center; min-width:22px; height:22px; padding:0 7px; border-radius:999px; background:var(--accent-soft); color:var(--accent-text); font-size:.78rem; font-weight:700; vertical-align:2px}
+/* ============ Botones y campos ============ */
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 16px; border-radius:var(--radius-sm); font-weight:700; font-size:.9rem; border:1px solid transparent; min-height:42px}
+.btn.primary{background:var(--accent); color:var(--ink-on-accent)}
+.btn.primary:hover{background:var(--accent-hover)}
+.btn.ghost{border-color:var(--border); background:var(--surface); color:var(--text)}
+.btn.ghost:hover{border-color:var(--accent); color:var(--accent-text)}
+.btn.danger{background:var(--bad); color:#fff}
+.btn.danger:hover{filter:brightness(1.08)}
+.btn.sm{padding:7px 13px; min-height:36px; font-size:.84rem}
+.btn:disabled{opacity:.55; cursor:not-allowed}
+.mini{display:inline-flex; align-items:center; gap:6px; padding:5px 11px; border-radius:8px; font-size:.78rem; font-weight:700; border:1px solid var(--border); background:var(--surface); color:var(--text); min-height:30px}
+.mini:hover{border-color:var(--accent); color:var(--accent-text)}
+.mini.danger{color:var(--bad)}
+.mini.danger:hover{border-color:var(--bad); background:var(--bad-soft)}
+.frow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+.fgrid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.lbl{display:flex; flex-direction:column; gap:5px; font-size:.8rem; font-weight:700; color:var(--muted)}
+.in{width:100%; padding:10px 12px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--surface2); color:var(--text); min-height:42px}
+.in:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+.in.sm{min-height:36px; padding:7px 11px; width:auto}
+select.in{appearance:none; background-image:linear-gradient(45deg,transparent 49%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 49%); background-position:calc(100% - 18px) 55%,calc(100% - 13px) 55%; background-size:5px 5px; background-repeat:no-repeat; padding-right:34px}
+textarea.in{resize:none; min-height:44px; max-height:180px}
+/* ============ Zona de subida ============ */
+.dropzone{border:2px dashed var(--border); border-radius:var(--radius); padding:26px 16px; text-align:center; color:var(--muted); display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; background:var(--surface2)}
+.dropzone svg{width:34px; height:34px; color:var(--accent)}
+.dropzone strong{color:var(--text); font-size:.98rem}
+.dropzone span{font-size:.82rem}
+.dropzone:hover,.dropzone:focus-visible{border-color:var(--accent)}
+.dropzone.drag{border-color:var(--accent); background:var(--accent-soft); color:var(--accent-text)}
+.dz-lock{display:flex; gap:12px; align-items:center; margin-top:12px; padding:12px 14px; border:1px solid var(--warn); background:var(--warn-soft); border-radius:var(--radius-sm); font-size:.85rem; color:var(--text)}
+.dz-lock svg{width:20px; height:20px; color:var(--warn); flex:none}
+.dz-lock div{flex:1; display:flex; flex-direction:column}
+.dz-lock strong{font-size:.87rem}
+.uplog{margin-top:12px; display:flex; flex-direction:column; gap:6px; font-size:.84rem}
+.uplog .uprow{display:flex; align-items:center; gap:8px; padding:8px 11px; border:1px solid var(--border); border-radius:8px; background:var(--surface2)}
+.uplog .uprow b{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600}
+.uplog .st-ok{color:var(--good); font-weight:700}
+.uplog .st-bad{color:var(--bad); font-weight:700}
+.uplog .st-wait{color:var(--muted)}
+/* ============ Lista de documentos ============ */
+.dlist{display:flex; flex-direction:column}
+.ditem{display:flex; align-items:center; gap:12px; padding:11px 4px; border-bottom:1px solid var(--border)}
+.ditem:last-child{border-bottom:none}
+.dicon{width:40px; height:40px; border-radius:11px; background:var(--accent-soft); color:var(--accent-text); display:grid; place-items:center; font-size:.62rem; font-weight:800; letter-spacing:.4px; flex:none}
+.dmain{min-width:0; flex:1}
+.dname{font-weight:600; font-size:.92rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.dmeta{font-size:.76rem; color:var(--muted); display:flex; gap:6px; flex-wrap:wrap; align-items:center}
+.dact{display:flex; gap:6px; flex:none}
+.dact .mini{min-height:30px; padding:5px 9px}
+.dbadge{display:inline-block; padding:1px 8px; border-radius:999px; font-size:.68rem; font-weight:800; letter-spacing:.3px}
+.dbadge.ok{background:var(--good-soft); color:var(--good)}
+.dbadge.warn{background:var(--warn-soft); color:var(--warn)}
+.dbadge.bad{background:var(--bad-soft); color:var(--bad)}
+.subh{margin:14px 0 4px; font-size:.85rem; color:var(--warn)}
+.empty{display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center; padding:30px 14px; color:var(--muted)}
+.empty svg{width:34px; height:34px; opacity:.55}
+.empty strong{color:var(--text)}
+.empty.sm{padding:16px}
+/* ============ Chat ============ */
+.chatcard{display:flex; flex-direction:column}
+.chatactions{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.ctxdetails{position:relative}
+.ctxdetails summary{list-style:none; cursor:pointer; padding:6px 12px; border:1px solid var(--border); border-radius:8px; font-size:.78rem; font-weight:700; background:var(--surface2); white-space:nowrap}
+.ctxdetails summary::-webkit-details-marker{display:none}
+.ctxdetails[open] summary{border-color:var(--accent); color:var(--accent-text)}
+.ctxlist{position:absolute; right:0; top:calc(100% + 6px); z-index:30; width:min(340px,86vw); max-height:260px; overflow:auto; background:var(--surface); border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow); padding:10px}
+.ctxrow{display:flex; align-items:center; gap:9px; padding:6px 4px; font-size:.84rem}
+.ctxrow input{accent-color:var(--accent); width:16px; height:16px; flex:none}
+.ctxrow span{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.ctxnone{font-size:.8rem; color:var(--muted); padding:6px}
+.chatbox{height:min(56vh,520px); min-height:240px; overflow-y:auto; padding:6px 4px; display:flex; flex-direction:column; gap:10px; scrollbar-width:thin}
+.chatbox::-webkit-scrollbar{width:8px}
+.chatbox::-webkit-scrollbar-thumb{background:var(--border); border-radius:8px}
+.msg{display:flex; max-width:100%}
+.msg.user{justify-content:flex-end}
+.bubble{max-width:82%; padding:11px 14px; border-radius:14px; border:1px solid var(--border); background:var(--surface2); font-size:.92rem; overflow-wrap:break-word; min-width:0}
+.msg.user .bubble{background:var(--accent); color:var(--ink-on-accent); border-color:var(--accent); border-bottom-right-radius:4px}
+.msg.ia .bubble{border-bottom-left-radius:4px}
+.msg.err .bubble{background:var(--bad-soft); border-color:var(--bad); color:var(--text)}
+.bubble.raw{white-space:pre-wrap}
+.sugs{display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 4px}
+.sug{padding:6px 12px; border:1px solid var(--border); border-radius:999px; font-size:.8rem; color:var(--muted); background:var(--surface2)}
+.sug:hover{border-color:var(--accent); color:var(--accent-text)}
+.chatin{display:flex; gap:10px; align-items:flex-end; margin-top:8px}
+.chatin textarea{flex:1}
+.sendbtn{width:44px; height:44px; border-radius:12px; background:var(--accent); color:var(--ink-on-accent); display:grid; place-items:center; flex:none}
+.sendbtn:hover{background:var(--accent-hover)}
+.sendbtn.stop{background:var(--bad); color:#fff}
+.sendbtn:disabled{opacity:.5; cursor:not-allowed}
+.sendbtn svg{width:20px; height:20px}
+/* ============ Markdown ============ */
+.md p{margin:.4em 0}
+.md h3,.md h4{margin:.85em 0 .35em}
+.md ul{margin:.35em 0 .6em; padding-left:1.35em}
+.md li{margin:.2em 0}
+.md hr{border:none; border-top:1px solid var(--border); margin:.9em 0}
+.md pre.code{background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:12px; overflow:auto; white-space:pre-wrap; word-break:break-word; margin:.5em 0}
+.md table{border-collapse:collapse; margin:.5em 0; width:100%; font-size:.88em}
+.md th,.md td{border:1px solid var(--border); padding:6px 9px; text-align:left; vertical-align:top}
+.md th{background:var(--surface2)}
+.md a{text-decoration:underline}
+/* ============ Analizar ============ */
+.anabar{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px}
+.anabar select{flex:1; min-width:220px}
+.anabtns{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px}
+.anabtn{padding:12px; border:1px solid var(--border); border-radius:12px; background:var(--surface2); text-align:left; display:flex; flex-direction:column; gap:2px}
+.anabtn:hover{border-color:var(--accent)}
+.anabtn b{font-size:.88rem}
+.anabtn span{font-size:.74rem; color:var(--muted)}
+.anabtn:disabled{opacity:.5; cursor:not-allowed}
+.anameta{display:flex; align-items:center; justify-content:space-between; gap:10px; margin:14px 0 8px; font-size:.78rem; color:var(--muted); flex-wrap:wrap}
+/* ============ Admin ============ */
+.adminhead{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px}
+.adminhead h2{margin:0}
+.statgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-bottom:14px}
+.stat-top{display:flex; align-items:center; gap:10px; margin-bottom:10px}
+.stat-top .sdot{width:11px; height:11px}
+.stat-top h3{margin:0; flex:1}
+.stat-body{font-size:.86rem; color:var(--muted); display:flex; flex-direction:column; gap:4px; overflow-wrap:anywhere}
+.stat-body b{color:var(--text); font-weight:600}
+.mini-log{margin-top:10px; padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:var(--surface2); font-size:.8rem; color:var(--muted); display:flex; flex-direction:column; gap:4px; overflow-wrap:anywhere; white-space:pre-wrap}
+.mini-log:empty{display:none}
+.notes{margin:0; padding-left:1.2em; display:flex; flex-direction:column; gap:9px; font-size:.87rem; color:var(--muted)}
+.notes b{color:var(--text)}
+.guia{margin-top:14px; border-top:1px dashed var(--border); padding-top:12px}
+.guia h4{margin:.6em 0 .3em; font-size:.88rem}
+.guia ol{margin:0 0 10px; padding-left:1.35em; display:flex; flex-direction:column; gap:7px; font-size:.86rem}
+.guia .note{font-size:.78rem; color:var(--warn); background:var(--warn-soft); border:1px solid var(--warn); border-radius:8px; padding:8px 11px; margin:8px 0 0}
+.cmd{background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:9px 11px; font-size:.78rem; overflow:auto; white-space:pre; margin:4px 0}
+/* ============ Modal y toasts ============ */
+.overlay{position:fixed; inset:0; z-index:50; background:rgba(8,14,16,.55); backdrop-filter:blur(3px); display:grid; place-items:center; padding:16px}
+.modal{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); width:min(480px,94vw); padding:20px; max-height:88vh; overflow:auto}
+.modal.wide{width:min(760px,94vw)}
+.mhead{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px}
+.mhead h3{margin:0}
+.err{color:var(--bad); font-size:.82rem; font-weight:600; margin:8px 0 0}
+.docmeta{font-size:.78rem; color:var(--muted); margin-bottom:10px; overflow-wrap:anywhere}
+.docview{max-height:52vh; overflow:auto}
+.toasts{position:fixed; right:14px; bottom:14px; z-index:60; display:flex; flex-direction:column; gap:8px; max-width:min(380px,92vw)}
+.toast{background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--muted); border-radius:11px; padding:11px 14px; box-shadow:var(--shadow); font-size:.86rem; overflow-wrap:anywhere}
+.toast.ok{border-left-color:var(--good)}
+.toast.warn{border-left-color:var(--warn)}
+.toast.bad{border-left-color:var(--bad)}
+/* ============ Pie ============ */
+.foot{margin-top:auto; border-top:1px solid var(--border); padding:16px; display:flex; justify-content:center; gap:8px; flex-wrap:wrap; color:var(--muted); font-size:.78rem; background:var(--surface)}
+.foot span+span::before{content:"·"; margin-right:8px; color:var(--border)}
+/* ============ Responsive ============ */
+@media (max-width:900px){
+  .grid2,.statgrid{grid-template-columns:1fr}
+  .banner{grid-template-columns:1fr}
+  .bubble{max-width:92%}
+}
+@media (max-width:560px){
+  .topbar-in{padding:9px 12px; gap:8px}
+  .brand-txt span{max-width:38vw}
+  .pill{padding:6px 9px; font-size:.74rem}
+  .sec,.banner{padding-left:12px; padding-right:12px}
+  .card{padding:15px}
+  .fgrid{grid-template-columns:1fr}
+  .chatin{gap:7px}
+  .dact .mini{padding:5px 7px}
+  .dact .mini span{display:none}
+}
+@media print{.topbar,.tabs,.banner,.toasts,.foot{display:none}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <span class="brand-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9.5 12 4.5l10 5-10 5-10-5z"/><path d="M6 11.8V16c0 1.3 2.7 2.7 6 2.7s6-1.4 6-2.7v-4.2"/><path d="M22 9.5V15"/></svg></span>
+      <div class="brand-txt">
+        <strong>EduDocs IA</strong>
+        <span id="brandSchool">Mi Escuela</span>
+      </div>
+    </div>
+    <div class="pills">
+      <button class="pill" id="pillPagina" data-st="wait" title="Estado de la página"><span class="dot"></span><span class="plbl">Página</span></button>
+      <button class="pill" id="pillB4a" data-st="wait" title="Estado de Back4App (clic para probar)"><span class="dot"></span><span class="plbl">Back4App</span></button>
+      <button class="pill" id="pillIa" data-st="wait" title="Estado de la IA (clic para probar)"><span class="dot"></span><span class="plbl">IA Gemini</span></button>
+      <button class="iconbtn" id="btnTheme" title="Cambiar tema claro/oscuro" aria-label="Cambiar tema">
+        <svg id="icoSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg id="icoMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" hidden><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 7 7 0 1 0 20 14.5z"/></svg>
+      </button>
+      <button class="iconbtn" id="btnAdmin" title="Modo administrador" aria-label="Modo administrador">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="banner" aria-label="Estado del sistema">
+  <div class="scard">
+    <span class="sdot" id="sdPagina" data-st="wait"></span>
+    <div class="sinfo"><small>Página</small><strong id="bPaginaVal">Cargando…</strong><em id="bPaginaSub">aplicación local</em></div>
+  </div>
+  <div class="scard">
+    <span class="sdot" id="sdB4a" data-st="wait"></span>
+    <div class="sinfo"><small>Back4App (nube)</small><strong id="bB4aVal">Verificando…</strong><em id="bB4aSub">base de datos de documentos</em></div>
+    <button class="mini ghost" id="btnCheckB4a">Probar</button>
+  </div>
+  <div class="scard">
+    <span class="sdot" id="sdIa" data-st="wait"></span>
+    <div class="sinfo"><small>IA Gemini</small><strong id="bIaVal">Verificando…</strong><em id="bIaSub">análisis y chat</em></div>
+    <button class="mini ghost" id="btnCheckIa">Probar</button>
+  </div>
+</section>
+
+<nav class="tabs" role="tablist" aria-label="Secciones">
+  <button class="tab" role="tab" data-tab="docs" aria-selected="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 13h6M9 17h6"/></svg>
+    Documentos</button>
+  <button class="tab" role="tab" data-tab="analizar" aria-selected="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M12 3l1.9 5.4L19.5 10l-5.6 1.6L12 17l-1.9-5.4L4.5 10l5.6-1.6z"/></svg>
+    Analizar</button>
+  <button class="tab" role="tab" data-tab="chat" aria-selected="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>
+    Chat IA</button>
+  <button class="tab" role="tab" data-tab="admin" aria-selected="false" hidden>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3m0 13v3M2.5 12h3m13 0h3M5.3 5.3l2.1 2.1m9.2 9.2 2.1 2.1M18.7 5.3l-2.1 2.1m-9.2 9.2-2.1 2.1"/></svg>
+    Admin</button>
+</nav>
+
+<main>
+  <!-- ============ DOCUMENTOS ============ -->
+  <section id="sec-docs" class="sec" role="tabpanel">
+    <div class="grid2">
+      <div class="card">
+        <h2>Subir documentos</h2>
+        <p class="hint">PDF, DOCX, TXT, MD, CSV, JSON o imágenes · máx. 25 MB por archivo · se guardan en Back4App</p>
+        <div id="dz" class="dropzone" tabindex="0" role="button" aria-label="Subir documentos: arrastra y suelta o haz clic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4m0 0L7.5 8.5M12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+          <strong>Arrastra y suelta aquí</strong>
+          <span>o haz clic para elegir archivos de tu equipo</span>
+        </div>
+        <input type="file" id="fileInput" multiple hidden accept=".pdf,.docx,.txt,.md,.csv,.json,.log,.xml,.srt,.png,.jpg,.jpeg,.webp,.gif,image/*,text/*,application/json">
+        <div class="dz-lock" id="dzLock" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+          <div><strong>Requiere modo administrador</strong><span>Ingresa la contraseña para poder subir documentos.</span></div>
+          <button class="btn primary sm" id="btnIrLogin">Entrar</button>
+        </div>
+        <div id="uplog" class="uplog" hidden></div>
+        <button class="btn ghost sm" id="btnSync" hidden style="margin-top:12px">Reintentar sincronización con la nube</button>
+      </div>
+      <div class="card">
+        <div class="cardhead">
+          <h2>Documentos <span id="docCount" class="count">0</span></h2>
+          <input id="docFilter" class="in sm" type="search" placeholder="Buscar por nombre…" aria-label="Buscar documentos">
+        </div>
+        <div id="listaNube" class="dlist"></div>
+        <h3 class="subh" id="hLocal" hidden>Solo en este dispositivo (pendientes de sincronizar)</h3>
+        <div id="listaLocal" class="dlist"></div>
+        <div id="emptyDocs" class="empty">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 13h6M9 17h6"/></svg>
+          <strong>Aún no hay documentos</strong>
+          <span>1. Entra como admin (candado) · 2. Sube tus documentos · 3. Analízalos o pregunta en el Chat IA</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ANALIZAR ============ -->
+  <section id="sec-analizar" class="sec" role="tabpanel" hidden>
+    <div class="card">
+      <h2>Analizar documento</h2>
+      <p class="hint">Elige un documento y un tipo de análisis. La IA responde con base únicamente en el contenido del documento.</p>
+      <div class="anabar">
+        <select id="selDoc" class="in" aria-label="Documento a analizar"></select>
+      </div>
+      <div class="anabtns" id="anabtns">
+        <button class="anabtn" data-ana="resumen"><b>Resumen ejecutivo</b><span>Lo esencial en pocos párrafos</span></button>
+        <button class="anabtn" data-ana="claves"><b>Puntos clave</b><span>Datos, fechas y cifras importantes</span></button>
+        <button class="anabtn" data-ana="academico"><b>Análisis académico</b><span>Objetivos, temas y actividades</span></button>
+        <button class="anabtn" data-ana="cuestionario"><b>Cuestionario</b><span>Preguntas de repaso con respuestas</span></button>
+        <button class="anabtn" data-ana="ideas"><b>Mapa de ideas</b><span>Esquema jerárquico del contenido</span></button>
+      </div>
+      <div id="anaEmpty" class="empty sm"><strong>Sin documentos</strong><span>Sube documentos (modo admin) para analizarlos aquí.</span></div>
+      <div id="anaWrap" hidden>
+        <div class="anameta"><span id="anaMeta"></span><button class="mini ghost" id="btnAnaCopy">Copiar resultado</button></div>
+        <div id="anaOut" class="md card-soft"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CHAT ============ -->
+  <section id="sec-chat" class="sec" role="tabpanel" hidden>
+    <div class="card chatcard">
+      <div class="cardhead">
+        <h2>Chat con la IA</h2>
+        <div class="chatactions">
+          <details class="ctxdetails">
+            <summary id="ctxSummary">Contexto: todos</summary>
+            <div class="ctxlist">
+              <div id="ctxList"></div>
+              <div class="ctxnone">Si no eliges documentos, la IA responderá sin contexto escolar.</div>
+            </div>
+          </details>
+          <button class="mini ghost" id="btnClearChat">Vaciar chat</button>
+        </div>
+      </div>
+      <div id="chatBox" class="chatbox" aria-live="polite"></div>
+      <div id="sugs" class="sugs"></div>
+      <div class="chatin">
+        <textarea id="chatInput" class="in" rows="1" placeholder="Escribe tu pregunta… (Enter para enviar, Shift+Enter salto de línea)" aria-label="Mensaje para la IA"></textarea>
+        <button class="sendbtn stop" id="btnStop" aria-label="Detener respuesta" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+        <button class="sendbtn" id="btnSend" aria-label="Enviar mensaje">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3 3.8 10.2l6.6 2.4L12.8 19z"/><path d="M21 3 10.4 12.6"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ADMIN ============ -->
+  <section id="sec-admin" class="sec" role="tabpanel" hidden>
+    <div class="adminhead card">
+      <div><h2>Panel de administración</h2><p class="hint" style="margin:0">Sesión activa en este navegador. Aquí gestionas conexiones, configuración y publicación.</p></div>
+      <button class="btn danger sm" id="btnLogout">Cerrar sesión</button>
+    </div>
+
+    <div class="statgrid">
+      <div class="card stat">
+        <div class="stat-top"><span class="sdot" id="stAppDot" data-st="ok"></span><h3>Aplicación</h3><button class="mini ghost" id="btnTestApp">Info</button></div>
+        <div class="stat-body" id="stAppBody">—</div>
+      </div>
+      <div class="card stat">
+        <div class="stat-top"><span class="sdot" id="stB4aDot" data-st="wait"></span><h3>Back4App</h3><button class="mini ghost" id="btnTestB4a">Probar</button></div>
+        <div class="stat-body" id="stB4aBody">—</div>
+      </div>
+      <div class="card stat">
+        <div class="stat-top"><span class="sdot" id="stIaDot" data-st="wait"></span><h3>Gemini (IA)</h3><button class="mini ghost" id="btnTestIa">Probar</button></div>
+        <div class="stat-body" id="stIaBody">—</div>
+      </div>
+      <div class="card stat">
+        <div class="stat-top"><span class="sdot" id="stGhDot" data-st="wait"></span><h3>GitHub</h3><button class="mini ghost" id="btnTestGh">Probar</button></div>
+        <div class="stat-body" id="stGhBody">Sin verificar</div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Configuración</h3>
+        <p class="hint">Los valores se guardan en este navegador (localStorage) y se aplican de inmediato.</p>
+        <div class="fgrid">
+          <label class="lbl">Nombre de la escuela<input id="cfgSchool" class="in"></label>
+          <label class="lbl">Modelo de IA<input id="cfgModel" class="in mono" list="modelList" placeholder="gemini-3.5-flash-lite o auto">
+            <datalist id="modelList">
+              <option value="auto"></option><option value="gemini-3.5-flash-lite"></option><option value="gemini-3.8-flash"></option><option value="gemini-3.5-flash"></option><option value="gemini-3.0-flash-lite"></option><option value="gemini-2.5-flash-lite"></option><option value="gemini-2.5-flash"></option><option value="gemini-2.0-flash"></option>
+            </datalist>
+          </label>
+          <label class="lbl">Back4App · App ID<input id="cfgB4aApp" class="in mono" spellcheck="false"></label>
+          <label class="lbl">Back4App · JavaScript Key<input id="cfgB4aJs" class="in mono" spellcheck="false"></label>
+          <label class="lbl">Gemini · API Key<input id="cfgGemini" class="in mono" spellcheck="false"></label>
+          <label class="lbl">Contexto máximo por consulta (caracteres)<input id="cfgMaxCtx" class="in mono" type="number" min="20000" max="900000" step="10000"></label>
+          <label class="lbl">Temperatura de la IA (<span id="cfgTempVal">0.4</span>)<input id="cfgTemp" type="range" min="0" max="1" step="0.1" style="width:100%; accent-color:var(--accent); margin-top:14px"></label>
+        </div>
+        <div class="frow">
+          <button class="btn primary" id="btnSaveCfg">Guardar configuración</button>
+          <button class="btn ghost" id="btnResetCfg">Restaurar valores de fábrica</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Back4App · mantenimiento</h3>
+        <p class="hint">Clase <code>Documento</code> · columnas: <code>archivo</code>, <code>nombre</code>, <code>tipo</code>, <code>tamano</code>, <code>texto</code>, <code>subidoPor</code>. Se crea automáticamente al subir el primer documento.</p>
+        <div class="frow">
+          <button class="btn ghost" id="btnInitSchema">Inicializar esquema</button>
+          <button class="btn ghost" id="btnReloadDocs">Recargar documentos</button>
+          <button class="btn ghost" id="btnDiag">Exportar diagnóstico</button>
+        </div>
+        <div id="b4aLog" class="mini-log"></div>
+      </div>
+
+      <div class="card" style="grid-column:1/-1">
+        <h3>Publicación en GitHub Pages (frontend)</h3>
+        <p class="hint">Cuenta: <code>argos4all</code> · correo de la cuenta: <code>argos4all@gmail.com</code> · sitio resultante: <code>https://argos4all.github.io/&lt;repositorio&gt;/</code></p>
+        <div class="fgrid">
+          <label class="lbl">Usuario de GitHub<input id="ghUser" class="in mono" spellcheck="false"></label>
+          <label class="lbl">Repositorio<input id="ghRepo" class="in mono" spellcheck="false" placeholder="escuela-ia"></label>
+          <label class="lbl">Rama<input id="ghBranch" class="in mono" spellcheck="false"></label>
+          <label class="lbl">Token (PAT) · solo este dispositivo<input id="ghPat" class="in mono" type="password" spellcheck="false" placeholder="github_pat_…"></label>
+        </div>
+        <div class="frow">
+          <button class="btn primary" id="btnGhPublish">Publicar index.html</button>
+          <button class="btn ghost" id="btnGhCheck">Verificar repositorio</button>
+          <button class="btn ghost" id="btnGhClear">Borrar token</button>
+        </div>
+        <div id="ghStatus" class="mini-log"></div>
+        <div class="guia">
+          <h4>Indicaciones paso a paso (primera publicación)</h4>
+          <ol>
+            <li><b>Crea el repositorio:</b> entra a <a href="https://github.com/new" target="_blank" rel="noopener noreferrer">github.com/new</a> con tu cuenta <code>argos4all</code>. Nombre sugerido: <code>escuela-ia</code>. Visibilidad: <b>Público</b>. Pulsa <b>Create repository</b>.</li>
+            <li><b>Sube el archivo:</b> dentro del repositorio pulsa <b>Add file → Upload files</b>, arrastra el archivo <code>index.html</code> (esta aplicación) y pulsa <b>Commit changes</b>.</li>
+            <li><b>Activa GitHub Pages:</b> en <b>Settings → Pages</b>, en "Build and deployment" elige Source: <b>Deploy from a branch</b>, Branch: <code>main</code> y carpeta <code>/ (root)</code>. Pulsa <b>Save</b>.</li>
+            <li><b>Espera 1 a 2 minutos</b> y abre <code>https://argos4all.github.io/escuela-ia/</code> (si usaste otro nombre de repositorio, ajusta la dirección). Cada vez que actualices <code>index.html</code> en la rama <code>main</code>, el sitio se actualiza solo.</li>
+          </ol>
+          <h4>Publicación automática desde esta página (opcional)</h4>
+          <ol>
+            <li>Crea un token en <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">github.com/settings/personal-access-tokens/new</a> (Fine-grained). En <b>Repository access</b> elige <b>Only select repositories</b> y selecciona tu repositorio. En <b>Permissions → Repository permissions → Contents</b> marca <b>Read and write</b>. Genera y copia el token (empieza con <code>github_pat_…</code>).</li>
+            <li>Pega el token en el campo <b>Token (PAT)</b> de arriba. Se guarda únicamente en este navegador; nunca se incluye en el código publicado.</li>
+            <li>Pulsa <b>Publicar index.html</b>: la aplicación crea o actualiza <code>index.html</code> en tu repositorio mediante la API de GitHub, y GitHub Pages publica la versión nueva automáticamente en 1 a 2 minutos.</li>
+          </ol>
+          <p class="note">Por seguridad, esta aplicación nunca guarda ni usa tu contraseña de GitHub: desde 2021 GitHub solo permite automatización con tokens (PAT). Si usas una computadora compartida, pulsa "Borrar token" al terminar.</p>
+        </div>
+      </div>
+
+      <div class="card" style="grid-column:1/-1">
+        <h3>Notas de funcionamiento y seguridad</h3>
+        <ul class="notes">
+          <li><b>Back4App · subida de archivos:</b> si el servidor responde error 130 ("File upload by public is disabled"), la aplicación crea automáticamente un usuario de sesión en tu app de Back4App y reintenta la subida; no necesitas hacer nada. Alternativa manual: en back4app.com → tu app → <b>App Settings → Security &amp; Privacy</b>, activa la subida pública de archivos.</li>
+          <li><b>Back4App · almacenamiento:</b> al eliminar un documento de la lista, el registro se borra, pero el archivo puede permanecer en el almacenamiento de Back4App (su eliminación definitiva requiere la Master Key). Límpialos desde el dashboard si lo necesitas.</li>
+          <li><b>Back4App · usuario de prueba:</b> durante la validación se creó el usuario <code>edudocs_prueba_tmp</code> en tu app. Puedes eliminarlo desde el dashboard (Users) o dejarlo; no se usa.</li>
+          <li><b>Gemini:</b> la clave viaja en el código público de GitHub Pages. Recomendación: en Google AI Studio, restringe la clave por sitio web (<code>https://argos4all.github.io</code>) y rotala si sospechas fuga; luego actualízala aquí sin tocar el código.</li>
+          <li><b>Gemini:</b> si ves "User location is not supported", la red desde la que se abre la página bloquea la API de Google; abre el sitio desde tu navegador habitual (otra red). Si ves "API key not valid", corrige la clave en Configuración.</li>
+          <li><b>Acceso admin:</b> la contraseña se verifica localmente con hash SHA-256; nunca se envía a ningún servidor. Tras 5 intentos fallidos, el acceso se bloquea 60 segundos.</li>
+          <li><b>Privacidad:</b> los documentos y el historial del chat se guardan en Back4App y en este navegador. La aplicación no usa analítica ni rastreo.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>EduDocs IA <span id="fVer"></span></span>
+  <span>IA: Gemini · Datos: Back4App · Frontend: GitHub Pages</span>
+</footer>
+
+<!-- ============ MODALES ============ -->
+<div class="overlay" id="modalLogin" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tLogin">
+    <div class="mhead"><h3 id="tLogin">Modo administrador</h3>
+      <button class="iconbtn" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <p class="hint">Ingresa la contraseña de administrador para subir documentos, eliminarlos y configurar la aplicación.</p>
+    <input type="password" id="loginPwd" class="in" placeholder="Contraseña de administrador" autocomplete="current-password">
+    <p class="err" id="loginErr" hidden></p>
+    <div class="frow"><button class="btn primary" id="btnLogin" style="flex:1">Entrar</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="modalDoc" hidden>
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="tDoc">
+    <div class="mhead"><h3 id="tDoc">Documento</h3>
+      <button class="iconbtn" data-close aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="docmeta" id="docViewMeta"></div>
+    <div class="md card-soft docview" id="docViewBody"></div>
+  </div>
+</div>
+
+<div id="toasts" class="toasts" aria-live="polite"></div>
+<noscript><p style="padding:20px">Esta aplicación necesita JavaScript para funcionar.</p></noscript>
+<script>
+'use strict';
+/* ================================================================
+   EduDocs IA v1.0 — Documentos escolares con IA (archivo único)
+   Backend: Back4App (Parse REST) · IA: Gemini REST · Frontend: GitHub Pages
+   ================================================================ */
+
+/* ---------- Constantes ---------- */
+const APP_VERSION = '1.0.0';
+const LS = {
+  cfg:'edudocs_cfg_v1', localDocs:'edudocs_local_docs', chat:'edudocs_chat_v1',
+  theme:'edudocs_theme', lock:'edudocs_lock', admin:'edudocs_admin_sess'
+};
+const ADMIN_HASH = '26851fcd3b5ccdfe4654d7ff65b20e630a2fab2b322454a9705732ae0040b8e7';
+const B4A_URL = 'https://parseapi.back4app.com';
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta';
+const MAX_FILE_MB = 25;
+const MAX_STORE_CHARS = 350000;
+const MODEL_FALLBACKS = ['gemini-3.5-flash-lite','gemini-3.8-flash','gemini-3.5-flash','gemini-3.0-flash-lite','gemini-2.5-flash-lite','gemini-2.5-flash','gemini-2.0-flash'];
+const DEFAULTS = {
+  school:'Mi Escuela',
+  b4aApp:'TCm0bdqC4FKjIb63OHPI8tDbIXlGHlzDL3Audz2K',
+  b4aJs:'oBQP9UXQ45NGwdnJE5AbZIvBLWBILyEc4dHQWRjB',
+  geminiKey:'AQ.Ab8RN6JoWWCB6QeMvnyhn6Ei-LMeo1PS2yhNXFq70P18j0Osdw',
+  model:'gemini-3.5-flash-lite',
+  temp:0.4, maxCtx:180000,
+  ghUser:'argos4all', ghRepo:'escuela-ia', ghBranch:'main', ghPat:'',
+  b4aSess:null
+};
+
+/* ---------- Estado ---------- */
+let cfg = { ...DEFAULTS };
+const state = {
+  admin:false, docs:[], localDocs:[], visionMem:{}, chat:[],
+  filter:'', ctxIds:null, abort:null, busy:false,
+  status:{ pagina:'wait', b4a:'wait', b4aMsg:'Verificando…', b4aSub:'', ia:'wait', iaMsg:'Verificando…', iaSub:'' },
+  docsTotal:null, b4aTok:null, iaModels:null, iaMs:null, runtimeModel:null,
+  gh:null, ghBody:'', lastAna:null
+};
+
+/* ---------- Utilidades ---------- */
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+function esc(s){ return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function fmtBytes(n){ if(n==null) return '—'; if(n<1024) return n+' B'; if(n<1048576) return (n/1024).toFixed(1)+' KB'; return (n/1048576).toFixed(2)+' MB'; }
+function fmtFecha(iso){ try{ return new Date(iso).toLocaleString('es-MX',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); }catch(e){ return ''; } }
+function resumirErr(e){ return String((e && e.message) || e).slice(0,90); }
+async function sha256Hex(txt){
+  const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt));
+  return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+function toast(msg, tipo){
+  const d = document.createElement('div');
+  d.className = 'toast ' + (tipo||'');
+  d.textContent = msg;
+  d.style.transition = 'opacity .3s';
+  $('#toasts').appendChild(d);
+  setTimeout(()=>{ d.style.opacity='0'; setTimeout(()=>d.remove(), 320); }, 4600);
+}
+async function copyText(t){
+  try{ await navigator.clipboard.writeText(t); toast('Copiado al portapapeles','ok'); }
+  catch(e){
+    const ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); toast('Copiado','ok'); }catch(_){ toast('No se pudo copiar','bad'); }
+    ta.remove();
+  }
+}
+function maskKey(k){ k=(k||'').trim(); return k? k.slice(0,7)+'…'+k.slice(-4) : '(vacía)'; }
+function localStorageUsed(){ let t=0; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); t += ((localStorage.getItem(k)||'').length + k.length)*2; } return t; }
+
+/* ---------- Configuración ---------- */
+function loadCfg(){ let c={}; try{ c=JSON.parse(localStorage.getItem(LS.cfg)||'{}')||{}; }catch(e){} cfg={ ...DEFAULTS, ...c }; }
+function saveCfg(){ try{ localStorage.setItem(LS.cfg, JSON.stringify(cfg)); }catch(e){ toast('No se pudo guardar la configuración local','warn'); } }
+function saveCfgField(k,v){ cfg[k]=v; saveCfg(); }
+
+/* ---------- Tema ---------- */
+function applyTheme(t){
+  document.documentElement.dataset.theme = t;
+  try{ localStorage.setItem(LS.theme, t); }catch(e){}
+  const sun=$('#icoSun'), moon=$('#icoMoon');
+  if(sun) sun.hidden = (t==='dark');
+  if(moon) moon.hidden = (t!=='dark');
+}
+
+/* ---------- Pestañas ---------- */
+function showTab(name){
+  $$('.tab').forEach(b=>b.setAttribute('aria-selected', String(b.dataset.tab===name)));
+  ['docs','analizar','chat','admin'].forEach(t=>{ const s=$('#sec-'+t); if(s) s.hidden = (t!==name); });
+  if(name==='analizar') refreshSelDoc();
+  if(name==='admin') fillAdmin();
+  if(name==='chat'){ renderCtx(); const ta=$('#chatInput'); if(ta) ta.focus(); }
+}
+
+/* ---------- Cliente Back4App (REST) ---------- */
+async function b4aFetch(path, opts={}){
+  const headers = { 'X-Parse-Application-Id': cfg.b4aApp, 'X-Parse-JavaScript-Key': cfg.b4aJs };
+  if(opts.body) headers['Content-Type'] = opts.ct || 'application/json';
+  if(opts.tok) headers['X-Parse-Session-Token'] = opts.tok;
+  let res;
+  try{ res = await fetch(B4A_URL + path, { method: opts.method||'GET', headers, body: opts.body }); }
+  catch(e){ const er=new Error('Sin conexión con Back4App'); er.network=true; throw er; }
+  let j=null; try{ j = await res.json(); }catch(e){}
+  if(!res.ok){ const er=new Error((j && j.error) || ('HTTP '+res.status)); er.code=j&&j.code; er.status=res.status; throw er; }
+  return j || {};
+}
+/* Sesión automática: Back4App bloquea subida pública de archivos (error 130);
+   la app crea o inicia sesión de un usuario de servicio y reintenta. */
+async function b4aToken(force){
+  if(state.b4aTok && !force) return state.b4aTok;
+  const s = cfg.b4aSess;
+  if(s && s.user && s.pass){
+    try{
+      const j = await b4aFetch('/login', { method:'POST', body: JSON.stringify({username:s.user, password:s.pass}) });
+      state.b4aTok = j.sessionToken; return state.b4aTok;
+    }catch(e){ /* credenciales locales inválidas: se crea un usuario nuevo */ }
+  }
+  const user = 'edudocs_' + Math.random().toString(36).slice(2,8);
+  const pass = 'Ed-' + Math.random().toString(36).slice(2,12) + '-' + Date.now().toString(36);
+  const j = await b4aFetch('/users', { method:'POST', body: JSON.stringify({username:user, password:pass}) });
+  saveCfgField('b4aSess', { user, pass });
+  state.b4aTok = j.sessionToken;
+  toast('Back4App: sesión automática creada para subir archivos','ok');
+  return state.b4aTok;
+}
+async function b4aCreateDoc(doc, file, tok){
+  const body = { nombre:doc.nombre, tipo:doc.tipo||'', tamano:doc.tamano||0, texto:(doc.texto||'').slice(0,MAX_STORE_CHARS), subidoPor:'admin' };
+  let url='';
+  if(file){
+    const safe = (doc.nombre.replace(/[^\w.\-]+/g,'_').slice(-120)) || 'documento';
+    const fh = { 'X-Parse-Application-Id': cfg.b4aApp, 'X-Parse-JavaScript-Key': cfg.b4aJs, 'Content-Type': doc.tipo || 'application/octet-stream' };
+    if(tok) fh['X-Parse-Session-Token'] = tok;
+    const fr = await fetch(B4A_URL + '/files/' + encodeURIComponent(safe), { method:'POST', headers: fh, body: file });
+    const fj = await fr.json().catch(()=>({}));
+    if(!fr.ok){ const er=new Error(fj.error || ('HTTP '+fr.status)); er.code=fj.code; er.status=fr.status; throw er; }
+    if(fj.name && fj.url){ body.archivo = { __type:'File', name:fj.name, url:fj.url }; url = fj.url; }
+  }
+  /* Creación del objeto: primero pública (la clase lo permite); si el servidor
+     la restringe, se reintenta con la sesión. El token no se usa de inmediato
+     tras el login para evitar la condición intermitente 209 de Back4App. */
+  let oj=null, err1=null;
+  try{ oj = await b4aFetch('/classes/Documento', { method:'POST', body: JSON.stringify(body) }); }
+  catch(e){ err1=e; }
+  if(!oj && tok){
+    try{ oj = await b4aFetch('/classes/Documento', { method:'POST', body: JSON.stringify(body), tok }); err1=null; }
+    catch(e2){ err1 = err1 || e2; }
+  }
+  if(!oj && err1 && err1.code===111){
+    await new Promise(r=>setTimeout(r, 1500));
+    try{ oj = await b4aFetch('/classes/Documento', { method:'POST', body: JSON.stringify(body), ...(tok?{tok}:{}) }); err1=null; }catch(e3){ /* se lanza err1 */ }
+  }
+  if(!oj) throw (err1 || new Error('No se pudo guardar el documento'));
+  return { id: oj.objectId, url: url };
+}
+async function b4aDeleteDoc(id, tok){
+  try{ await b4aFetch('/classes/Documento/' + encodeURIComponent(id), { method:'DELETE' }); }
+  catch(e){ if(!tok) throw e; await b4aFetch('/classes/Documento/' + encodeURIComponent(id), { method:'DELETE', tok }); }
+}
+
+/* ---------- Estado global (píldoras + banner + panel) ---------- */
+function updateStatusUI(){
+  const st = state.status;
+  const pillP=$('#pillPagina'), pillB=$('#pillB4a'), pillI=$('#pillIa');
+  if(pillP) pillP.dataset.st = st.pagina;
+  if(pillB) pillB.dataset.st = st.b4a;
+  if(pillI) pillI.dataset.st = st.ia;
+  const setT=(sel,val)=>{ const el=$(sel); if(el) el.textContent=val; };
+  const setH=(sel,val)=>{ const el=$(sel); if(el) el.innerHTML=val; };
+  const setD=(sel,val)=>{ const el=$(sel); if(el) el.dataset.st=val; };
+  setD('#sdPagina', st.pagina);
+  setT('#bPaginaVal', st.pagina==='ok' ? 'En línea' : (st.pagina==='bad' ? 'Sin conexión' : 'Cargando…'));
+  setT('#bPaginaSub', st.pagina==='ok' ? 'aplicación activa en este navegador' : 'revisa tu conexión a internet');
+  setD('#sdB4a', st.b4a);   setT('#bB4aVal', st.b4aMsg);  setT('#bB4aSub', st.b4aSub);
+  setD('#sdIa', st.ia);     setT('#bIaVal', st.iaMsg);    setT('#bIaSub', st.iaSub);
+  setD('#stAppDot','ok');
+  setH('#stAppBody', appInfoHtml());
+  setD('#stB4aDot', st.b4a); setH('#stB4aBody', b4aInfoHtml());
+  setD('#stIaDot', st.ia);   setH('#stIaBody', iaInfoHtml());
+  setD('#stGhDot', state.gh || (cfg.ghPat ? 'wait' : 'warn'));
+  setH('#stGhBody', state.ghBody || (cfg.ghPat
+    ? 'Token presente. Pulsa <b>Probar</b> para verificar el repositorio.'
+    : 'Sin token PAT: la verificación y publicación automática requieren uno (guía más abajo).'));
+}
+function appInfoHtml(){
+  const lineas = [
+    '<b>Versión</b> ' + APP_VERSION + ' · <b>Red</b> ' + (navigator.onLine ? 'en línea' : 'sin conexión'),
+    '<b>Documentos</b> ' + state.docs.length + ' en la nube · ' + state.localDocs.length + ' locales',
+    '<b>Chat</b> ' + state.chat.length + ' mensajes guardados · <b>localStorage</b> ≈ ' + fmtBytes(localStorageUsed()),
+    '<b>Sesión admin</b> ' + (state.admin ? 'activa' : 'inactiva'),
+    '<b>Navegador</b> ' + esc(navigator.userAgent.slice(0,80)) + '…'
+  ];
+  return lineas.join('<br>');
+}
+function b4aInfoHtml(){
+  const st = state.status;
+  return [
+    '<b>Estado</b> ' + esc(st.b4aMsg) + (st.b4aSub ? ' · ' + esc(st.b4aSub) : ''),
+    '<b>App ID</b> ' + esc(maskKey(cfg.b4aApp)) + ' · <b>JS Key</b> ' + esc(maskKey(cfg.b4aJs)),
+    '<b>Servidor</b> parseapi.back4app.com',
+    '<b>Usuario de sesión</b> ' + (cfg.b4aSess && cfg.b4aSess.user ? esc(cfg.b4aSess.user) : 'se creará automáticamente al subir archivos si el servidor lo exige'),
+    '<b>Documentos en la nube</b> ' + (state.docsTotal==null ? '—' : state.docsTotal)
+  ].join('<br>');
+}
+function iaInfoHtml(){
+  const st = state.status;
+  return [
+    '<b>Estado</b> ' + esc(st.iaMsg) + (st.iaSub ? ' · ' + esc(st.iaSub) : ''),
+    '<b>API Key</b> ' + esc(maskKey(cfg.geminiKey)),
+    '<b>Modelo configurado</b> ' + esc(cfg.model||'auto') + (state.runtimeModel && state.runtimeModel!==cfg.model ? ' (en uso: ' + esc(state.runtimeModel) + ')' : ''),
+    '<b>Modelos disponibles</b> ' + (state.iaModels ? state.iaModels.length : '—'),
+    '<b>Temperatura</b> ' + cfg.temp
+  ].join('<br>');
+}
+
+/* ---------- Verificaciones ---------- */
+async function checkB4a(){
+  state.status.b4a='wait'; state.status.b4aMsg='Verificando…'; state.status.b4aSub='';
+  updateStatusUI();
+  try{
+    const t0 = Date.now();
+    const j = await b4aFetch('/classes/Documento?limit=1&count=1');
+    const ms = Date.now()-t0;
+    state.docsTotal = (typeof j.count==='number') ? j.count : null;
+    state.status.b4a='ok'; state.status.b4aMsg='Conectado ('+ms+' ms)';
+    state.status.b4aSub=(state.docsTotal==null?'':'documentos: '+state.docsTotal);
+    updateStatusUI();
+    await loadDocs();
+    if(state.localDocs.length) syncPendientes().catch(()=>{});
+  }catch(e){
+    state.status.b4a='bad'; state.status.b4aMsg='Sin conexión'; state.status.b4aSub=resumirErr(e);
+    updateStatusUI();
+    renderDocs();
+  }
+}
+async function loadDocs(){
+  const j = await b4aFetch('/classes/Documento?limit=200&order=-createdAt');
+  state.docs = (j.results||[]).map(r=>({
+    id:r.objectId, nombre:r.nombre||'documento', tipo:r.tipo||'', tamano:r.tamano||0,
+    texto:r.texto||'', url:(r.archivo && r.archivo.url) || '', fuente:'nube', creado:r.createdAt
+  }));
+  renderDocs();
+}
+
+/* ---------- Documentos: cola local y sincronización ---------- */
+function loadLocalDocs(){ try{ state.localDocs=JSON.parse(localStorage.getItem(LS.localDocs)||'[]')||[]; }catch(e){ state.localDocs=[]; } }
+function persistLocalDocs(){ try{ localStorage.setItem(LS.localDocs, JSON.stringify(state.localDocs)); }catch(e){ toast('No se pudo guardar la cola local (espacio lleno)','warn'); } }
+function findDoc(id){ return state.docs.find(d=>d.id===id) || state.localDocs.find(d=>d.id===id); }
+function tipoPorExt(ext){
+  const m={pdf:'application/pdf',docx:'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',webp:'image/webp',gif:'image/gif',
+    txt:'text/plain',md:'text/markdown',csv:'text/csv',json:'application/json'};
+  return m[ext] || 'application/octet-stream';
+}
+async function syncPendientes(){
+  if(state.status.b4a!=='ok' || !state.localDocs.length) return;
+  let okN=0, fallos=0;
+  for(const d of [...state.localDocs]){
+    try{
+      let tok=null;
+      try{ tok=await b4aToken(); }catch(e){ /* sin sesión: intento público */ }
+      const r = await b4aCreateDoc({nombre:d.nombre, tipo:d.tipo, tamano:d.tamano, texto:d.texto}, null, tok);
+      const nd = { ...d, id:r.id, url:r.url, fuente:'nube', pendiente:false };
+      state.docs.unshift(nd);
+      state.localDocs = state.localDocs.filter(x=>x.id!==d.id);
+      okN++;
+    }catch(e){ fallos++; break; }
+  }
+  persistLocalDocs(); renderDocs();
+  if(okN) toast('Sincronizados '+okN+' documento(s) con la nube','ok');
+  if(fallos) toast('No se pudieron sincronizar algunos documentos','warn');
+}
+
+/* ---------- Render de documentos ---------- */
+function docItem(d){
+  const ext = ((d.nombre.split('.').pop()||'').toUpperCase()).slice(0,4) || 'DOC';
+  const badge = d.fuente==='nube'
+    ? '<span class="dbadge ok">En la nube</span>'
+    : '<span class="dbadge warn">'+(d.pendiente?'Pendiente':'Local')+'</span>';
+  const acts = [
+    '<button class="mini" data-act="ver"><span>Ver</span></button>',
+    '<button class="mini" data-act="analizar"><span>Analizar</span></button>',
+    '<button class="mini" data-act="preguntar"><span>Preguntar</span></button>',
+    d.url ? '<a class="mini" href="'+esc(d.url)+'" target="_blank" rel="noopener noreferrer" title="Descargar archivo"><span>Descargar</span></a>' : '',
+    state.admin ? '<button class="mini danger" data-act="borrar"><span>Eliminar</span></button>' : ''
+  ].join('');
+  return '<div class="ditem" data-id="'+esc(d.id)+'">'
+    + '<span class="dicon">'+esc(ext)+'</span>'
+    + '<div class="dmain"><div class="dname">'+esc(d.nombre)+'</div>'
+    + '<div class="dmeta">'+badge+'<span>'+fmtBytes(d.tamano)+'</span><span>'+fmtFecha(d.creado)+'</span>'
+    + (d.texto ? '<span>texto listo</span>' : '<span>sin texto</span>') + '</div></div>'
+    + '<div class="dact">'+acts+'</div></div>';
+}
+function renderDocs(){
+  const f = state.filter.trim().toLowerCase();
+  const match = d => !f || (d.nombre||'').toLowerCase().includes(f);
+  const nube = state.docs.filter(match);
+  const local = state.localDocs.filter(match);
+  $('#listaNube').innerHTML = nube.map(docItem).join('');
+  $('#listaLocal').innerHTML = local.map(docItem).join('');
+  $('#hLocal').hidden = !local.length;
+  $('#emptyDocs').hidden = !!(nube.length || local.length);
+  $('#docCount').textContent = nube.length + local.length;
+  $('#btnSync').hidden = !(state.localDocs.length && state.status.b4a==='ok');
+  refreshSelDoc(); renderCtx();
+}
+async function docAction(act, id){
+  const d = findDoc(id);
+  if(!d) return;
+  if(act==='ver'){
+    $('#tDoc').textContent = d.nombre;
+    $('#docViewMeta').textContent = (d.tipo||tipoPorExt((d.nombre.split('.').pop()||'').toLowerCase())) + ' · ' + fmtBytes(d.tamano) + ' · ' + fmtFecha(d.creado) + ' · ' + (d.fuente==='nube'?'en la nube':'local');
+    const t = d.texto || '';
+    $('#docViewBody').innerHTML = t
+      ? mdRender('# Contenido extraído\n\n' + t.slice(0, 12000) + (t.length>12000 ? '\n\n*(…texto truncado para vista previa; la IA analiza hasta '+fmtBytes((d.texto||'').length)+' caracteres…)*' : ''))
+      : mdRender('*(Este documento no tiene texto extraído: es una imagen o un PDF escaneado. La IA lo leerá directamente como imagen/PDF al analizarlo o preguntarle.)*');
+    $('#modalDoc').hidden = false;
+  }
+  else if(act==='analizar'){ showTab('analizar'); $('#selDoc').value = d.id; }
+  else if(act==='preguntar'){ showTab('chat'); state.ctxIds = new Set([d.id]); renderCtx(); }
+  else if(act==='borrar'){
+    if(!state.admin){ toast('Requiere modo administrador','warn'); return; }
+    if(!confirm('¿Eliminar "'+d.nombre+'"?\n(El registro se borrará de Back4App; el archivo puede permanecer en el almacenamiento de Back4App)')) return;
+    try{
+      if(d.fuente==='nube'){ let tok=null; try{ tok=await b4aToken(); }catch(e){} await b4aDeleteDoc(d.id, tok); }
+      state.docs = state.docs.filter(x=>x.id!==d.id);
+      state.localDocs = state.localDocs.filter(x=>x.id!==d.id);
+      delete state.visionMem[d.id];
+      persistLocalDocs(); renderDocs(); checkB4a();
+      toast('Documento eliminado','ok');
+    }catch(e){ toast('No se pudo eliminar: '+resumirErr(e),'bad'); }
+  }
+}
+
+/* ---------- Modo administrador ---------- */
+function applyAdminUI(){
+  const tabA = $('.tab[data-tab="admin"]');
+  if(tabA) tabA.hidden = !state.admin;
+  $('#btnAdmin').classList.toggle('on', state.admin);
+  $('#dzLock').hidden = state.admin;
+  renderDocs();
+  if(state.admin) fillAdmin();
+}
+function openLogin(){
+  $('#modalLogin').hidden = false;
+  $('#loginErr').hidden = true;
+  $('#loginPwd').value = '';
+  setTimeout(()=>$('#loginPwd').focus(), 40);
+}
+async function loginAdmin(){
+  const v = $('#loginPwd').value;
+  if(!v) return;
+  const lock = (()=>{ try{ return JSON.parse(localStorage.getItem(LS.lock)||'{}')||{}; }catch(e){ return {}; } })();
+  if(lock.until && Date.now() < lock.until){
+    $('#loginErr').textContent = 'Demasiados intentos. Espera ' + Math.ceil((lock.until-Date.now())/1000) + ' segundos.';
+    $('#loginErr').hidden = false; return;
+  }
+  const btn=$('#btnLogin'); btn.disabled=true;
+  const h = await sha256Hex(v);
+  btn.disabled=false;
+  if(h === ADMIN_HASH){
+    state.admin = true;
+    try{ sessionStorage.setItem(LS.admin,'1'); }catch(e){}
+    localStorage.removeItem(LS.lock);
+    $('#modalLogin').hidden = true;
+    applyAdminUI();
+    toast('Modo administrador activado','ok');
+    showTab('admin');
+  } else {
+    const n = (lock.n||0) + 1;
+    if(n >= 5) localStorage.setItem(LS.lock, JSON.stringify({n:0, until: Date.now()+60000}));
+    else localStorage.setItem(LS.lock, JSON.stringify({n}));
+    $('#loginErr').textContent = 'Contraseña incorrecta' + (n>=5 ? ' · acceso bloqueado 60 segundos' : ' ('+n+'/5)');
+    $('#loginErr').hidden = false;
+  }
+}
+function logout(){
+  state.admin = false;
+  try{ sessionStorage.removeItem(LS.admin); }catch(e){}
+  applyAdminUI();
+  toast('Sesión de administrador cerrada','ok');
+  showTab('docs');
+}
+/* ================================================================
+   Parte 4 · Extracción de texto, Gemini, Markdown, Chat y Análisis
+   ================================================================ */
+
+/* ---------- Carga de bibliotecas con respaldo (CDN) ---------- */
+function loadScript(urls){
+  return new Promise((res, rej)=>{
+    const intento = i=>{
+      if(i >= urls.length){ rej(new Error('No se pudo cargar la biblioteca necesaria (revisa tu conexión)')); return; }
+      const s = document.createElement('script');
+      s.src = urls[i];
+      s.onload = ()=>res();
+      s.onerror = ()=>intento(i+1);
+      document.head.appendChild(s);
+    };
+    intento(0);
+  });
+}
+const PDFJS_SOURCES = [
+  ['https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js','https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'],
+  ['https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js','https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js']
+];
+const MAMMOTH_SOURCES = [
+  ['https://cdn.jsdelivr.net/npm/mammoth@1.9.0/mammoth.browser.min.js'],
+  ['https://unpkg.com/mammoth@1.8.0/mammoth.browser.min.js'],
+  ['https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js']
+];
+async function ensurePdfJs(){
+  if(window.pdfjsLib) return;
+  for(const [lib, worker] of PDFJS_SOURCES){
+    try{ await loadScript([lib]); if(window.pdfjsLib){ window.pdfjsLib.GlobalWorkerOptions.workerSrc = worker; return; } }
+    catch(e){ /* siguiente fuente */ }
+  }
+  throw new Error('No se pudo cargar el lector de PDF. Verifica tu conexión e inténtalo de nuevo.');
+}
+async function ensureMammoth(){
+  if(window.mammoth) return;
+  for(const [lib] of MAMMOTH_SOURCES){
+    try{ await loadScript([lib]); if(window.mammoth) return; }catch(e){}
+  }
+  throw new Error('No se pudo cargar el lector de DOCX. Verifica tu conexión e inténtalo de nuevo.');
+}
+
+/* ---------- Extracción de texto ---------- */
+function abToB64(buf){
+  const u = new Uint8Array(buf);
+  let s = '';
+  const CH = 0x8000;
+  for(let i=0; i<u.length; i+=CH) s += String.fromCharCode.apply(null, u.subarray(i, i+CH));
+  return btoa(s);
+}
+async function pdfTexto(buf){
+  await ensurePdfJs();
+  const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise;
+  const maxPag = Math.min(pdf.numPages, 400);
+  let out = '';
+  for(let i=1; i<=maxPag; i++){
+    const page = await pdf.getPage(i);
+    const tc = await page.getTextContent();
+    const piezas = [];
+    for(const it of tc.items){
+      if(typeof it.str !== 'string') continue;
+      if(it.hasEOL) piezas.push('\n');
+      piezas.push(it.str);
+    }
+    out += piezas.join('') + '\n\n';
+    if(out.length > MAX_STORE_CHARS) break;
+  }
+  return out;
+}
+async function extractText(file, ext){
+  const esTexto = ['txt','md','csv','json','log','xml','srt'].includes(ext) || /^text\//.test(file.type||'') || file.type==='application/json';
+  if(esTexto) return { texto: await file.text(), vision: null };
+  if(ext === 'pdf'){
+    const buf = await file.arrayBuffer();
+    let texto = '';
+    try{ texto = await pdfTexto(buf); }
+    catch(e){ texto = ''; }
+    if(texto.trim().length >= 80 && buf.byteLength <= 25*1048576){
+      return { texto, vision: null };
+    }
+    if(buf.byteLength <= 14*1048576){
+      return { texto: texto || '', vision: { mime:'application/pdf', data: abToB64(buf) } };
+    }
+    return { texto: texto || '', vision: null };
+  }
+  if(ext === 'docx'){
+    await ensureMammoth();
+    const r = await window.mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() });
+    return { texto: (r && r.value) || '', vision: null };
+  }
+  const esImg = ['png','jpg','jpeg','webp','gif'].includes(ext) || /^image\//.test(file.type||'');
+  if(esImg){
+    const buf = await file.arrayBuffer();
+    if(buf.byteLength > 14*1048576) return { texto:'(imagen sin texto)', vision:null };
+    return { texto:'(imagen: la IA la leerá directamente)', vision:{ mime: file.type || ('image/'+ext), data: abToB64(buf) } };
+  }
+  if(['doc','xls','xlsx','ppt','pptx','pages','odt','ods'].includes(ext))
+    throw new Error('Formato "'+ext+'" no soportado. Conviértelo a PDF, DOCX, TXT o CSV.');
+  throw new Error('Formato no soportado: .'+ext);
+}
+
+/* ---------- Procesado y subida de archivos ---------- */
+function rowSet(row, st, txt){
+  const sp = row.querySelector('.st');
+  if(sp){ sp.className = 'st st-'+st; sp.textContent = txt; }
+}
+async function procesarFiles(files){
+  if(!state.admin){ toast('La subida requiere modo administrador','warn'); openLogin(); return; }
+  if(!files || !files.length) return;
+  const log = $('#uplog'); log.hidden = false;
+  for(const f of files){
+    const row = document.createElement('div');
+    row.className = 'uprow';
+    row.innerHTML = '<b>'+esc(f.name)+'</b><span class="st st-wait">En cola…</span>';
+    log.appendChild(row);
+    await procesarArchivo(f, row);
+  }
+  persistLocalDocs(); renderDocs(); checkB4a();
+}
+async function procesarArchivo(file, row){
+  try{
+    rowSet(row,'wait','Leyendo y extrayendo texto…');
+    if(file.size > MAX_FILE_MB*1048576) throw new Error('El archivo supera '+MAX_FILE_MB+' MB.');
+    const ext = (file.name.split('.').pop()||'').toLowerCase();
+    const ex = await extractText(file, ext);
+    const doc = {
+      id:'loc_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+      nombre:file.name, tipo:file.type || tipoPorExt(ext), tamano:file.size,
+      texto:(ex.texto||'').slice(0, MAX_STORE_CHARS), fuente:'local', pendiente:true,
+      creado:new Date().toISOString()
+    };
+    if(ex.vision) state.visionMem[doc.id] = ex.vision;
+    rowSet(row,'wait','Guardando en Back4App…');
+    let guardado = false;
+    const idPrevio = doc.id;
+    try{
+      let tok=null;
+      try{ tok = await b4aToken(); }catch(e){ /* intento público */ }
+      const r = await b4aCreateDoc(doc, file, tok);
+      doc.id=r.id; doc.url=r.url; doc.fuente='nube'; doc.pendiente=false;
+      if(ex.vision){ delete state.visionMem[idPrevio]; state.visionMem[doc.id]=ex.vision; }
+      rowSet(row,'ok','Guardado en Back4App');
+      guardado = true;
+    }catch(e1){
+      if(e1.code===130 || /public is disabled/i.test(e1.message||'')){
+        rowSet(row,'wait','Creando sesión automática en Back4App…');
+        const tok = await b4aToken(true);
+        const r = await b4aCreateDoc(doc, file, tok);
+        doc.id=r.id; doc.url=r.url; doc.fuente='nube'; doc.pendiente=false;
+        if(ex.vision){ delete state.visionMem[idPrevio]; state.visionMem[doc.id]=ex.vision; }
+        rowSet(row,'ok','Guardado en Back4App (con sesión automática)');
+        guardado = true;
+      } else { throw e1; }
+    }
+    if(guardado){ state.docs.unshift(doc); toast('Documento subido: '+file.name,'ok'); }
+    else { throw new Error('No se pudo guardar'); }
+  }catch(e1){
+    // Fallback local: conserva el texto y lo marca como pendiente
+    try{
+      const ext=(file.name.split('.').pop()||'').toLowerCase();
+      const ex=await extractText(file, ext).catch(()=>({texto:'',vision:null}));
+      const doc={
+        id:'loc_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+        nombre:file.name, tipo:file.type||tipoPorExt(ext), tamano:file.size,
+        texto:(ex.texto||'').slice(0,MAX_STORE_CHARS), fuente:'local', pendiente:true,
+        creado:new Date().toISOString()
+      };
+      if(ex.vision) state.visionMem[doc.id]=ex.vision;
+      state.localDocs.unshift(doc);
+      rowSet(row,'bad','Sin conexión con la nube · guardado local (pendiente)');
+      toast('No se pudo subir "'+file.name+'": '+resumirErr(e1)+' — quedó guardado en este dispositivo.','warn');
+    }catch(e2){
+      rowSet(row,'bad','Error: '+resumirErr(e2));
+      toast('Error al procesar "'+file.name+'": '+resumirErr(e2),'bad');
+    }
+  }
+}
+
+/* ---------- Gemini ---------- */
+function apiKey(){ return (cfg.geminiKey||'').trim(); }
+function gemHeaders(){ return { 'Content-Type':'application/json', 'x-goog-api-key': apiKey() }; }
+function gErr(res, j){
+  const msg = (j && j.error && j.error.message) || ('HTTP '+res.status);
+  const e = new Error(msg);
+  e.status = res.status;
+  e.retryModel = res.status===404 || res.status===410 || /not found|unsupported|no longer available/i.test(msg);
+  const sug = msg.match(/models\/([A-Za-z0-9._\-]+)/);
+  if(sug) e.suggested = sug[1];
+  return e;
+}
+function gBody(contents, sys){
+  const b = { contents, generationConfig:{ temperature: Number(cfg.temp)||0.4, maxOutputTokens: 4096 } };
+  if(sys) b.systemInstruction = { parts:[{ text: sys }] };
+  return b;
+}
+async function geminiStream(model, contents, sys, onDelta, signal){
+  const res = await fetch(GEMINI_URL+'/models/'+encodeURIComponent(model)+':streamGenerateContent?alt=sse',
+    { method:'POST', headers: gemHeaders(), signal, body: JSON.stringify(gBody(contents, sys)) });
+  if(!res.ok){ const j = await res.json().catch(()=>null); throw gErr(res, j); }
+  const reader = res.body.getReader();
+  const dec = new TextDecoder();
+  let buf='', full='';
+  for(;;){
+    const r = await reader.read();
+    if(r.done) break;
+    buf += dec.decode(r.value, { stream:true });
+    let ix;
+    while((ix = buf.indexOf('\n')) >= 0){
+      const line = buf.slice(0, ix).trim();
+      buf = buf.slice(ix+1);
+      if(!line.startsWith('data:')) continue;
+      const p = line.slice(5).trim();
+      if(!p) continue;
+      try{
+        const j = JSON.parse(p);
+        const t = (((j.candidates||[])[0]||{}).content||{}).parts || [];
+        const frag = t.map(x=>x.text||'').join('');
+        if(frag){ full += frag; if(onDelta) onDelta(frag); }
+      }catch(e){ /* fragmento incompleto */ }
+    }
+  }
+  if(!full.trim()) throw new Error('La IA devolvió una respuesta vacía');
+  return full;
+}
+async function geminiOnce(model, contents, sys, signal){
+  const res = await fetch(GEMINI_URL+'/models/'+encodeURIComponent(model)+':generateContent',
+    { method:'POST', headers: gemHeaders(), signal, body: JSON.stringify(gBody(contents, sys)) });
+  const j = await res.json().catch(()=>null);
+  if(!res.ok) throw gErr(res, j);
+  const parts = (((j.candidates||[])[0]||{}).content||{}).parts || [];
+  const t = parts.map(x=>x.text||'').join('');
+  if(!t.trim()) throw new Error('La IA devolvió una respuesta vacía');
+  return t;
+}
+function resolveRuntimeModel(){
+  if(state.runtimeModel) return state.runtimeModel;
+  if(cfg.model && cfg.model!=='auto' && (!state.iaModels || state.iaModels.includes(cfg.model))) return cfg.model;
+  if(state.iaModels){ for(const m of MODEL_FALLBACKS){ if(state.iaModels.includes(m)) return m; } }
+  return (cfg.model && cfg.model!=='auto') ? cfg.model : MODEL_FALLBACKS[0];
+}
+async function geminiCall(contents, sys, opts={}){
+  const { stream=false, onDelta=null, signal=null } = opts;
+  if(!apiKey()) throw new Error('Falta la API Key de Gemini. Configúrala en el panel de administración.');
+  const cola = [];
+  const enCola = new Set();
+  const push = m=>{ if(m && !enCola.has(m)){ enCola.add(m); cola.push(m); } };
+  push(resolveRuntimeModel());
+  MODEL_FALLBACKS.forEach(push);
+  let last=null, probados=0;
+  while(cola.length && probados < 8){
+    const m = cola.shift();
+    if(state.iaModels && !state.iaModels.includes(m)) continue;
+    probados++;
+    try{
+      const r = stream
+        ? await geminiStream(m, contents, sys, onDelta, signal)
+        : await geminiOnce(m, contents, sys, signal);
+      state.runtimeModel = m;
+      state.status.ia='ok'; state.status.iaMsg='En línea'; state.status.iaSub='modelo: '+m;
+      updateStatusUI();
+      return r;
+    }catch(e){
+      last = e;
+      if(e.name==='AbortError') throw e;
+      if(e.suggested) push(e.suggested);
+      if(e.retryModel) continue;
+      throw e;
+    }
+  }
+  throw last || new Error('No hay un modelo de IA disponible');
+}
+async function pingGemini(){
+  state.status.ia='wait'; state.status.iaMsg='Verificando…'; state.status.iaSub='';
+  updateStatusUI();
+  if(!apiKey()){
+    state.status.ia='bad'; state.status.iaMsg='Falta API Key'; state.status.iaSub='configúrala en el panel Admin';
+    updateStatusUI(); return;
+  }
+  try{
+    const t0 = Date.now();
+    const res = await fetch(GEMINI_URL+'/models?pageSize=200', { headers:{ 'x-goog-api-key': apiKey() } });
+    const j = await res.json().catch(()=>null);
+    if(!res.ok) throw gErr(res, j);
+    state.iaModels = ((j.models||[]))
+      .filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent'))
+      .map(m=>m.name.replace(/^models\//,''));
+    state.iaMs = Date.now()-t0;
+    const rt = resolveRuntimeModel();
+    state.status.ia='ok';
+    state.status.iaMsg='En línea ('+state.iaMs+' ms)';
+    state.status.iaSub='modelo: '+rt+(cfg.model && cfg.model!=='auto' && cfg.model!==rt ? ' · respaldo (no se encontró '+cfg.model+')' : '');
+  }catch(e){
+    if(/location is not supported|FAILED_PRECONDITION/i.test(e.message||'')){
+      state.status.ia='warn'; state.status.iaMsg='Bloqueada por ubicación';
+    } else if(e.status===400 || e.status===401 || e.status===403){
+      state.status.ia='bad'; state.status.iaMsg='Clave rechazada';
+    } else {
+      state.status.ia='bad'; state.status.iaMsg='Sin conexión';
+    }
+    state.status.iaSub=resumirErr(e);
+  }
+  updateStatusUI();
+}
+function amigableErr(e){
+  const m = (e && e.message) || String(e);
+  if(/location is not supported/i.test(m)) return 'La API de Gemini no está disponible desde la ubicación de esta conexión. Abre el sitio desde tu navegador y red habituales.';
+  if(/API key not valid|API_KEY_INVALID/i.test(m)) return 'La clave de la API fue rechazada. Revísala en el panel de administración.';
+  if(e && (e.status===429 || /quota|RESOURCE_EXHAUSTED/i.test(m))) return 'Se alcanzó el límite de uso de la IA. Espera unos minutos e intenta de nuevo.';
+  if(/Failed to fetch|NetworkError/i.test(m)) return 'Sin conexión con el servicio de IA. Verifica tu internet.';
+  return m.length>320 ? m.slice(0,320)+'…' : m;
+}
+
+/* ---------- Contexto de documentos ---------- */
+async function ensureVision(d){
+  if(!d || state.visionMem[d.id]) return;
+  const isImg = /^image\//.test(d.tipo||'');
+  const isPdfScan = /pdf/i.test((d.tipo||'')+' '+d.nombre) && (d.texto||'').trim().length < 80;
+  if(!isImg && !isPdfScan) return;
+  if(!d.url) return;
+  try{
+    const res = await fetch(d.url);
+    if(!res.ok) return;
+    const buf = await res.arrayBuffer();
+    if(buf.byteLength > 14*1048576) return;
+    state.visionMem[d.id] = { mime: isImg ? (d.tipo||'image/png') : 'application/pdf', data: abToB64(buf) };
+  }catch(e){ /* sin visión: se usa solo el texto */ }
+}
+function docIdsSelected(){
+  if(state.ctxIds) return [...state.ctxIds];
+  return state.docs.map(d=>d.id);
+}
+function ctxPartsTexto(ids){
+  const parts = [];
+  let budget = Number(cfg.maxCtx)||180000;
+  for(const id of ids){
+    const d = findDoc(id);
+    if(!d || !d.texto) continue;
+    const t = d.texto.slice(0, Math.max(0, budget));
+    budget -= t.length;
+    parts.push({ text:'\n\n===== DOCUMENTO: '+d.nombre+' =====\n'+t + (t.length < d.texto.length ? '\n[...texto truncado por límite de contexto...]' : '') });
+  }
+  return parts;
+}
+async function ctxPartsVision(ids){
+  const parts = [];
+  let n = 0;
+  for(const id of ids){
+    if(n >= 3) break;
+    const d = findDoc(id);
+    if(!d) continue;
+    await ensureVision(d);
+    const v = state.visionMem[d.id];
+    if(v){ parts.push({ inline_data:{ mime_type:v.mime, data:v.data } }); n++; }
+  }
+  return parts;
+}
+function sysBase(){
+  return 'Eres el asistente académico de la escuela "'+(cfg.school||'Mi Escuela')+'". Ayudas a docentes y alumnos a revisar, analizar y comprender documentos escolares (reglamentos, planes de estudio, circulares, tareas, evaluaciones). Reglas: responde SIEMPRE en español claro; usa markdown con viñetas y negritas cuando ayude; sé conciso pero completo; cuando uses información de un documento, menciona su nombre entre corchetes, por ejemplo [Reglamento.pdf]; NO inventes datos, nombres, fechas ni cifras: si algo no aparece en los documentos, dilo con franqueza.';
+}
+
+/* ---------- Markdown (render seguro) ---------- */
+function mdInline(s){
+  return s
+    .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
+    .replace(/(^|[\s(])\*([^*\n]+)\*/g, '$1<i>$2</i>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+}
+function mdRender(src){
+  const lineas = String(src||'').replace(/\r\n?/g,'\n').split('\n');
+  let out='', ul=false, pre=false, tb=false;
+  const closeUl=()=>{ if(ul){ out+='</ul>'; ul=false; } };
+  const closeTb=()=>{ if(tb){ out+='</tbody></table>'; tb=false; } };
+  for(const raw of lineas){
+    if(/^\s*```/.test(raw)){
+      closeTb(); closeUl();
+      out += pre ? '</pre>' : '<pre class="code">';
+      pre = !pre;
+      continue;
+    }
+    if(pre){ out += esc(raw)+'\n'; continue; }
+    const ln = esc(raw);
+    if(/^\s*\|.*\|\s*$/.test(ln)){
+      const celdas = ln.trim().slice(1,-1).split('|');
+      if(celdas.every(c=>/^\s*:?-{3,}:?\s*$/.test(c))) continue;
+      if(!tb){ closeUl(); out+='<table><tbody>'; tb=true; }
+      out += '<tr>'+celdas.map(c=>'<td>'+mdInline(c.trim())+'</td>').join('')+'</tr>';
+      continue;
+    }
+    closeTb();
+    if(/^\s*(-{3,}|\*{3,})\s*$/.test(ln)){ closeUl(); out+='<hr>'; continue; }
+    const h = ln.match(/^(#{1,4})\s+(.*)$/);
+    if(h){ closeUl(); const lv=Math.min(h[1].length+1,5); out+='<h'+lv+'>'+mdInline(h[2])+'</h'+lv+'>'; continue; }
+    const li = ln.match(/^\s*(?:[-*•]|\d+[.)])\s+(.*)$/);
+    if(li){ if(!ul){ out+='<ul>'; ul=true; } out+='<li>'+mdInline(li[1])+'</li>'; continue; }
+    closeUl();
+    if(ln.trim()==='') continue;
+    out += '<p>'+mdInline(ln)+'</p>';
+  }
+  closeUl(); closeTb();
+  if(pre) out += '</pre>';
+  return out;
+}
+
+/* ---------- Chat ---------- */
+const SUGS = [
+  'Resume los documentos',
+  '¿Qué fechas o plazos importantes hay?',
+  'Explica el contenido en palabras simples',
+  'Hazme 5 preguntas de repaso'
+];
+function loadChat(){ try{ state.chat = JSON.parse(localStorage.getItem(LS.chat)||'[]')||[]; }catch(e){ state.chat=[]; } }
+function saveChat(){ try{ localStorage.setItem(LS.chat, JSON.stringify(state.chat.slice(-40))); }catch(e){} }
+function msgHtml(m){
+  const cls = m.role==='user' ? 'user' : (m.err ? 'ia err' : 'ia');
+  const body = m.role==='user' ? esc(m.text) : (m.done===false ? esc(m.text)+'<span class="cursor"></span>' : mdRender(m.text));
+  const raw = (m.role!=='user' && m.done===false) ? ' raw' : '';
+  return '<div class="msg '+cls+'"><div class="bubble'+raw+'">'+body+'</div></div>';
+}
+function renderChat(){
+  const box = $('#chatBox');
+  box.innerHTML = state.chat.map(msgHtml).join('');
+  box.scrollTop = box.scrollHeight;
+  renderSugs();
+}
+function bubbleAppend(delta){
+  const box = $('#chatBox');
+  const bubbles = box.querySelectorAll('.msg.ia .bubble');
+  const last = bubbles[bubbles.length-1];
+  if(last){ last.textContent += delta; box.scrollTop = box.scrollHeight; }
+}
+function ctxLabel(){
+  return !state.ctxIds ? 'Contexto: todos' : (state.ctxIds.size ? 'Contexto: '+state.ctxIds.size+' doc(s)' : 'Contexto: ninguno');
+}
+function renderCtx(){
+  const sum = $('#ctxSummary');
+  if(sum) sum.textContent = ctxLabel();
+  const el = $('#ctxList');
+  if(!el) return;
+  if(!state.docs.length){ el.innerHTML = '<div class="ctxnone">No hay documentos en la nube todavía.</div>'; return; }
+  el.innerHTML = '<label class="ctxrow"><input type="checkbox" id="ctxAll" '+(state.ctxIds===null?'checked':'')+'><span><b>Todos los documentos</b></span></label>'
+    + state.docs.map(d=>'<label class="ctxrow"><input type="checkbox" data-cid="'+esc(d.id)+'" '+((state.ctxIds===null)||state.ctxIds.has(d.id)?'checked':'')+'><span>'+esc(d.nombre)+'</span></label>').join('');
+}
+function renderSugs(){
+  const el = $('#sugs');
+  if(!el) return;
+  if(state.chat.length){ el.hidden = true; el.innerHTML=''; return; }
+  el.hidden = false;
+  el.innerHTML = SUGS.map(s=>'<button class="sug">'+esc(s)+'</button>').join('');
+}
+function setBusy(b){
+  state.busy = b;
+  $('#btnStop').hidden = !b;
+  $('#btnSend').hidden = b;
+  $$('.anabtn').forEach(x=>x.disabled = b);
+}
+async function sendMsg(){
+  if(state.busy) return;
+  if(!apiKey()){ toast('Falta la API Key de Gemini. Configúrala en el panel Admin.','warn'); return; }
+  const ta = $('#chatInput');
+  const q = ta.value.trim();
+  if(!q) return;
+  ta.value=''; ta.style.height='auto';
+  state.chat.push({ role:'user', text:q });
+  state.chat.push({ role:'ia', text:'', done:false });
+  renderChat();
+  setBusy(true);
+  const ctrl = new AbortController();
+  state.abort = ctrl;
+  try{
+    const ids = docIdsSelected();
+    const vparts = await ctxPartsVision(ids);
+    const tparts = ctxPartsTexto(ids);
+    const historial = state.chat.filter(m=>m.done!==false && m.text).slice(-9,-1)
+      .map(m=>({ role: m.role==='user' ? 'user' : 'model', parts:[{ text:m.text }] }));
+    const contents = [...historial, { role:'user', parts:[...vparts, ...tparts, { text:q }] }];
+    const sys = sysBase() + (ids.length ? '\n\nTienes acceso al contenido de los documentos seleccionados como contexto, entre los marcadores "===== DOCUMENTO".' : '\n\nNo hay documentos cargados: puedes responder con conocimiento general, dejando claro cuando algo no proviene de los documentos.');
+    const full = await geminiCall(contents, sys, { stream:true, onDelta:bubbleAppend, signal:ctrl.signal });
+    state.chat[state.chat.length-1] = { role:'ia', text:full, done:true };
+  }catch(e){
+    if(e.name==='AbortError'){
+      state.chat[state.chat.length-1] = { role:'ia', text:(state.chat[state.chat.length-1].text||'')+'\n\n*(respuesta detenida)*', done:true };
+    } else {
+      state.chat[state.chat.length-1] = { role:'ia', text:'**Error:** '+amigableErr(e), err:true, done:true };
+    }
+  }finally{
+    setBusy(false);
+    saveChat(); renderChat();
+  }
+}
+
+/* ---------- Análisis ---------- */
+const ANALISIS = {
+  resumen:   { t:'Resumen ejecutivo', p:'Elabora un resumen ejecutivo del documento: propósito, contenido esencial y conclusiones, en 4 a 6 párrafos breves.' },
+  claves:    { t:'Puntos clave', p:'Extrae los puntos clave del documento: datos, fechas, cifras, obligaciones y temas importantes, en una lista con viñetas ordenada por relevancia.' },
+  academico: { t:'Análisis académico', p:'Analiza el documento con enfoque pedagógico: objetivos de aprendizaje, temas centrales, nivel escolar sugerido, conceptos que requieren refuerzo y 3 actividades sugeridas para clase.' },
+  cuestionario:{ t:'Cuestionario', p:'Genera un cuestionario de repaso con 5 preguntas de opción múltiple (4 opciones cada una) y 3 preguntas abiertas. Al final agrega una sección "Respuestas" con la opción correcta y una justificación breve para cada pregunta.' },
+  ideas:     { t:'Mapa de ideas', p:'Crea un esquema jerárquico en viñetas de las ideas principales y subideas del documento, usando sangrías para los niveles.' }
+};
+function refreshSelDoc(){
+  const sel = $('#selDoc');
+  if(!sel) return;
+  const prev = sel.value;
+  const todos = [...state.docs, ...state.localDocs];
+  sel.innerHTML = todos.length
+    ? todos.map(d=>'<option value="'+esc(d.id)+'">'+esc(d.nombre)+'</option>').join('')
+    : '<option value="">— sin documentos —</option>';
+  if(prev && todos.some(d=>d.id===prev)) sel.value = prev;
+  const hay = todos.length>0;
+  $('#anaEmpty').hidden = hay;
+  $('#anabtns').style.opacity = hay ? '1' : '.5';
+  $$('.anabtn').forEach(b=>b.disabled = !hay || state.busy);
+}
+async function runAnalysis(tipo){
+  if(state.busy) return;
+  const id = $('#selDoc').value;
+  const d = findDoc(id);
+  if(!d){ toast('Selecciona un documento (sube alguno primero)','warn'); return; }
+  if(!apiKey()){ toast('Falta la API Key de Gemini. Configúrala en el panel Admin.','warn'); return; }
+  const a = ANALISIS[tipo];
+  $('#anaWrap').hidden = false;
+  $('#anaOut').innerHTML = '<span class="spin"></span> Analizando "'+esc(d.nombre)+'"…';
+  $('#anaMeta').textContent = a.t + ' · ' + d.nombre;
+  setBusy(true);
+  const ctrl = new AbortController();
+  state.abort = ctrl;
+  try{
+    const vparts = await ctxPartsVision([id]);
+    const tparts = ctxPartsTexto([id]);
+    const contents = [{ role:'user', parts:[...vparts, ...tparts, { text: a.p + '\n\nDocumento: ' + d.nombre }] }];
+    const sys = sysBase() + '\n\nResponde con markdown claro y estructurado, basado únicamente en el documento proporcionado.';
+    const full = await geminiCall(contents, sys, { signal: ctrl.signal });
+    state.lastAna = { text: full, meta: a.t + ' · ' + d.nombre + ' · ' + new Date().toLocaleTimeString('es-MX') + ' · modelo: ' + (state.runtimeModel||'') };
+    $('#anaOut').innerHTML = mdRender(full);
+    $('#anaMeta').textContent = state.lastAna.meta;
+  }catch(e){
+    const msg = e.name==='AbortError' ? '*Análisis detenido por el usuario.*' : '**Error:** '+amigableErr(e);
+    $('#anaOut').innerHTML = mdRender(msg);
+  }finally{
+    setBusy(false);
+  }
+}
+/* ================================================================
+   Parte 5 · Panel de administración, GitHub Pages y arranque
+   ================================================================ */
+
+/* ---------- Formulario de configuración ---------- */
+function fillAdmin(){
+  $('#cfgSchool').value = cfg.school || '';
+  $('#cfgModel').value  = cfg.model || '';
+  $('#cfgB4aApp').value = cfg.b4aApp || '';
+  $('#cfgB4aJs').value  = cfg.b4aJs || '';
+  $('#cfgGemini').value = cfg.geminiKey || '';
+  $('#cfgMaxCtx').value = cfg.maxCtx || 180000;
+  $('#cfgTemp').value   = cfg.temp; $('#cfgTempVal').textContent = cfg.temp;
+  $('#ghUser').value   = cfg.ghUser || '';
+  $('#ghRepo').value   = cfg.ghRepo || '';
+  $('#ghBranch').value = cfg.ghBranch || 'main';
+  $('#ghPat').value    = cfg.ghPat || '';
+  updateStatusUI();
+}
+function guardarConfig(){
+  cfg.school   = $('#cfgSchool').value.trim() || 'Mi Escuela';
+  cfg.model    = $('#cfgModel').value.trim() || 'auto';
+  cfg.b4aApp   = $('#cfgB4aApp').value.trim();
+  cfg.b4aJs    = $('#cfgB4aJs').value.trim();
+  cfg.geminiKey= $('#cfgGemini').value.trim();
+  cfg.maxCtx   = Math.min(900000, Math.max(20000, Number($('#cfgMaxCtx').value)||180000));
+  cfg.temp     = Number($('#cfgTemp').value)||0.4;
+  cfg.ghUser   = $('#ghUser').value.trim();
+  cfg.ghRepo   = $('#ghRepo').value.trim();
+  cfg.ghBranch = $('#ghBranch').value.trim() || 'main';
+  cfg.ghPat    = $('#ghPat').value.trim();
+  saveCfg();
+  state.b4aTok=null; state.iaModels=null; state.runtimeModel=null;
+  $('#brandSchool').textContent = cfg.school;
+  toast('Configuración guardada en este navegador','ok');
+  updateStatusUI();
+  checkB4a().catch(()=>{});
+  pingGemini().catch(()=>{});
+}
+function restaurarConfig(){
+  if(!confirm('¿Restaurar los valores de fábrica? Se conservarán los documentos.')) return;
+  cfg = { ...DEFAULTS };
+  saveCfg();
+  fillAdmin();
+  $('#brandSchool').textContent = cfg.school;
+  state.b4aTok=null; state.iaModels=null; state.runtimeModel=null;
+  toast('Configuración restaurada','ok');
+  checkB4a().catch(()=>{});
+  pingGemini().catch(()=>{});
+}
+function logTo(sel, txt){
+  const el = $(sel);
+  if(!el) return;
+  el.textContent = '['+new Date().toLocaleTimeString('es-MX')+'] '+txt+'\n'+el.textContent;
+}
+
+/* ---------- Mantenimiento Back4App ---------- */
+async function initSchema(){
+  logTo('#b4aLog','Inicializando esquema (prueba de escritura y lectura)…');
+  try{
+    const t0=Date.now();
+    const oj = await b4aFetch('/classes/Documento', { method:'POST', body: JSON.stringify({ nombre:'__esquema__', texto:'inicialización', tipo:'text/plain', tamano:0, subidoPor:'sistema' }) });
+    await b4aFetch('/classes/Documento/'+oj.objectId, { method:'DELETE' });
+    logTo('#b4aLog','Listo: la clase Documento existe y acepta escritura/lectura ('+(Date.now()-t0)+' ms).');
+    toast('Esquema de Back4App verificado','ok');
+    checkB4a().catch(()=>{});
+  }catch(e){
+    logTo('#b4aLog','Error: '+resumirErr(e));
+    toast('No se pudo inicializar el esquema: '+resumirErr(e),'bad');
+  }
+}
+function diagExport(){
+  const d = {
+    fecha: new Date().toISOString(),
+    version: APP_VERSION,
+    config: {
+      school:cfg.school, model:cfg.model, temp:cfg.temp, maxCtx:cfg.maxCtx,
+      b4aApp:maskKey(cfg.b4aApp), b4aJs:maskKey(cfg.b4aJs), geminiKey:maskKey(cfg.geminiKey),
+      ghUser:cfg.ghUser, ghRepo:cfg.ghRepo, ghBranch:cfg.ghBranch, ghPat:cfg.ghPat?'(presente)':'(vacío)'
+    },
+    estado: {
+      pagina:state.status.pagina, b4a:state.status.b4a, ia:state.status.ia, github:state.gh,
+      modeloEnUso:state.runtimeModel, modelosDisponibles: state.iaModels? state.iaModels.length : null,
+      detalle:state.status
+    },
+    datos: { docsNube:state.docs.length, docsLocales:state.localDocs.length, mensajesChat:state.chat.length, totalEnBack4App:state.docsTotal },
+    navegador: navigator.userAgent
+  };
+  const blob = new Blob([JSON.stringify(d,null,2)], { type:'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'edudocs-diagnostico.json';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+  toast('Diagnóstico exportado (claves enmascaradas)','ok');
+}
+
+/* ---------- GitHub Pages ---------- */
+function ghHeaders(){
+  if(!(cfg.ghPat||'').trim()) throw new Error('Sin token PAT: crea uno con la guía de abajo.');
+  return {
+    'Authorization':'Bearer '+cfg.ghPat.trim(),
+    'Accept':'application/vnd.github+json',
+    'X-GitHub-Api-Version':'2022-11-28',
+    'Content-Type':'application/json'
+  };
+}
+function ghRepoUrl(){
+  const u=(cfg.ghUser||'').trim(), r=(cfg.ghRepo||'').trim();
+  if(!u || !r) throw new Error('Completa usuario y repositorio de GitHub.');
+  return 'https://api.github.com/repos/'+encodeURIComponent(u)+'/'+encodeURIComponent(r);
+}
+async function testGh(){
+  if(!(cfg.ghPat||'').trim()){
+    state.gh='warn';
+    state.ghBody='Sin token PAT. La verificación y publicación automática requieren uno (guía más abajo); mientras tanto puedes publicar manualmente con "Upload files".';
+    updateStatusUI();
+    return;
+  }
+  await ghCheck();
+}
+async function ghCheck(){
+  const log=$('#ghStatus');
+  try{
+    const repo = ghRepoUrl();
+    if(log) log.textContent='Consultando repositorio…';
+    const r = await fetch(repo, { headers: ghHeaders() });
+    const j = await r.json().catch(()=>null);
+    if(!r.ok){
+      if(r.status===404) throw new Error('Repositorio no encontrado. Créalo en github.com/new (público) y revisa usuario/nombre.');
+      if(r.status===401 || r.status===403) throw new Error('Token inválido o sin permisos (necesita Contents: Read and write).');
+      throw new Error((j && j.message) || ('HTTP '+r.status));
+    }
+    let pagesTxt='sin configurar (actívala en Settings → Pages)';
+    try{
+      const p = await fetch(repo+'/pages', { headers: ghHeaders() });
+      if(p.ok){ const pj = await p.json(); pagesTxt='activa → '+pj.html_url; }
+    }catch(e){ /* Pages sin verificar */ }
+    state.gh='ok';
+    state.ghBody = '<b>Repositorio</b> '+esc(j.full_name)+(j.private?' (privado)':' (público)')
+      +'<br><b>Rama</b> '+esc(j.default_branch)+' · <b>Último envío</b> '+fmtFecha(j.pushed_at)
+      +'<br><b>GitHub Pages</b> '+esc(pagesTxt)
+      +'<br><b>Sitio esperado</b> https://'+esc(cfg.ghUser)+'.github.io/'+esc(cfg.ghRepo)+'/';
+    if(log) log.textContent='Repositorio verificado correctamente.';
+    toast('GitHub: repositorio verificado','ok');
+    updateStatusUI();
+  }catch(e){
+    state.gh='bad';
+    state.ghBody='<b>Error</b> '+esc(resumirErr(e));
+    if(log) log.textContent='Error: '+resumirErr(e);
+    toast('GitHub: '+resumirErr(e),'bad');
+    updateStatusUI();
+  }
+}
+function utf8ToB64(s){
+  const b = new TextEncoder().encode(s);
+  let bin='';
+  const CH=0x8000;
+  for(let i=0;i<b.length;i+=CH) bin += String.fromCharCode.apply(null, b.subarray(i,i+CH));
+  return btoa(bin);
+}
+async function ownSource(){
+  try{
+    const res = await fetch(location.href, { cache:'no-store' });
+    if(res.ok){
+      const t = await res.text();
+      if(t.includes('EduDocsIA')) return t;
+    }
+  }catch(e){ /* archivo local: no accesible por fetch */ }
+  toast('No se pudo leer el archivo original; se usará una reconstrucción del DOM. Para la primera publicación, sube index.html manualmente (guía paso 2).','warn');
+  return '<!DOCTYPE html>\n<!-- EduDocsIA v'+APP_VERSION+' (reconstruido desde el navegador) -->\n'+document.documentElement.outerHTML;
+}
+async function ghPublish(){
+  const log=$('#ghStatus');
+  try{
+    if(log) log.textContent='Preparando contenido…';
+    const src = await ownSource();
+    const b64 = utf8ToB64(src);
+    let sha=null;
+    if(log) log.textContent='Verificando archivo existente…';
+    const g = await fetch(ghRepoUrl()+'/contents/index.html?ref='+encodeURIComponent(cfg.ghBranch||'main'), { headers: ghHeaders() });
+    if(g.ok){ const j = await g.json(); sha = j.sha; }
+    else if(g.status!==404){ const j = await g.json().catch(()=>null); throw new Error((j && j.message) || ('HTTP '+g.status)); }
+    if(log) log.textContent=(sha?'Actualizando':'Creando')+' index.html en '+cfg.ghUser+'/'+cfg.ghRepo+'…';
+    const put = await fetch(ghRepoUrl()+'/contents/index.html', {
+      method:'PUT', headers: ghHeaders(),
+      body: JSON.stringify({
+        message:'EduDocs IA '+APP_VERSION+' — publicación automática ('+new Date().toLocaleString('es-MX')+')',
+        content: b64, branch: cfg.ghBranch||'main', ...(sha?{sha}:{})
+      })
+    });
+    const pj = await put.json().catch(()=>null);
+    if(!put.ok) throw new Error((pj && pj.message) || ('HTTP '+put.status));
+    state.gh='ok';
+    const sitio = 'https://'+cfg.ghUser+'.github.io/'+cfg.ghRepo+'/';
+    state.ghBody='<b>Publicado</b> index.html · <b>Sitio</b> '+esc(sitio)+' · <b>Repositorio</b> https://github.com/'+esc(cfg.ghUser)+'/'+esc(cfg.ghRepo);
+    if(log) log.textContent='Publicación enviada. GitHub Pages desplegará la versión nueva en 1-2 minutos.\nSitio: '+sitio+'\nRepositorio: https://github.com/'+cfg.ghUser+'/'+cfg.ghRepo;
+    toast('index.html publicado en GitHub','ok');
+    updateStatusUI();
+  }catch(e){
+    state.gh='bad';
+    state.ghBody='<b>Error</b> '+esc(resumirErr(e));
+    if(log) log.textContent='Error: '+resumirErr(e)+'\n\nPrimera vez: 1) crea el repositorio en github.com/new (público), 2) revisa que el token tenga Contents: Read and write, 3) verifica usuario, repositorio y rama.';
+    toast('No se pudo publicar: '+resumirErr(e),'bad');
+    updateStatusUI();
+  }
+}
+
+/* ---------- Vinculación de eventos ---------- */
+function bind(){
+  $('#btnTheme').addEventListener('click', ()=>applyTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
+
+  $('#btnAdmin').addEventListener('click', ()=>{ if(state.admin) showTab('admin'); else openLogin(); });
+  $('#btnIrLogin').addEventListener('click', openLogin);
+  $('#btnLogin').addEventListener('click', loginAdmin);
+  $('#loginPwd').addEventListener('keydown', e=>{ if(e.key==='Enter') loginAdmin(); });
+  $('#btnLogout').addEventListener('click', logout);
+
+  $$('.overlay').forEach(ov=>{
+    ov.addEventListener('click', e=>{ if(e.target===ov) ov.hidden=true; });
+    ov.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click', ()=>{ ov.hidden=true; }));
+  });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') $$('.overlay').forEach(ov=>ov.hidden=true); });
+
+  $$('.tab').forEach(b=>b.addEventListener('click', ()=>showTab(b.dataset.tab)));
+
+  $('#pillB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
+  $('#pillIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
+  $('#btnCheckB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
+  $('#btnCheckIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
+
+  const dz=$('#dz'), fi=$('#fileInput');
+  dz.addEventListener('click', ()=>{ if(state.admin) fi.click(); else openLogin(); });
+  dz.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); if(state.admin) fi.click(); else openLogin(); } });
+  ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.add('drag'); }));
+  ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.remove('drag'); }));
+  dz.addEventListener('drop', e=>{ const fs=Array.from((e.dataTransfer && e.dataTransfer.files)||[]); if(fs.length) procesarFiles(fs); });
+  document.addEventListener('dragover', e=>e.preventDefault());
+  document.addEventListener('drop', e=>e.preventDefault());
+  fi.addEventListener('change', ()=>{ const fs=Array.from(fi.files||[]); if(fs.length) procesarFiles(fs); fi.value=''; });
+  $('#btnSync').addEventListener('click', ()=>syncPendientes().catch(()=>{}));
+  $('#docFilter').addEventListener('input', e=>{ state.filter=e.target.value; renderDocs(); });
+
+  ['listaNube','listaLocal'].forEach(id=>{
+    $('#'+id).addEventListener('click', e=>{
+      const item = e.target.closest('.ditem');
+      if(!item) return;
+      const act = e.target.closest('[data-act]');
+      if(!act) return;
+      docAction(act.dataset.act, item.dataset.id);
+    });
+  });
+
+  $$('.anabtn').forEach(b=>b.addEventListener('click', ()=>runAnalysis(b.dataset.ana)));
+  $('#btnAnaCopy').addEventListener('click', ()=>{ if(state.lastAna) copyText(state.lastAna.text); else toast('Aún no hay resultado que copiar','warn'); });
+
+  $('#btnSend').addEventListener('click', sendMsg);
+  $('#btnStop').addEventListener('click', ()=>{ if(state.abort) state.abort.abort(); });
+  const ta=$('#chatInput');
+  ta.addEventListener('input', ()=>{ ta.style.height='auto'; ta.style.height=Math.min(180, ta.scrollHeight)+'px'; });
+  ta.addEventListener('keydown', e=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendMsg(); } });
+  $('#btnClearChat').addEventListener('click', ()=>{ state.chat=[]; saveChat(); renderChat(); });
+  $('#ctxList').addEventListener('change', e=>{
+    if(e.target.id==='ctxAll'){ state.ctxIds = e.target.checked ? null : new Set(state.docs.map(d=>d.id)); renderCtx(); return; }
+    const id=e.target.dataset.cid;
+    if(!id) return;
+    if(state.ctxIds===null) state.ctxIds=new Set(state.docs.map(d=>d.id));
+    if(e.target.checked) state.ctxIds.add(id); else state.ctxIds.delete(id);
+    renderCtx();
+  });
+  $('#sugs').addEventListener('click', e=>{
+    const b=e.target.closest('.sug');
+    if(!b) return;
+    $('#chatInput').value = b.textContent;
+    sendMsg();
+  });
+
+  $('#btnSaveCfg').addEventListener('click', guardarConfig);
+  $('#btnResetCfg').addEventListener('click', restaurarConfig);
+  $('#cfgTemp').addEventListener('input', e=>{ $('#cfgTempVal').textContent = e.target.value; });
+  $('#btnTestApp').addEventListener('click', ()=>{ updateStatusUI(); toast('Información actualizada','ok'); });
+  $('#btnTestB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
+  $('#btnTestIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
+  $('#btnTestGh').addEventListener('click', testGh);
+  $('#btnInitSchema').addEventListener('click', initSchema);
+  $('#btnReloadDocs').addEventListener('click', async ()=>{ await checkB4a().catch(()=>{}); toast('Documentos recargados','ok'); });
+  $('#btnDiag').addEventListener('click', diagExport);
+  $('#btnGhPublish').addEventListener('click', ghPublish);
+  $('#btnGhCheck').addEventListener('click', testGh);
+  $('#btnGhClear').addEventListener('click', ()=>{
+    cfg.ghPat=''; saveCfg(); $('#ghPat').value='';
+    state.gh=null; state.ghBody='';
+    updateStatusUI();
+    toast('Token borrado de este navegador','ok');
+  });
+
+  window.addEventListener('online', ()=>{ state.status.pagina='ok'; updateStatusUI(); checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); });
+  window.addEventListener('offline', ()=>{ state.status.pagina='bad'; updateStatusUI(); });
+}
+
+/* ---------- Arranque ---------- */
+function boot(){
+  loadCfg();
+  loadLocalDocs();
+  loadChat();
+  applyTheme(document.documentElement.dataset.theme||'light');
+  $('#brandSchool').textContent = cfg.school || 'Mi Escuela';
+  $('#fVer').textContent = 'v'+APP_VERSION;
+  try{ if(sessionStorage.getItem(LS.admin)==='1') state.admin=true; }catch(e){}
+  bind();
+  applyAdminUI();
+  showTab('docs');
+  renderChat();
+  state.status.pagina = navigator.onLine ? 'ok' : 'bad';
+  updateStatusUI();
+  refreshSelDoc();
+  checkB4a().catch(()=>{});
+  pingGemini().catch(()=>{});
+  setInterval(()=>{
+    if(navigator.onLine){ checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); }
+  }, 5*60*1000);
+}
+document.addEventListener('DOMContentLoaded', boot);
+</script>
+</body>
+</html>
