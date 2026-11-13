@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- EduDocsIA v3.3 · archivo único · backend: Back4App · IA: Gemini · hosting: GitHub Pages -->
+<!-- EduDocsIA v3.4 · archivo único · backend: Back4App · IA: Gemini · hosting: GitHub Pages · subida pública sin contraseña, admin con contraseña -->
 <html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
@@ -173,11 +173,6 @@ textarea.in{resize:vertical}
 .dz .hint{margin-top:4px}
 .dz .dzacts{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
 .dz .dzacts .btn,.dz .dzacts .mini{pointer-events:auto}
-.dzlock{position:absolute;inset:0;border-radius:16px;background:color-mix(in srgb,var(--bg) 55%,transparent);
-  backdrop-filter:blur(2px);display:grid;place-items:center;z-index:2}
-.dzlock .inner{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);
-  padding:10px 16px;border-radius:13px;box-shadow:var(--shadow);font-weight:600}
-.dzlock svg{width:18px;height:18px;color:var(--pri)}
 .uplog{margin-top:12px;display:flex;flex-direction:column;gap:6px}
 .uprow{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border:1px solid var(--border);
   border-radius:11px;padding:8px 12px;font-size:13px}
@@ -310,7 +305,7 @@ body.embed main{min-height:0}
   <div class="brand">
     <span class="logo" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/></svg></span>
     <b>EduDocs IA</b>
-    <span class="vchip" id="vchip">v3.1</span>
+    <span class="vchip" id="vchip">v3.4</span>
   </div>
   <nav class="tabs" role="tablist">
     <button class="tab" data-tab="inicio" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Inicio</button>
@@ -379,8 +374,8 @@ body.embed main{min-height:0}
     <div class="card">
       <h3 style="font-size:15px;margin-bottom:12px">Cómo funciona</h3>
       <div class="steps">
-        <div class="step"><span class="n">1</span><div><b>Entra como administrador</b><span>Usa el candado de la esquina y la contraseña de tu escuela.</span></div></div>
-        <div class="step"><span class="n">2</span><div><b>Sube tus documentos</b><span>Arrastra y suelta, elige archivos o una carpeta completa.</span></div></div>
+        <div class="step"><span class="n">1</span><div><b>Sube tus documentos</b><span>Arrastra y suelta, elige archivos o una carpeta completa. No necesitas contraseña.</span></div></div>
+        <div class="step"><span class="n">2</span><div><b>Se transcriben automáticamente</b><span>Gemini transcribe cada documento completo a Markdown y lo guarda en Back4App.</span></div></div>
         <div class="step"><span class="n">3</span><div><b>Analiza y pregunta</b><span>Genera resúmenes, cuestionarios o conversa con los documentos en el Chat.</span></div></div>
       </div>
     </div>
@@ -399,7 +394,6 @@ body.embed main{min-height:0}
 <section id="sec-docs" class="sec" role="tabpanel" hidden>
   <div class="card">
     <div class="dz" id="dz" tabindex="0" role="button" aria-label="Zona para subir documentos">
-      <div class="dzlock" id="dzLock"><div class="inner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><div><div><strong>Requiere modo administrador</strong></div><span class="hint">Ingresa la contraseña para poder subir documentos.</span></div><button class="mini" id="btnIrLogin"><span>Ingresar</span></button></div></div>
       <span class="dzic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></span>
       <b>Arrastra tus documentos aquí</b>
       <p class="hint">o haz clic para seleccionarlos · PDF, DOCX, TXT, MD, CSV, JSON o imágenes · máx. 25 MB por archivo · se guardan en Back4App<br>Al subir, la IA (Gemini) transcribe el contenido completo a un archivo <b>Markdown (.md)</b> y lo guarda automáticamente en Back4App para consultarlo desde la aplicación.</p>
@@ -422,7 +416,7 @@ body.embed main{min-height:0}
   <div class="dlist" id="listaNube"></div>
   <div class="sectitle" id="hLocal" hidden><h2>En este dispositivo</h2><p class="hint">Se subirán automáticamente cuando haya conexión (o pulsa "Subir pendientes").</p></div>
   <div class="dlist" id="listaLocal"></div>
-  <div class="empty" id="emptyDocs" hidden><strong>Sin documentos todavía</strong><span>Sube PDF, DOCX, TXT o imágenes con el panel de arriba (requiere modo administrador).</span></div>
+  <div class="empty" id="emptyDocs" hidden><strong>Sin documentos todavía</strong><span>Sube PDF, DOCX, TXT o imágenes con el panel de arriba. No necesitas contraseña.</span></div>
 </section>
 
 <!-- ================= ANÁLISIS ================= -->
@@ -434,7 +428,7 @@ body.embed main{min-height:0}
       <label class="lbl" for="selDoc">Documento</label>
       <select id="selDoc" class="in"></select>
     </div>
-    <div class="empty sm" id="anaEmpty" style="margin-top:12px"><strong>Sin documentos</strong><span>Sube documentos (modo admin) para analizarlos aquí.</span></div>
+    <div class="empty sm" id="anaEmpty" style="margin-top:12px"><strong>Sin documentos</strong><span>Sube documentos para analizarlos aquí.</span></div>
     <div class="anabtns" id="anabtns">
       <button class="btn soft anabtn" data-ana="resumen">Resumen ejecutivo</button>
       <button class="btn soft anabtn" data-ana="claves">Puntos clave</button>
@@ -536,7 +530,8 @@ body.embed main{min-height:0}
       <li><b>Back4App · almacenamiento:</b> al eliminar un documento se borra el registro; el archivo puede permanecer en el almacenamiento de Back4App (su borrado definitivo requiere la Master Key desde el dashboard).</li>
       <li><b>Gemini:</b> la clave viaja en el código público de GitHub Pages. Recomendación: en Google AI Studio restringe la clave al sitio <code>https://argos4all.github.io</code> y rótala si sospechas fuga; luego actualízala en Configuración sin tocar el código.</li>
       <li><b>Gemini:</b> si ves "User location is not supported", la red actual bloquea la API de Google; abre el sitio desde tu navegador y red habituales.</li>
-      <li><b>Acceso admin:</b> la contraseña se verifica localmente con hash SHA-256; nunca se envía a ningún servidor. Tras 5 intentos fallidos, el acceso se bloquea 60 segundos.</li>
+      <li><b>Subida sin contraseña:</b> cualquier persona puede subir documentos desde la zona "Arrastra tus documentos aquí"; no hace falta entrar en modo administrador.</li>
+      <li><b>Acceso admin:</b> la contraseña se verifica localmente con hash SHA-256; nunca se envía a ningún servidor. Se usa solo para eliminar documentos, regenerar transcripciones y configurar la app. Tras 5 intentos fallidos, el acceso se bloquea 60 segundos.</li>
       <li><b>Privacidad:</b> los documentos se guardan en Back4App y el historial del chat en este navegador. La aplicación no usa analítica ni rastreo.</li>
     </ul>
   </div>
@@ -554,7 +549,7 @@ body.embed main{min-height:0}
   <div class="modal" style="max-width:420px">
     <div class="mhead"><h3 id="tLogin">Modo administrador</h3><button class="iconbtn" data-close title="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
     <div class="mbody">
-      <p class="hint" style="margin:0 0 10px">Ingresa la contraseña de administrador para subir documentos, eliminarlos y configurar la aplicación.</p>
+      <p class="hint" style="margin:0 0 10px">Ingresa la contraseña de administrador para eliminar documentos, regenerar transcripciones y configurar la aplicación.</p>
       <input type="password" id="loginPwd" class="in" placeholder="Contraseña de administrador" autocomplete="current-password">
       <p class="hint" id="loginErr" style="color:var(--bad);font-weight:600;margin:8px 0 0" hidden></p>
       <div style="margin-top:12px"><button class="btn" id="btnLogin" style="width:100%">Entrar</button></div>
@@ -578,13 +573,13 @@ body.embed main{min-height:0}
 <script>
 'use strict';
 /* ================================================================
-   EduDocs IA v3.3 — Documentos escolares con IA (archivo único)
+   EduDocs IA v3.4 — Documentos escolares con IA (archivo único)
    Backend: Back4App (Parse REST) · IA: Gemini · Frontend: GitHub Pages
    Transcripción integral a Markdown al subir, con guardado automático en Back4App
    ================================================================ */
 
 /* ---------- Constantes ---------- */
-const APP_VERSION = '3.3.0';
+const APP_VERSION = '3.4.0';
 const LS = {
   cfg:'edudocs2_cfg', localDocs:'edudocs2_local_docs', chat:'edudocs2_chat',
   theme:'edudocs2_theme', lock:'edudocs2_lock', admin:'edudocs2_admin_sess'
@@ -719,7 +714,7 @@ async function b4aToken(force){
   return state.b4aTok;
 }
 async function b4aCreateDoc(doc, file, tok){
-  const body = { nombre:doc.nombre, tipo:doc.tipo||'', tamano:doc.tamano||0, texto:(doc.texto||'').slice(0,MAX_STORE_CHARS), subidoPor:'admin' };
+  const body = { nombre:doc.nombre, tipo:doc.tipo||'', tamano:doc.tamano||0, texto:(doc.texto||'').slice(0,MAX_STORE_CHARS), subidoPor: state.admin ? 'admin' : 'publico' };
   let url='';
   if(file){
     const safe = (doc.nombre.replace(/[^\w.\-]+/g,'_').slice(-120)) || 'documento';
@@ -984,7 +979,6 @@ function applyAdminUI(){
   const tabA = $('.tab[data-tab="admin"]');
   if(tabA) tabA.hidden = !state.admin;
   $('#btnAdmin').classList.toggle('on', state.admin);
-  $('#dzLock').hidden = state.admin;
   renderDocs(); renderRecent();
   if(state.admin) fillAdmin();
 }
@@ -1133,7 +1127,6 @@ function rowSet(row, st, txt){
   if(sp){ sp.className = 'st st-'+st; sp.textContent = txt; }
 }
 async function procesarFiles(files){
-  if(!state.admin){ toast('La subida requiere modo administrador','warn'); openLogin(); return; }
   if(!files || !files.length) return;
   const log = $('#uplog'); log.hidden = false;
   for(const f of files){
@@ -1954,7 +1947,6 @@ function bind(){
   $('#btnTheme').addEventListener('click', ()=>applyTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
 
   $('#btnAdmin').addEventListener('click', ()=>{ if(state.admin) showTab('admin'); else openLogin(); });
-  $('#btnIrLogin').addEventListener('click', e=>{ e.stopPropagation(); openLogin(); });
   $('#btnLogin').addEventListener('click', loginAdmin);
   $('#loginPwd').addEventListener('keydown', e=>{ if(e.key==='Enter') loginAdmin(); });
   $('#btnLogout').addEventListener('click', logout);
@@ -1976,23 +1968,22 @@ function bind(){
   $('#pillIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
   $('#btnChkB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
   $('#btnChkIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
-  $('#heroSubir').addEventListener('click', ()=>{ showTab('docs'); if(!state.admin) openLogin(); });
+  $('#heroSubir').addEventListener('click', ()=>showTab('docs'));
   $('#heroAnalizar').addEventListener('click', ()=>showTab('analizar'));
 
   const dz=$('#dz'), fi=$('#fileInput'), fo=$('#folderInput');
   dz.addEventListener('click', e=>{
     if(e.target.closest('button') || e.target.closest('a') || e.target.closest('input')) return;
-    if(!state.admin){ openLogin(); return; }
     fi.click();
   });
-  dz.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); if(state.admin) fi.click(); else openLogin(); } });
-  ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); if(!state.admin) return; dz.classList.add('drag'); }));
+  dz.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); fi.click(); } });
+  ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.add('drag'); }));
   ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.remove('drag'); }));
   dz.addEventListener('drop', e=>{ const fs=Array.from((e.dataTransfer && e.dataTransfer.files)||[]); if(fs.length) procesarFiles(fs); });
   document.addEventListener('dragover', e=>e.preventDefault());
   document.addEventListener('drop', e=>e.preventDefault());
-  $('#btnFiles').addEventListener('click', e=>{ e.stopPropagation(); if(!state.admin){ openLogin(); return; } fi.click(); });
-  $('#btnFolder').addEventListener('click', e=>{ e.stopPropagation(); if(!state.admin){ openLogin(); return; } fo.click(); });
+  $('#btnFiles').addEventListener('click', e=>{ e.stopPropagation(); fi.click(); });
+  $('#btnFolder').addEventListener('click', e=>{ e.stopPropagation(); fo.click(); });
   fi.addEventListener('change', ()=>{ const fs=Array.from(fi.files||[]); if(fs.length) procesarFiles(fs); fi.value=''; });
   fo.addEventListener('change', ()=>{ const fs=Array.from(fo.files||[]); if(fs.length) procesarFiles(fs); fo.value=''; });
   $('#btnSync').addEventListener('click', ()=>syncPendientes().catch(()=>{}));

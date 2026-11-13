@@ -20,18 +20,18 @@ Aplicación de archivo único (`index.html`) para escuelas: sube documentos con 
 - **Formatos**: PDF, DOCX, TXT, MD, CSV, JSON, XML y imágenes (máx. 25 MB por archivo); selección de carpeta completa.
 - **Responsive**: PC, tablet y celular; tema **claro y oscuro** recordado entre visitas.
 - **Indicadores de estado** en cabecera e inicio: Página, Back4App e IA Gemini (verificación automática cada 5 minutos y al iniciar).
-- **Panel de administración** (contraseña): estado y configuración de Back4App, Gemini y GitHub Pages; claves enmascaradas; diagnóstico exportable; mantenimiento del esquema.
+- **Panel de administración** (contraseña): eliminación de documentos, regeneración de transcripciones, estado y configuración de Back4App, Gemini y GitHub Pages; claves enmascaradas; diagnóstico exportable; mantenimiento del esquema.
 - **Chat con los documentos**: contexto seleccionable, respuestas en streaming y citas al documento de origen.
 - **Análisis con IA**: resumen ejecutivo, puntos clave, análisis académico, cuestionario y mapa de ideas.
 - **Modo embebido**: agrega `?embed=1` e insértala en cualquier sitio con un `<iframe>` (el código se genera en el panel Admin).
 
 ## Cómo se usa
 
-1. Entra con el candado de la esquina (contraseña de administrador de la escuela).
-2. Sube documentos en **Documentos** (arrastra y suelta, elige archivos o carpeta). La transcripción `.md` se genera sola, archivo por archivo, con barra de avance por fragmento.
-3. Lee la transcripción con el botón **Ver** del documento, descárgala con **.md**, o genera resúmenes en **Análisis** y conversa en **Chat**.
+1. Sube documentos en **Documentos** (arrastra y suelta, elige archivos o carpeta): **no necesitas contraseña**. La transcripción `.md` se genera sola, archivo por archivo, con barra de avance por fragmento.
+2. Lee la transcripción con el botón **Ver** del documento, descárgala con **.md**, o genera resúmenes en **Análisis** y conversa en **Chat**.
+3. Con el candado de la esquina (contraseña de administrador de la escuela) se eliminan documentos, se regeneran transcripciones y se configura la aplicación.
 
-Sin sesión de administrador la aplicación queda en modo consulta: cualquier visitante puede leer, analizar y preguntar, pero nadie puede subir ni eliminar documentos.
+La subida de documentos es **pública (sin contraseña)**; el modo administrador se reserva para eliminar documentos, regenerar transcripciones y configurar la app.
 
 ## Cadena de modelos Gemini
 
@@ -64,7 +64,7 @@ Las versiones anteriores se conservan en la carpeta `versiones/`.
 ## Estructura
 
 ```
-index.html                      → aplicación completa (v3.3 · IA Gemini)
+index.html                      → aplicación completa (v3.4 · IA Gemini · subida pública)
 versiones/edudocs-ia-v2.0.html  → respaldo versión anterior (Gemini simple)
 versiones/edudocs-ia-v1.0.html  → respaldo primera versión
 ```
