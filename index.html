@@ -1800,7 +1800,7 @@ async function pingGlm(){
       if(e.cors){
         state.status.glm='warn';
         state.status.glmMsg='Bloqueada por CORS de Z.ai';
-        state.status.glmSub=(cfg.glmRelay||'').trim() ? 'relay configurado pero sin respuesta' : 'configura un relay en Admin (opcional) · Gemini sigue cubriendo todo';
+        state.status.glmSub=(cfg.glmRelay||'').trim() ? 'relay configurado pero sin respuesta' : 'para activar GLM publica el relay gratuito (Admin → README) · Gemini sigue cubriendo todo';
         updateStatusUI();
         return;
       }
