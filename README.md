@@ -1,13 +1,13 @@
-# EduDocs IA · Documentos escolares con IA dual (Gemini + GLM)
+# EduDocs IA · Documentos escolares con IA dual (Gemini + GPT-6 Luna)
 
-Aplicación de archivo único (`index.html`) para escuelas: sube documentos con **arrastrar y soltar**, guárdalos en la nube (Back4App), transcríbelos **íntegramente a Markdown con IA** y pregunta en lenguaje natural. Dos inteligencias artificiales — **Google Gemini** y **GLM (Z.ai)** — trabajan de forma **complementaria**: si una no está disponible, la otra continúa automáticamente.
+Aplicación de archivo único (`index.html`) para escuelas: sube documentos con **arrastrar y soltar**, guárdalos en la nube (Back4App), transcríbelos **íntegramente a Markdown con IA** y pregunta en lenguaje natural. Dos inteligencias artificiales — **Google Gemini** y **GPT-6 Luna (OpenAI)** — trabajan de forma **complementaria**: si una no está disponible, la otra continúa automáticamente.
 
 **Sitio publicado:** https://argos4all.github.io/Ometecuhtli-Normatividad-IA/
 
 ## Características
 
 - **Archivo único**: todo (HTML + CSS + JS) vive en `index.html`; sin instalación ni build.
-- **IA dual complementaria**: router interno que intenta Gemini y, ante cualquier fallo, continúa con GLM (o viceversa según el modo elegido). Cada respuesta y transcripción indica el motor que la produjo (ej. "Gemini · gemini-3.5-flash-lite" o "GLM · glm-4.5-flash").
+- **IA dual complementaria**: router interno que intenta Gemini y, ante cualquier fallo, continúa con GPT-6 Luna (o viceversa según el modo elegido). Cada respuesta y transcripción indica el motor que la produjo (ej. "Gemini · gemini-3.5-flash-lite" o "GPT-6 Luna · gpt-6-luna").
 - **Transcripción integral al subir**: al subir un archivo, la IA lo transcribe de principio a fin siguiendo una regla de máxima precisión:
   - No omite párrafos, notas al pie, encabezados, números, fechas ni detalles.
   - Transporta las **tablas íntegramente a Markdown** conservando celdas, filas y columnas.
@@ -19,8 +19,8 @@ Aplicación de archivo único (`index.html`) para escuelas: sube documentos con 
 - **PDF con texto y PDF escaneado**: extracción con pdf.js; si el PDF no tiene capa de texto, las páginas se rasterizan y se transcriben con visión (hasta 40 páginas por proceso).
 - **Formatos**: PDF, DOCX, TXT, MD, CSV, JSON, XML y imágenes (máx. 25 MB por archivo); selección de carpeta completa.
 - **Responsive**: PC, tablet y celular; tema **claro y oscuro** recordado entre visitas.
-- **Indicadores de estado** en cabecera e inicio: Página, Back4App, IA Gemini e IA GLM (verificación automática cada 5 minutos y al iniciar).
-- **Panel de administración** (contraseña): estado y configuración de Back4App, Gemini, GLM/Z.ai y GitHub Pages; claves enmascaradas; diagnóstico exportable; mantenimiento del esquema.
+- **Indicadores de estado** en cabecera e inicio: Página, Back4App, IA Gemini e IA GPT-6 Luna (verificación automática cada 5 minutos y al iniciar).
+- **Panel de administración** (contraseña): estado y configuración de Back4App, Gemini, OpenAI y GitHub Pages; claves enmascaradas; diagnóstico exportable; mantenimiento del esquema.
 - **Chat con los documentos**: contexto seleccionable, respuestas en streaming y citas al documento de origen.
 - **Análisis con IA**: resumen ejecutivo, puntos clave, análisis académico, cuestionario y mapa de ideas.
 - **Modo embebido**: agrega `?embed=1` e insértala en cualquier sitio con un `<iframe>` (el código se genera en el panel Admin).
@@ -37,52 +37,23 @@ Sin sesión de administrador la aplicación queda en modo consulta: cualquier vi
 
 | Modo | Comportamiento |
 | --- | --- |
-| **Auto (recomendado)** | Cada tarea intenta primero Gemini; si falla (clave, cuota, red, región), continúa GLM automáticamente. En la transcripción larga, si Gemini cae a mitad del documento, GLM termina los fragmentos restantes y el registro anota ambos motores ("Gemini + GLM"). |
+| **Auto (recomendado)** | Cada tarea intenta primero Gemini; si falla (clave, cuota, red, región), continúa GPT-6 Luna automáticamente. En la transcripción larga, si Gemini cae a mitad del documento, Luna termina los fragmentos restantes y el registro anota ambos motores ("Gemini + GPT-6 Luna"). |
 | **Solo Gemini** | Usa únicamente Gemini con su cadena de respaldo de modelos. |
-| **Solo GLM (Z.ai)** | Usa únicamente GLM con su cadena de respaldo de modelos. |
+| **Solo Luna (OpenAI)** | Usa únicamente OpenAI con su cadena de respaldo de modelos. |
 
-Cadena de modelos GLM: `glm-5.3-flash` (requiere saldo en Z.ai) → `glm-4.5-flash` (gratuito). Si la cuenta no tiene saldo para el modelo premium, la app lo detecta y usa el gratuito sin configurar nada; al recargar saldo, el premium se usa solo.
+Cadena de modelos OpenAI: al iniciar, la app consulta el **catálogo de modelos** de la cuenta (`GET /v1/models`) y arma la cadena automáticamente: primero los modelos **GPT-6 Luna** disponibles (identificadores que contienen `luna`, p. ej. `gpt-6-luna`), luego GPT-6, GPT-5 y como último respaldo `gpt-4o-mini`. Si un modelo no está disponible para la cuenta (error `model_not_found`), la app lo salta y continúa con el siguiente; cuando recargues créditos o OpenAI habilite nuevos modelos, la cadena se actualiza sola.
 
 Cadena de modelos Gemini: `gemini-3.5-flash-lite` y respaldos (`gemini-3.8-flash`, `gemini-3.5-flash`, `gemini-3.0-flash-lite`, `gemini-2.5-flash*`, `gemini-2.0-flash`).
 
-## GLM desde el navegador (relay de CORS preconfigurado)
+## GPT-6 Luna desde el navegador (sin relay)
 
-Z.ai limita las llamadas directas desde el navegador (su gateway no siempre responde el preflight CORS). La aplicación ya viene configurada para gestionarlo sola:
+OpenAI **permite CORS** desde el navegador en países soportados (México incluido), así que la app llama **directamente** a `https://api.openai.com/v1/chat/completions` sin intermediarios. Estados que la app muestra solos:
 
-1. Intenta primero la llamada por el **relay de CORS preconfigurado**: `https://ometcuhtli.argos4all.workers.dev` (la app antepone automáticamente `?url=` con el destino).
-2. Si el relay no responde, reintenta la llamada **directa** a `https://api.z.ai`.
-3. Si nada funciona, muestra el estado en la píldora GLM y **Gemini cubre todas las tareas** (modo complementario).
+- **Red o firewall escolar bloquea OpenAI** → píldora en ámbar "OpenAI no alcanzable desde esta red" y Gemini cubre todas las tareas (modo complementario).
+- **Región no soportada** → píldora en ámbar "Bloqueada por ubicación"; desde México no debería aparecer.
+- **Clave rechazada o sin créditos** → mensaje claro en el panel Admin con la causa exacta.
 
-Para reemplazar o volver a publicar el relay (gratis, ~2 minutos con cuenta de Cloudflare):
-
-1. Entra a [workers.cloudflare.com](https://workers.cloudflare.com/) → "Create worker" y pega este código:
-
-```js
-export default {
-  async fetch(req) {
-    if (req.method === 'OPTIONS') return new Response(null, { headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS'
-    }});
-    const destino = new URL(req.url).searchParams.get('url');
-    if (!destino || !destino.startsWith('https://api.z.ai/')) return new Response('url invalida', { status: 400 });
-    const r = await fetch(destino, {
-      method: 'POST',
-      headers: { 'Content-Type': req.headers.get('content-type') || 'application/json', 'Authorization': req.headers.get('authorization') || '' },
-      body: await req.text()
-    });
-    const resp = new Response(r.body, r);
-    resp.headers.set('Access-Control-Allow-Origin', '*');
-    return resp;
-  }
-};
-```
-
-2. Copia la URL del worker (ej. `https://ometcuhtli.argos4all.workers.dev`) y pégala en **Admin → Configuración → GLM · Relay de CORS** → Guardar (ya viene preconfigurada; solo cambia la URL si publicas otro relay).
-3. Pulsa "Probar" en la tarjeta GLM · Z.ai: la píldora debe quedar en verde.
-
-> Consejo de seguridad: el relay solo reenvía la petición; la clave de Z.ai viaja desde el navegador del usuario. Puedes endurecer el worker restringiendo el `Origin` permitido a `https://argos4all.github.io`.
+Opcional (redes escolares muy restrictivas): puedes reenviar OpenAI por tu worker de Cloudflare agregando `api.openai.com` a los destinos permitidos del relay (el del README anterior solo permitía `api.z.ai`), pegando la URL del worker como "Relay" en Configuración. La app no lo necesita en condiciones normales.
 
 ## Backend y servicios
 
@@ -90,10 +61,10 @@ export default {
 | --- | --- |
 | [Back4App](https://www.back4app.com) (Parse REST) | Guarda los documentos (clase `Documento`) y los archivos. Campos: `nombre`, `tipo`, `tamano`, `texto`, `archivo`, `estado`, `transcripcionMd`, `mdArchivo`, `motor`, `paginas`, `transcripcionFecha`, `subidoPor`. La app inicia sesión con un usuario de servicio para subir archivos si el servidor lo exige (error 130). |
 | Google Gemini (`generativelanguage.googleapis.com`) | Análisis, chat y transcripción, con streaming (SSE) y cadena de respaldo entre modelos. |
-| Z.ai (`api.z.ai`) | GLM para chat, análisis y transcripción (cadena `glm-5.3-flash` → `glm-4.5-flash`), con respaldo por saldo y transporte **relay preconfigurado** (`ometcuhtli.argos4all.workers.dev`) / directo. |
+| OpenAI (`api.openai.com`) | **GPT-6 Luna** para chat, análisis y transcripción, con descubrimiento automático de modelos y cadena de respaldo (`gpt-6-luna` → GPT-5 → `gpt-4o-mini`); transporte directo (CORS permitido). |
 | GitHub Pages | Hospeda el archivo `index.html` desde este repositorio. |
 
-Las claves de servicio viven en el bloque `DEFAULTS` dentro de `index.html` (aplicación client-side). Recomendaciones: restringir la clave de Gemini al sitio publicado y rotarla periódicamente; recargar saldo en Z.ai para habilitar `glm-5.3-flash`.
+Las claves de servicio viven en el bloque `DEFAULTS` dentro de `index.html` (aplicación client-side). Recomendaciones: restringir la clave de Gemini al sitio publicado y rotarla periódicamente; en OpenAI, define un límite de gasto del proyecto y rota la clave si sospechas fuga.
 
 ## Publicar una nueva versión
 
@@ -106,7 +77,7 @@ Las versiones anteriores se conservan en la carpeta `versiones/`.
 ## Estructura
 
 ```
-index.html                      → aplicación completa (v3.0 · IA dual + relay preconfigurado)
+index.html                      → aplicación completa (v3.1 · IA dual Gemini + GPT-6 Luna)
 versiones/edudocs-ia-v2.0.html  → respaldo versión anterior (Gemini simple)
 versiones/edudocs-ia-v1.0.html  → respaldo primera versión
 ```
@@ -116,4 +87,4 @@ versiones/edudocs-ia-v1.0.html  → respaldo primera versión
 - La contraseña de administrador se verifica localmente con hash SHA-256 y nunca se envía a ningún servidor; tras 5 intentos fallidos el acceso se bloquea 60 segundos.
 - Los documentos se guardan en Back4App; el historial del chat vive en el navegador del usuario. La aplicación no usa analítica ni rastreo.
 - El borrado de un documento elimina el registro; el archivo puede permanecer en el almacenamiento de Back4App (su borrado definitivo requiere la Master Key desde el dashboard).
-- Si Gemini muestra "User location is not supported", la red actual bloquea la API de Google: la app sigue con GLM automáticamente y el sitio funciona con normalidad desde el navegador y red habituales.
+- Si Gemini muestra "User location is not supported", la red actual bloquea la API de Google: la app sigue con GPT-6 Luna automáticamente y el sitio funciona con normalidad desde el navegador y red habituales.

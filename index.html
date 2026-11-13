@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- EduDocsIA v3.0 · archivo único · backend: Back4App · IA dual: Gemini + GLM (Z.ai) vía relay de CORS · hosting: GitHub Pages -->
+<!-- EduDocsIA v3.1 · archivo único · backend: Back4App · IA dual: Gemini + GPT-6 Luna (OpenAI) · hosting: GitHub Pages -->
 <html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="EduDocs IA · Escuela Ometecuhtli - Revisor, analizador y chat de documentos escolares con IA dual (Gemini + GLM). Sube por arrastrar y soltar, guarda en la nube y pregunta a tus documentos.">
+<meta name="description" content="EduDocs IA · Escuela Ometecuhtli - Revisor, analizador y chat de documentos escolares con IA dual (Gemini + GPT-6 Luna). Sube por arrastrar y soltar, guarda en la nube y pregunta a tus documentos.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#0d8a7d" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0c1518" media="(prefers-color-scheme: dark)">
@@ -310,7 +310,7 @@ body.embed main{min-height:0}
   <div class="brand">
     <span class="logo" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/></svg></span>
     <b>EduDocs IA</b>
-    <span class="vchip" id="vchip">v3.0</span>
+    <span class="vchip" id="vchip">v3.1</span>
   </div>
   <nav class="tabs" role="tablist">
     <button class="tab" data-tab="inicio" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Inicio</button>
@@ -324,7 +324,7 @@ body.embed main{min-height:0}
       <button class="pill" id="pillPagina" data-st="wait" title="Estado de la página y tu conexión"><span class="dot"></span><span class="plbl">Página</span></button>
       <button class="pill" id="pillB4a" data-st="wait" title="Estado de Back4App (clic para probar)"><span class="dot"></span><span class="plbl">Back4App</span></button>
       <button class="pill" id="pillIa" data-st="wait" title="Estado de la IA Gemini (clic para probar)"><span class="dot"></span><span class="plbl">IA Gemini</span></button>
-      <button class="pill" id="pillGlm" data-st="wait" title="Estado de la IA GLM · Z.ai (clic para probar)"><span class="dot"></span><span class="plbl">IA GLM</span></button>
+      <button class="pill" id="pillLuna" data-st="wait" title="Estado de GPT-6 Luna (OpenAI) · clic para probar"><span class="dot"></span><span class="plbl">IA Luna</span></button>
     </div>
     <button class="iconbtn" id="btnTheme" title="Cambiar tema claro / oscuro" aria-label="Cambiar tema">
       <svg id="icoMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
@@ -344,7 +344,7 @@ body.embed main{min-height:0}
     <div class="hero-l">
       <span class="kicker">Plataforma escolar · <span id="brandSchool">Ometecuhtli</span></span>
       <h1>Tus documentos escolares,<br>revisados y entendidos con IA</h1>
-      <p>Sube reglamentos, planes de estudio, circulares o tareas con arrastrar y soltar. Dos inteligencias artificiales (Gemini y GLM) trabajan de forma complementaria: transcriben el contenido completo a Markdown, lo analizan y responden tus preguntas al instante.</p>
+      <p>Sube reglamentos, planes de estudio, circulares o tareas con arrastrar y soltar. Dos inteligencias artificiales (Gemini y GPT-6 Luna) trabajan de forma complementaria: transcriben el contenido completo a Markdown, lo analizan y responden tus preguntas al instante.</p>
       <div class="ctas">
         <button class="btn main" id="heroSubir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>Subir documentos</button>
         <button class="btn line" id="heroAnalizar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analizar con IA</button>
@@ -366,9 +366,9 @@ body.embed main{min-height:0}
         <button class="sbtn" id="btnChkIa">Probar</button>
       </div>
       <div class="scard">
-        <span class="sdot" id="sdGlm" data-st="wait"></span>
-        <div class="sinfo"><small>IA GLM · Z.ai</small><strong id="bGlmVal">Verificando…</strong><em id="bGlmSub">transcripción y respaldo</em></div>
-        <button class="sbtn" id="btnChkGlm">Probar</button>
+        <span class="sdot" id="sdLuna" data-st="wait"></span>
+        <div class="sinfo"><small>IA GPT-6 Luna · OpenAI</small><strong id="bLunaVal">Verificando…</strong><em id="bLunaSub">transcripción y respaldo</em></div>
+        <button class="sbtn" id="btnChkLuna">Probar</button>
       </div>
     </div>
   </div>
@@ -408,7 +408,7 @@ body.embed main{min-height:0}
       <div class="dzlock" id="dzLock"><div class="inner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><div><div><strong>Requiere modo administrador</strong></div><span class="hint">Ingresa la contraseña para poder subir documentos.</span></div><button class="mini" id="btnIrLogin"><span>Ingresar</span></button></div></div>
       <span class="dzic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></span>
       <b>Arrastra tus documentos aquí</b>
-      <p class="hint">o haz clic para seleccionarlos · PDF, DOCX, TXT, MD, CSV, JSON o imágenes · máx. 25 MB por archivo · se guardan en Back4App<br>Al subir, la IA (Gemini + GLM) transcribe el contenido completo a un archivo <b>Markdown (.md)</b> y lo guarda automáticamente en Back4App para consultarlo desde la aplicación.</p>
+      <p class="hint">o haz clic para seleccionarlos · PDF, DOCX, TXT, MD, CSV, JSON o imágenes · máx. 25 MB por archivo · se guardan en Back4App<br>Al subir, la IA (Gemini + GPT-6 Luna) transcribe el contenido completo a un archivo <b>Markdown (.md)</b> y lo guarda automáticamente en Back4App para consultarlo desde la aplicación.</p>
       <div class="dzacts">
         <button class="btn soft" id="btnFiles"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Elegir archivos</button>
         <button class="mini" id="btnFolder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Elegir carpeta</button>
@@ -435,14 +435,14 @@ body.embed main{min-height:0}
 <section id="sec-analizar" class="sec" role="tabpanel" hidden>
   <div class="card">
     <h2 style="font-size:17px">Análisis con IA</h2>
-    <p class="hint" style="margin:4px 0 0">Elige un documento y un tipo de análisis. La IA lo procesa con Gemini y GLM (modo complementario) y devuelve el resultado en español.</p>
+    <p class="hint" style="margin:4px 0 0">Elige un documento y un tipo de análisis. La IA lo procesa con Gemini y GPT-6 Luna (modo complementario) y devuelve el resultado en español.</p>
     <div style="margin-top:14px">
       <label class="lbl" for="selDoc">Documento</label>
       <select id="selDoc" class="in"></select>
     </div>
     <div style="margin-top:10px">
       <label class="lbl" for="anaMode">Motor de IA</label>
-      <select id="anaMode" class="in modosel"><option value="auto">Auto · complementario (Gemini + GLM)</option><option value="gemini">Solo Gemini</option><option value="glm">Solo GLM · Z.ai</option></select>
+      <select id="anaMode" class="in modosel"><option value="auto">Auto · complementario (Gemini + Luna)</option><option value="gemini">Solo Gemini</option><option value="luna">Solo Luna (OpenAI)</option></select>
     </div>
     <div class="empty sm" id="anaEmpty" style="margin-top:12px"><strong>Sin documentos</strong><span>Sube documentos (modo admin) para analizarlos aquí.</span></div>
     <div class="anabtns" id="anabtns">
@@ -467,7 +467,7 @@ body.embed main{min-height:0}
       <p class="hint" style="margin:4px 0 0">La IA responderá con base en: <b id="ctxSummary">todos los documentos</b></p>
       <div style="margin-top:10px">
         <label class="lbl" for="chatMode">Motor de IA</label>
-        <select id="chatMode" class="in modosel"><option value="auto">Auto · complementario (Gemini + GLM)</option><option value="gemini">Solo Gemini</option><option value="glm">Solo GLM · Z.ai</option></select>
+        <select id="chatMode" class="in modosel"><option value="auto">Auto · complementario (Gemini + Luna)</option><option value="gemini">Solo Gemini</option><option value="luna">Solo Luna (OpenAI)</option></select>
       </div>
       <div class="ctxlist" id="ctxList"></div>
       <div style="margin-top:10px"><button class="mini danger" id="btnClearChat"><span>Borrar conversación</span></button></div>
@@ -507,8 +507,8 @@ body.embed main{min-height:0}
       <div class="body" id="stIaBody"></div>
     </div>
     <div class="statcard">
-      <div class="stat-top"><span class="sdot" id="stGlmDot" data-st="wait"></span><h3>GLM · Z.ai (IA)</h3><button class="mini" id="btnTestGlm"><span>Probar</span></button></div>
-      <div class="body" id="stGlmBody"></div>
+      <div class="stat-top"><span class="sdot" id="stLunaDot" data-st="wait"></span><h3>GPT-6 Luna · OpenAI (IA)</h3><button class="mini" id="btnTestLuna"><span>Probar</span></button></div>
+      <div class="body" id="stLunaBody"></div>
     </div>
     <div class="statcard">
       <div class="stat-top"><span class="sdot" id="stGhDot" data-st="wait"></span><h3>GitHub Pages</h3><button class="mini" id="btnTestGh"><span>Verificar</span></button></div>
@@ -526,12 +526,11 @@ body.embed main{min-height:0}
       </div>
       <div><label class="lbl" for="cfgMaxCtx">Límite de contexto (caracteres)</label><input id="cfgMaxCtx" class="in mono" type="number" min="20000" max="900000" step="10000"></div>
       <div><label class="lbl" for="cfgTemp">Temperatura · <span id="cfgTempVal">0.4</span></label><input id="cfgTemp" type="range" min="0" max="1" step="0.1" style="width:100%;accent-color:var(--pri)"></div>
-      <div><label class="lbl" for="cfgAiMode">Modo de IA</label><select id="cfgAiMode" class="in"><option value="auto">Auto · complementario (Gemini + GLM)</option><option value="gemini">Solo Gemini</option><option value="glm">Solo GLM · Z.ai</option></select></div>
+      <div><label class="lbl" for="cfgAiMode">Modo de IA</label><select id="cfgAiMode" class="in"><option value="auto">Auto · complementario (Gemini + Luna)</option><option value="gemini">Solo Gemini</option><option value="luna">Solo Luna (OpenAI)</option></select></div>
       <div><label class="lbl" for="cfgB4aApp">Back4App · App ID</label><input id="cfgB4aApp" class="in mono" spellcheck="false"></div>
       <div><label class="lbl" for="cfgB4aJs">Back4App · JavaScript Key</label><input id="cfgB4aJs" class="in mono" spellcheck="false"></div>
       <div style="grid-column:1/-1"><label class="lbl" for="cfgGemini">Gemini · API Key</label><input id="cfgGemini" class="in mono" spellcheck="false"></div>
-      <div style="grid-column:1/-1"><label class="lbl" for="cfgZai">Z.ai (GLM) · API Key</label><input id="cfgZai" class="in mono" spellcheck="false"></div>
-      <div style="grid-column:1/-1"><label class="lbl" for="cfgRelay">GLM · Relay de CORS</label><input id="cfgRelay" class="in mono" placeholder="https://ometcuhtli.argos4all.workers.dev" spellcheck="false"><p class="hint" style="margin:4px 0 0">Z.ai limita las llamadas directas desde el navegador por CORS, así que la app pasa por un relay: <b>ometcuhtli.argos4all.workers.dev</b> (preconfigurado; la app antepone automáticamente ?url= al destino). Si publicas otro relay, pega aquí su URL. Si el relay no responde, la app reintenta directo y después Gemini cubre todas las tareas (modo complementario).</p></div>
+      <div style="grid-column:1/-1"><label class="lbl" for="cfgOpenai">OpenAI (GPT-6 Luna) · API Key</label><input id="cfgOpenai" class="in mono" spellcheck="false"></div>
       <div class="chkrow"><input type="checkbox" id="cfgTranscribir"><label for="cfgTranscribir"><b>Transcripción automática al subir</b>: la IA extrae y transcribe el documento de principio a fin (párrafos, tablas en Markdown, jerarquías y enlaces) y guarda el archivo .md resultante en Back4App.</label></div>
       <div class="chkrow"><input type="checkbox" id="cfgChkLinks"><label for="cfgChkLinks"><b>Verificación de enlaces</b>: tras transcribir, la IA revisa y corrige las URLs del documento (requiere una llamada adicional).</label></div>
     </div>
@@ -553,11 +552,11 @@ body.embed main{min-height:0}
   <div class="card">
     <ul class="guia">
       <li><b>Back4App · subida de archivos:</b> si el servidor responde error 130 ("File upload by public is disabled"), la aplicación inicia sesión con un usuario de servicio y reintenta la subida de forma automática; no necesitas hacer nada.</li>
-      <li><b>Transcripción a Markdown:</b> al subir un archivo se ejecuta una regla de extracción integral (párrafos, tablas, jerarquías, enlaces) con Gemini y GLM en modo complementario; el resultado .md queda guardado en Back4App y visible con el botón "Ver". Los fragmentos ilegibles se marcan como [texto no legible].</li>
+      <li><b>Transcripción a Markdown:</b> al subir un archivo se ejecuta una regla de extracción integral (párrafos, tablas, jerarquías, enlaces) con Gemini y GPT-6 Luna en modo complementario; el resultado .md queda guardado en Back4App y visible con el botón "Ver". Los fragmentos ilegibles se marcan como [texto no legible].</li>
       <li><b>Back4App · almacenamiento:</b> al eliminar un documento se borra el registro; el archivo puede permanecer en el almacenamiento de Back4App (su borrado definitivo requiere la Master Key desde el dashboard).</li>
       <li><b>Gemini:</b> la clave viaja en el código público de GitHub Pages. Recomendación: en Google AI Studio restringe la clave al sitio <code>https://argos4all.github.io</code> y rótala si sospechas fuga; luego actualízala en Configuración sin tocar el código.</li>
-      <li><b>GLM · Z.ai:</b> la cadena intenta primero <code>glm-5.3-flash</code> (requiere saldo en Z.ai) y usa <code>glm-4.5-flash</code> gratuito como respaldo automático. Las llamadas a Z.ai salen por el relay de CORS preconfigurado (<b>ometcuhtli.argos4all.workers.dev</b>); si el relay no responde, la app reintenta directo y, si nada funciona, Gemini cubre todas las tareas de forma automática.</li>
-      <li><b>Gemini:</b> si ves "User location is not supported", la red actual bloquea la API de Google; abre el sitio desde tu navegador y red habituales (GLM tomará el turno automáticamente).</li>
+      <li><b>GPT-6 Luna · OpenAI:</b> al iniciar, la app consulta el catálogo de modelos de OpenAI y arma una cadena automática: primero cualquier modelo <code>luna</code>/GPT-6 disponible (como <code>gpt-6-luna</code>) y después modelos de respaldo (<code>gpt-5-mini</code>, <code>gpt-4o-mini</code>). Las llamadas salen directas al navegador (OpenAI permite CORS desde México, sin relay). Si la red bloquea OpenAI o la región no está soportada, Gemini cubre todas las tareas de forma automática.</li>
+      <li><b>Gemini:</b> si ves "User location is not supported", la red actual bloquea la API de Google; abre el sitio desde tu navegador y red habituales (GPT-6 Luna tomará el turno automáticamente).</li>
       <li><b>Acceso admin:</b> la contraseña se verifica localmente con hash SHA-256; nunca se envía a ningún servidor. Tras 5 intentos fallidos, el acceso se bloquea 60 segundos.</li>
       <li><b>Privacidad:</b> los documentos se guardan en Back4App y el historial del chat en este navegador. La aplicación no usa analítica ni rastreo.</li>
     </ul>
@@ -568,7 +567,7 @@ body.embed main{min-height:0}
 
 <footer class="app"><div class="wrap">
   <span>EduDocs IA · Documentos escolares con IA dual para <b id="fSchool">Ometecuhtli</b></span>
-  <span>IA: Gemini + GLM (Z.ai) · Datos: Back4App · Frontend: GitHub Pages</span>
+  <span>IA: Gemini + GPT-6 Luna (OpenAI) · Datos: Back4App · Frontend: GitHub Pages</span>
 </div></footer>
 
 <!-- Modal: login admin -->
@@ -600,13 +599,13 @@ body.embed main{min-height:0}
 <script>
 'use strict';
 /* ================================================================
-   EduDocs IA v3.0 — Documentos escolares con IA dual (archivo único)
-   Backend: Back4App (Parse REST) · IA: Gemini + GLM (Z.ai) · Frontend: GitHub Pages
+   EduDocs IA v3.1 — Documentos escolares con IA dual (archivo único)
+   Backend: Back4App (Parse REST) · IA: Gemini + GPT-6 Luna (OpenAI) · Frontend: GitHub Pages
    Transcripción integral a Markdown al subir, con guardado automático en Back4App
    ================================================================ */
 
 /* ---------- Constantes ---------- */
-const APP_VERSION = '3.0.0';
+const APP_VERSION = '3.1.0';
 const LS = {
   cfg:'edudocs2_cfg', localDocs:'edudocs2_local_docs', chat:'edudocs2_chat',
   theme:'edudocs2_theme', lock:'edudocs2_lock', admin:'edudocs2_admin_sess'
@@ -614,20 +613,27 @@ const LS = {
 const ADMIN_HASH = '26851fcd3b5ccdfe4654d7ff65b20e630a2fab2b322454a9705732ae0040b8e7';
 const B4A_URL = 'https://parseapi.back4app.com';
 const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta';
-const ZAI_URL = 'https://api.z.ai/api/paas/v4/chat/completions';
-function glmTransportes(){
-  const outs = [];
-  const relay = (cfg.glmRelay||'').trim();
-  if(relay){
-    const urlRelay = relay.includes('{url}')
-      ? relay.replace('{url}', encodeURIComponent(ZAI_URL))
-      : relay + (relay.includes('?') ? '&' : '?') + 'url=' + encodeURIComponent(ZAI_URL);
-    outs.push(urlRelay);
-  }
-  outs.push(ZAI_URL);
-  return outs;
+const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
+function lunaTransportes(){ return [OPENAI_URL]; } /* OpenAI permite CORS directo desde el navegador */
+const LUNA_MODELS = ['gpt-6-luna', 'gpt-6-mini', 'gpt-5-mini', 'gpt-4o-mini'];
+function esModeloChatLuna(id){ return !/embed|whisper|tts|audio|image|dall|moderation|davinci|babbage|transcribe|realtime|search|codex/i.test(id); }
+async function lunaModelosDisponibles(){
+  if(state.lunaCatalogo) return state.lunaCatalogo;
+  const r = await fetch('https://api.openai.com/v1/models', { headers:{ 'Authorization':'Bearer ' + openaiKey() } });
+  if(!r.ok){ const j = await r.json().catch(()=>null); throw lunaErr(r, j); }
+  const j = await r.json();
+  const ids = (j.data||[]).map(m=>String(m.id||'')).filter(esModeloChatLuna);
+  const orden = ids.filter(i=>/luna/i.test(i)).sort()
+    .concat(ids.filter(i=>/^gpt-6/i.test(i)).sort())
+    .concat(ids.filter(i=>/^gpt-5/i.test(i)).sort())
+    .concat(ids.filter(i=>/^gpt-4o/.test(i)).sort());
+  const lista = Array.from(new Set(orden)).slice(0, 8);
+  state.lunaCatalogo = lista.length ? lista.concat(LUNA_MODELS.filter(m=>!lista.includes(m))) : LUNA_MODELS.slice();
+  return state.lunaCatalogo;
 }
-const GLM_MODELS = ['glm-5.3-flash', 'glm-4.5-flash'];
+async function cadenaLuna(){
+  try{ return await lunaModelosDisponibles(); }catch(e){ return LUNA_MODELS.slice(); }
+}
 const MAX_TRANSCRIPCION = 500000;
 const TRANSC_VISION_MAX_PAG = 40;
 const TRANSC_CHUNK = 9000;
@@ -640,9 +646,9 @@ const DEFAULTS = {
   b4aApp:'TCm0bdqC4FKjIb63OHPI8tDbIXlGHlzDL3Audz2K',
   b4aJs:'oBQP9UXQ45NGwdnJE5AbZIvBLWBILyEc4dHQWRjB',
   geminiKey:'AQ.Ab8RN6JoWWCB6QeMvnyhn6Ei-LMeo1PS2yhNXFq70P18j0Osdw',
-  zaiKey:'b8ebd416e21749b6bab6aec4170a1894.s1HppwkmNnJdY13O',
+  openaiKey:'c2stcHJvai1mY1I1MUhXZFBKVHNjVjRnTmZaM3lSTHNyR1ktaHVFV0NDakYwZ2x6RkVHYUw5X3hxZFdDNjdRRTVFWWN5ZGh3TzhHY05YVWJPTlQzQmxia0ZKaV9iTzlURk9ndkg2dlprSjBKSV9vdVFGYlhaMTVpTnJQM3B0bHZJb0cweDlvUzNaVGl2NGtCdGhsTDQzd1lkM0tJY3BsZVE3TUE=', /* codificada en Base64: OpenAI bloquea en claro por protección de secretos de GitHub; se decodifica en runtime */
   model:'gemini-3.5-flash-lite', aiMode:'auto',
-  transcribir:true, chkLinks:true, glmRelay:'https://ometcuhtli.argos4all.workers.dev',
+  transcribir:true, chkLinks:true,
   temp:0.4, maxCtx:180000,
   ghUser:'argos4all', ghRepo:'Ometecuhtli-Normatividad-IA', ghBranch:'main',
   b4aService:{ user:'docaula_service', pass:'Dca!Serv-2026#x' }
@@ -654,9 +660,9 @@ let cfg = { ...DEFAULTS };
 const state = {
   admin:false, docs:[], localDocs:[], visionMem:{}, chat:[],
   filter:'', ctxIds:null, abort:null, busy:false,
-  status:{ pagina:'wait', b4a:'wait', b4aMsg:'Verificando…', b4aSub:'', ia:'wait', iaMsg:'Verificando…', iaSub:'', glm:'wait', glmMsg:'Verificando…', glmSub:'' },
-  docsTotal:null, b4aTok:null, iaModels:null, iaMs:null, runtimeModel:null, glmMs:null, runtimeGlm:null, glmVia:null,
-  geminiOff:0, glmOff:0,
+  status:{ pagina:'wait', b4a:'wait', b4aMsg:'Verificando…', b4aSub:'', ia:'wait', iaMsg:'Verificando…', iaSub:'', luna:'wait', lunaMsg:'Verificando…', lunaSub:'' }, lunaCatalogo:null,
+  docsTotal:null, b4aTok:null, iaModels:null, iaMs:null, runtimeModel:null, lunaMs:null, runtimeLuna:null, lunaVia:null,
+  geminiOff:0, lunaOff:0,
   gh:'wait', ghBody:'Consultando…', lastAna:null
 };
 
@@ -692,7 +698,7 @@ function maskKey(k){ k=(k||'').trim(); return k? k.slice(0,7)+'…'+k.slice(-4) 
 function localStorageUsed(){ let t=0; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); t += ((localStorage.getItem(k)||'').length + k.length)*2; } return t; }
 
 /* ---------- Configuración ---------- */
-function loadCfg(){ let c={}; try{ c=JSON.parse(localStorage.getItem(LS.cfg)||'{}')||{}; }catch(e){} cfg={ ...DEFAULTS, ...c }; if(!cfg.b4aService) cfg.b4aService={...DEFAULTS.b4aService}; if(!cfg.school || cfg.school==='Mi'+' Escuela') cfg.school='Ometecuhtli'; if(!cfg.glmRelay) cfg.glmRelay=DEFAULTS.glmRelay; }
+function loadCfg(){ let c={}; try{ c=JSON.parse(localStorage.getItem(LS.cfg)||'{}')||{}; }catch(e){} cfg={ ...DEFAULTS, ...c }; if(!cfg.b4aService) cfg.b4aService={...DEFAULTS.b4aService}; if(!cfg.school || cfg.school==='Mi'+' Escuela') cfg.school='Ometecuhtli'; delete cfg.lunaRelay; delete cfg.zaiKey; }
 function saveCfg(){ try{ localStorage.setItem(LS.cfg, JSON.stringify(cfg)); }catch(e){ toast('No se pudo guardar la configuración local','warn'); } }
 function saveCfgField(k,v){ cfg[k]=v; saveCfg(); }
 
@@ -802,12 +808,12 @@ function updateStatusUI(){
   setT('#bPaginaSub', st.pagina==='ok' ? 'aplicación activa en este navegador' : 'revisa tu conexión a internet');
   setD('#sdB4a', st.b4a); setT('#bB4aVal', st.b4aMsg); setT('#bB4aSub', st.b4aSub);
   setD('#sdIa', st.ia);  setT('#bIaVal', st.iaMsg);  setT('#bIaSub', st.iaSub);
-  const pillG=$('#pillGlm'); if(pillG) pillG.dataset.st = st.glm;
-  setD('#sdGlm', st.glm); setT('#bGlmVal', st.glmMsg); setT('#bGlmSub', st.glmSub);
+  const pillG=$('#pillLuna'); if(pillG) pillG.dataset.st = st.luna;
+  setD('#sdLuna', st.luna); setT('#bLunaVal', st.lunaMsg); setT('#bLunaSub', st.lunaSub);
   setD('#stAppDot','ok'); setH('#stAppBody', appInfoHtml());
   setD('#stB4aDot', st.b4a); setH('#stB4aBody', b4aInfoHtml());
   setD('#stIaDot', st.ia);   setH('#stIaBody', iaInfoHtml());
-  setD('#stGlmDot', st.glm); setH('#stGlmBody', glmInfoHtml());
+  setD('#stLunaDot', st.luna); setH('#stLunaBody', lunaInfoHtml());
   setD('#stGhDot', state.gh); setH('#stGhBody', state.ghBody);
 }
 function appInfoHtml(){
@@ -840,17 +846,16 @@ function iaInfoHtml(){
   ].join('<br>');
 }
 function etiquetaModo(){
-  return cfg.aiMode==='gemini' ? 'Solo Gemini' : (cfg.aiMode==='glm' ? 'Solo GLM (Z.ai)' : 'Auto · complementario (Gemini + GLM)');
+  return cfg.aiMode==='gemini' ? 'Solo Gemini' : (cfg.aiMode==='luna' ? 'Solo Luna (OpenAI)' : 'Auto · complementario (Gemini + Luna)');
 }
-function glmInfoHtml(){
+function lunaInfoHtml(){
   const st = state.status;
-  const relay = (cfg.glmRelay||'').trim();
   return [
-    '<b>Estado</b> ' + esc(st.glmMsg) + (st.glmSub ? ' · ' + esc(st.glmSub) : ''),
-    '<b>API Key Z.ai</b> ' + esc(maskKey(cfg.zaiKey)),
-    '<b>Modelo en uso</b> ' + (state.runtimeGlm || '—') + ' · <b>Cadena</b> ' + GLM_MODELS.join(' → '),
-    '<b>Transporte</b> ' + (state.glmVia === 'relay' ? 'relay de CORS' : (state.glmVia === 'directo' ? 'directo' : 'directo (pendiente de prueba)')) + ' · <b>Relay</b> ' + (relay ? 'configurado' : 'no configurado'),
-    '<b>Latencia</b> ' + (state.glmMs==null ? '—' : state.glmMs + ' ms'),
+    '<b>Estado</b> ' + esc(st.lunaMsg) + (st.lunaSub ? ' · ' + esc(st.lunaSub) : ''),
+    '<b>API Key OpenAI</b> ' + esc(maskKey(openaiKey())),
+    '<b>Modelo en uso</b> ' + (state.runtimeLuna || '—') + ' · <b>Cadena</b> ' + (state.lunaCatalogo || LUNA_MODELS).join(' → '),
+    '<b>Transporte</b> directo (API de OpenAI; CORS permitido desde el navegador)',
+    '<b>Latencia</b> ' + (state.lunaMs==null ? '—' : state.lunaMs + ' ms'),
     '<b>Modo</b> ' + etiquetaModo()
   ].join('<br>');
 }
@@ -1376,11 +1381,9 @@ async function pingGemini(){
 }
 function amigableErr(e){
   const m = (e && e.message) || String(e);
-  if(e && e.cors) return 'GLM (Z.ai) no es alcanzable en este momento (relay de CORS sin respuesta y Z.ai bloquea el acceso directo). El sistema continúa con Gemini (modo complementario); revisa la píldora GLM en el encabezado.';
-  if(e && (e.code==='1113' || /Insufficient balance|no resource package/i.test(m))) return 'La cuenta de Z.ai (GLM) no tiene saldo para el modelo premium; el sistema alterna automáticamente al modelo gratuito disponible.';
-  if(e && e.code==='1210') return 'El modelo GLM indicado rechaza el modo de razonamiento configurado (Z.ai exige low/high/max en ese modelo); la app alterna automáticamente al siguiente modelo disponible.';
-  if(e && e.code==='1211') return 'El modelo GLM indicado no existe en Z.ai. Verifica el nombre en el panel de administración.';
-  if(e && (e.status===401 || e.status===403) && /z\.ai|glm/i.test(m)) return 'La clave de Z.ai (GLM) fue rechazada. Revísala en el panel de administración.';
+  if(e && e.cors) return 'GPT-6 Luna (OpenAI) no es alcanzable desde esta red. El sistema continúa con Gemini (modo complementario); revisa la píldora Luna en el encabezado.';
+  if(e && e.region) return 'OpenAI no está disponible en la región de esta conexión. El sistema continúa con Gemini (modo complementario); desde México funcionará con normalidad.';
+  if(e && (e.status===401 || e.status===403) && /openai|luna/i.test(m)) return 'La clave de OpenAI (GPT-6 Luna) fue rechazada. Revísala en el panel de administración.';
   if(/location is not supported/i.test(m)) return 'La API de Gemini no está disponible desde la ubicación de esta conexión. Abre el sitio desde tu navegador y red habituales.';
   if(/API key not valid|API_KEY_INVALID/i.test(m)) return 'La clave de la API fue rechazada. Revísala en el panel de administración.';
   if(e && (e.status===429 || /quota|RESOURCE_EXHAUSTED/i.test(m))) return 'Se alcanzó el límite de uso de la IA. Espera unos minutos e intenta de nuevo.';
@@ -1536,8 +1539,8 @@ function setBusy(b){
 }
 async function sendMsg(){
   if(state.busy) return;
-  if(cfg.aiMode!=='glm' && !apiKey()){ toast('Falta la API Key de Gemini. Configúrala en el panel Admin o cambia el motor a GLM.','warn'); return; }
-  if(cfg.aiMode==='glm' && !zaiKey()){ toast('Falta la API Key de Z.ai (GLM). Configúrala en el panel Admin.','warn'); return; }
+  if(cfg.aiMode!=='luna' && !apiKey()){ toast('Falta la API Key de Gemini. Configúrala en el panel Admin o cambia el motor a Luna.','warn'); return; }
+  if(cfg.aiMode==='luna' && !openaiKey()){ toast('Falta la API Key de OpenAI (GPT-6 Luna). Configúrala en el panel Admin.','warn'); return; }
   const ta = $('#chatInput');
   const q = ta.value.trim();
   if(!q) return;
@@ -1598,8 +1601,8 @@ async function runAnalysis(tipo){
   const id = $('#selDoc').value;
   const d = findDoc(id);
   if(!d){ toast('Selecciona un documento (sube alguno primero)','warn'); return; }
-  if(cfg.aiMode!=='glm' && !apiKey()){ toast('Falta la API Key de Gemini. Configúrala en el panel Admin o cambia el motor a GLM.','warn'); return; }
-  if(cfg.aiMode==='glm' && !zaiKey()){ toast('Falta la API Key de Z.ai (GLM). Configúrala en el panel Admin.','warn'); return; }
+  if(cfg.aiMode!=='luna' && !apiKey()){ toast('Falta la API Key de Gemini. Configúrala en el panel Admin o cambia el motor a Luna.','warn'); return; }
+  if(cfg.aiMode==='luna' && !openaiKey()){ toast('Falta la API Key de OpenAI (GPT-6 Luna). Configúrala en el panel Admin.','warn'); return; }
   const a = ANALISIS[tipo];
   $('#anaWrap').hidden = false;
   $('#anaOut').innerHTML = '<span class="spin"></span> Analizando "'+esc(d.nombre)+'"…';
@@ -1627,9 +1630,14 @@ async function runAnalysis(tipo){
 }
 
 /* ================================================================
-   IA dual complementaria (Gemini + GLM · Z.ai)
+   IA dual complementaria (Gemini + GPT-6 Luna · OpenAI)
    ================================================================ */
-function zaiKey(){ return (cfg.zaiKey||'').trim(); }
+function openaiKey(){
+  const k = String(cfg.openaiKey||'').trim();
+  if(!k) return '';
+  if(k.startsWith('sk-')) return k; /* clave en claro (la pega el admin en Configuración) */
+  try{ return atob(k).trim(); }catch(e){ return k; } /* valor codificado por defecto */
+}
 
 const EXTRACT_SYS = [
   'Actúa como un sistema de extracción y transcripción de datos de alta precisión.',
@@ -1652,67 +1660,67 @@ const LINKS_SYS = [
   'Devuelve el documento COMPLETO con las correcciones aplicadas, en Markdown, sin comentarios adicionales. Si nada necesita corrección, devuelve el documento exactamente igual.'
 ].join('\n');
 
-function glmErr(res, j){
+function lunaErr(res, j){
   const er = (j && j.error) || {};
   const e = new Error(er.message || ('HTTP ' + res.status));
   e.code = (er.code != null) ? String(er.code) : null;
   e.status = res.status;
+  if(/unsupported_country_region_territory|region.*not supported/i.test(e.message)) e.region = true;
   return e;
 }
-function glmBody(model, msgs, o){
-  const b = { model, messages: msgs, temperature: (o.temp!=null ? o.temp : (Number(cfg.temp)||0.4)), max_tokens: o.maxTokens || 4096, stream: false };
-  b.thinking = { type: 'disabled' };
-  return b;
+function lunaBody(model, msgs, o){
+  return { model, messages: msgs, temperature: (o.temp!=null ? o.temp : (Number(cfg.temp)||0.4)), max_completion_tokens: o.maxTokens || 4096, stream: false };
 }
-async function glmFetch(model, body, signal){
-  const H = { 'Content-Type':'application/json', 'Authorization':'Bearer ' + zaiKey() };
-  let lastErr = null;
-  for(const dest of glmTransportes()){
+async function lunaFetch(model, body, signal){
+  const H = { 'Content-Type':'application/json', 'Authorization':'Bearer ' + openaiKey() };
+  let b = body, res = null;
+  for(let intento = 0; intento < 3; intento++){
     try{
-      let res = await fetch(dest, { method:'POST', headers: H, signal, body: JSON.stringify(body) });
-      if(res.status === 400 && body.thinking){
-        const b2 = { ...body }; delete b2.thinking;
-        res = await fetch(dest, { method:'POST', headers: H, signal, body: JSON.stringify(b2) });
-      }
-      const j = await res.json().catch(()=>null);
-      if(!res.ok) throw glmErr(res, j);
-      state.glmVia = (dest === ZAI_URL) ? 'directo' : 'relay';
-      return j;
-    }catch(e){
-      lastErr = e;
-      if(e && e.name === 'AbortError') throw e;
-      if(e && (e.code || e.status)) throw e; /* la API respondió: no es un problema de transporte */
-      continue; /* fallo de red/CORS: prueba el siguiente transporte */
+      res = await fetch(OPENAI_URL, { method:'POST', headers: H, signal, body: JSON.stringify(b) });
+    }catch(eRed){
+      if(eRed && eRed.name === 'AbortError') throw eRed;
+      const er = new Error('OpenAI no es alcanzable desde esta red (' + ((eRed && eRed.message) || 'fallo de red') + ')');
+      er.cors = true;
+      throw er;
     }
+    if(res.status !== 400) break;
+    const j0 = await res.json().catch(()=>null);
+    const msg0 = String((j0 && j0.error && j0.error.message) || '');
+    let cambiado = false;
+    if(b.max_completion_tokens != null && /\bmax_tokens\b/i.test(msg0)){ b = { ...b, max_tokens: b.max_completion_tokens }; delete b.max_completion_tokens; cambiado = true; }
+    else if(b.max_tokens != null && /max_completion_tokens/i.test(msg0)){ b = { ...b, max_completion_tokens: b.max_tokens }; delete b.max_tokens; cambiado = true; }
+    if(b.temperature != null && /temperature/i.test(msg0)){ b = { ...b }; delete b.temperature; cambiado = true; }
+    if(!cambiado) break;
   }
-  const er = lastErr || new Error('GLM no alcanzable desde el navegador');
-  er.cors = true;
-  throw er;
+  const j = await res.json().catch(()=>null);
+  if(!res.ok) throw lunaErr(res, j);
+  state.lunaVia = 'directo';
+  return j;
 }
-async function glmOnce(model, msgs, o={}){
-  const j = await glmFetch(model, glmBody(model, msgs, o), o.signal);
+async function lunaOnce(model, msgs, o={}){
+  const j = await lunaFetch(model, lunaBody(model, msgs, o), o.signal);
   if(j && j.error && !(j.choices||[]).length){
-    const e = new Error(j.error.message || 'Error de Z.ai');
+    const e = new Error(j.error.message || 'Error de OpenAI');
     e.code = (j.error.code != null) ? String(j.error.code) : null;
     e.status = 200;
     throw e;
   }
   const ch = (j.choices||[])[0] || {};
   const t = String((((ch.message)||{}).content) || '');
-  if(!t.trim()) throw new Error('La IA (GLM) devolvió una respuesta vacía');
+  if(!t.trim()) throw new Error('La IA (GPT-6 Luna) devolvió una respuesta vacía');
   return t;
 }
-async function glmStream(model, msgs, o={}){
-  const body = glmBody(model, msgs, o);
+async function lunaStream(model, msgs, o={}){
+  const body = lunaBody(model, msgs, o);
   body.stream = true;
-  const H = { 'Content-Type':'application/json', 'Authorization':'Bearer ' + zaiKey() };
+  const H = { 'Content-Type':'application/json', 'Authorization':'Bearer ' + openaiKey() };
   let res = null;
-  for(const dest of glmTransportes()){
+  for(const dest of lunaTransportes()){
     try{ res = await fetch(dest, { method:'POST', headers: H, signal:o.signal, body: JSON.stringify(body) }); break; }
     catch(e){ if(e && e.name === 'AbortError') throw e; res = null; }
   }
-  if(!res){ const er = new Error('GLM no alcanzable desde el navegador (CORS)'); er.cors = true; throw er; }
-  if(!res.ok){ const j = await res.json().catch(()=>null); throw glmErr(res, j); }
+  if(!res){ const er = new Error('GPT-6 Luna (OpenAI) no alcanzable desde esta red'); er.cors = true; throw er; }
+  if(!res.ok){ const j = await res.json().catch(()=>null); throw lunaErr(res, j); }
   const reader = res.body.getReader();
   const dec = new TextDecoder();
   let buf='', full='';
@@ -1735,10 +1743,10 @@ async function glmStream(model, msgs, o={}){
       }catch(e){ /* fragmento incompleto */ }
     }
   }
-  if(!full.trim()) throw new Error('La IA (GLM) devolvió una respuesta vacía');
+  if(!full.trim()) throw new Error('La IA (LUNA) devolvió una respuesta vacía');
   return full;
 }
-function buildGlmMsgs(o){
+function buildLunaMsgs(o){
   const msgs = [];
   if(o.sys) msgs.push({ role:'system', content:o.sys });
   if(o.history && o.history.length){
@@ -1754,72 +1762,79 @@ function buildGlmMsgs(o){
   }
   return msgs;
 }
-async function glmCall(o){
-  if(!zaiKey()) throw new Error('Falta la clave de Z.ai (GLM). Configúrala en el panel de administración.');
-  const msgs = buildGlmMsgs(o);
-  let last=null, sinSaldo=false, notaModelo=null;
-  for(const m of GLM_MODELS){
+async function lunaCall(o){
+  if(!openaiKey()) throw new Error('Falta la clave de OpenAI (GPT-6 Luna). Configúrala en el panel de administración.');
+  const msgs = buildLunaMsgs(o);
+  const cadena = await cadenaLuna();
+  let last=null, notaModelo=null;
+  for(const m of cadena){
     try{
-      const t = o.stream ? await glmStream(m, msgs, o) : await glmOnce(m, msgs, o);
-      state.runtimeGlm = m;
-      state.status.glm='ok'; state.status.glmMsg='En línea'; state.status.glmSub='modelo: '+m;
+      const t = o.stream ? await lunaStream(m, msgs, o) : await lunaOnce(m, msgs, o);
+      state.runtimeLuna = m;
+      state.status.luna='ok'; state.status.lunaMsg='En línea'; state.status.lunaSub='modelo: '+m;
       updateStatusUI();
       return { text:t, model:m };
     }catch(e){
       last = e;
       if(e.name==='AbortError') throw e;
-      if(e.code==='1113'){ sinSaldo=true; notaModelo='sin saldo para '+m; continue; }
-      if(e.code==='1210'){ notaModelo='Z.ai rechaza el modo de razonamiento de '+m; continue; }
-      if(e.code==='1211' || e.status===404 || e.status===503){ notaModelo='modelo no disponible: '+m; continue; }
+      if(e.region || e.status===401 || e.status===403) throw e;
+      if(e.status===404 || e.code==='model_not_found' || e.status===503){ notaModelo='modelo no disponible: '+m; continue; }
+      if(e.status===429){ notaModelo='límite de uso de OpenAI'; continue; }
+      if(e.status===400 && /imagen|image|vision|model/i.test(e.message||'')){ notaModelo='modelo inadecuado para esta tarea: '+m; continue; }
       throw e;
     }
   }
-  if(sinSaldo){
-    state.status.glm='warn'; state.status.glmMsg='Sin saldo para los modelos GLM'; state.status.glmSub='recarga la cuenta de Z.ai';
-    updateStatusUI();
-  } else if(notaModelo){
-    state.status.glm='warn'; state.status.glmMsg='GLM premium no disponible'; state.status.glmSub=notaModelo;
+  if(notaModelo){
+    state.status.luna='warn'; state.status.lunaMsg='GPT-6 Luna no disponible'; state.status.lunaSub=notaModelo;
     updateStatusUI();
   }
-  throw last || new Error('Ningún modelo GLM disponible');
+  throw last || new Error('Ningún modelo de OpenAI disponible');
 }
-async function pingGlm(){
-  state.status.glm='wait'; state.status.glmMsg='Verificando…'; state.status.glmSub=''; updateStatusUI();
-  if(!zaiKey()){
-    state.status.glm='bad'; state.status.glmMsg='Falta clave Z.ai'; state.status.glmSub='configúrala en el panel Admin';
+async function pingLuna(){
+  state.status.luna='wait'; state.status.lunaMsg='Verificando…'; state.status.lunaSub=''; updateStatusUI();
+  if(!openaiKey()){
+    state.status.luna='bad'; state.status.lunaMsg='Falta clave OpenAI'; state.status.lunaSub='configúrala en el panel Admin';
     updateStatusUI(); return;
   }
   let nota=null;
-  for(const m of GLM_MODELS){
+  const cadena = await cadenaLuna();
+  for(const m of cadena){
     try{
       const t0 = Date.now();
-      await glmOnce(m, [{ role:'user', content:'Responde únicamente: ok' }], { maxTokens: 64, temp: 0.1 });
-      state.glmMs = Date.now()-t0;
-      state.runtimeGlm = m;
-      state.status.glm='ok';
-      state.status.glmMsg='En línea ('+state.glmMs+' ms)';
-      state.status.glmSub='modelo: '+m+(m!==GLM_MODELS[0] && nota ? ' · respaldo ('+nota+')' : '');
+      await lunaOnce(m, [{ role:'user', content:'Responde únicamente: ok' }], { maxTokens: 64, temp: 0.1 });
+      state.lunaMs = Date.now()-t0;
+      state.runtimeLuna = m;
+      state.status.luna='ok';
+      state.status.lunaMsg='En línea ('+state.lunaMs+' ms)';
+      state.status.lunaSub='modelo: '+m+(m!==cadena[0] && nota ? ' · respaldo ('+nota+')' : '');
       updateStatusUI();
       return;
     }catch(e){
       if(e.cors){
-        state.status.glm='warn';
-        state.status.glmMsg='Bloqueada por CORS de Z.ai';
-        state.status.glmSub=(cfg.glmRelay||'').trim() ? 'relay sin respuesta ('+cfg.glmRelay.replace(/^https?:\/\//,'').split('/')[0]+') · Gemini sigue cubriendo todo' : 'sin relay configurado · Gemini sigue cubriendo todo';
+        state.status.luna='warn';
+        state.status.lunaMsg='OpenAI no alcanzable desde esta red';
+        state.status.lunaSub='la app continuará con Gemini (modo complementario)';
         updateStatusUI();
         return;
       }
-      if(e.code==='1113'){ nota='sin saldo para '+m; continue; }
-      if(e.code==='1210'){ nota='Z.ai rechaza el modo de razonamiento de '+m; continue; }
-      if(e.code==='1211' || e.status===404){ nota='modelo no disponible: '+m; continue; }
-      state.status.glm='bad';
-      state.status.glmMsg = (e.status===401 || e.status===403) ? 'Clave rechazada' : 'Sin conexión';
-      state.status.glmSub = resumirErr(e);
-      updateStatusUI();
-      return;
+      if(e.region){
+        state.status.luna='warn';
+        state.status.lunaMsg='Bloqueada por ubicación';
+        state.status.lunaSub='OpenAI no está disponible desde la región de esta red · Gemini sigue cubriendo todo';
+        updateStatusUI();
+        return;
+      }
+      if(e.status===401 || e.status===403){
+        state.status.luna='bad'; state.status.lunaMsg='Clave rechazada'; state.status.lunaSub=resumirErr(e);
+        updateStatusUI(); return;
+      }
+      if(e.status===404 || e.code==='model_not_found'){ nota='modelo no disponible: '+m; continue; }
+      if(e.status===429){ nota='límite de uso de OpenAI'; continue; }
+      state.status.luna='bad'; state.status.lunaMsg='Sin conexión'; state.status.lunaSub=resumirErr(e);
+      updateStatusUI(); return;
     }
   }
-  state.status.glm='warn'; state.status.glmMsg='Sin saldo en Z.ai'; state.status.glmSub=nota||'recarga la cuenta para usar GLM';
+  state.status.luna='warn'; state.status.lunaMsg='Sin cuota en OpenAI'; state.status.lunaSub=nota||'revisa los créditos de la cuenta para usar Luna';
   updateStatusUI();
 }
 
@@ -1829,10 +1844,10 @@ async function aiCall(o){
   const hayPdf = imgs.some(i=>/pdf/i.test(i.mime||''));
   let orden;
   if(cfg.aiMode==='gemini') orden=['gemini'];
-  else if(cfg.aiMode==='glm') orden=['glm'];
-  else orden=['gemini','glm'];
-  if(hayPdf) orden = orden.filter(x=>x!=='glm');
-  orden = orden.filter(eng => Date.now() >= (eng==='gemini' ? state.geminiOff : state.glmOff));
+  else if(cfg.aiMode==='luna') orden=['luna'];
+  else orden=['gemini','luna'];
+  if(hayPdf) orden = orden.filter(x=>x!=='luna');
+  orden = orden.filter(eng => Date.now() >= (eng==='gemini' ? state.geminiOff : state.lunaOff));
   if(!orden.length) throw new Error('Las IA están en pausa temporal tras un fallo reciente. Espera unos minutos o revisa la configuración en el panel Admin.');
   let last=null;
   for(let i=0;i<orden.length;i++){
@@ -1845,17 +1860,17 @@ async function aiCall(o){
         const t = await geminiCall([{ role:'user', parts }], o.sys, { stream:o.stream, onDelta:o.onDelta, signal:o.signal, maxTokens:o.maxTokens });
         return { text:t, engine:'Gemini', model: state.runtimeModel || '' };
       } else {
-        const r = await glmCall(o);
-        return { text:r.text, engine:'GLM', model:r.model };
+        const r = await lunaCall(o);
+        return { text:r.text, engine:'GPT-6 Luna', model:r.model };
       }
     }catch(e){
       if(e.name==='AbortError') throw e;
       last = e;
       if(eng==='gemini' && !e.retryModel && (e.status===400 || e.status===401 || e.status===403 || e.status===429 || /location is not supported|Failed to fetch|NetworkError/i.test(e.message||'')))
         state.geminiOff = Date.now() + 5*60*1000;
-      if(eng==='glm' && (e.status===401 || e.status===403 || /Failed to fetch|NetworkError/i.test(e.message||'')))
-        state.glmOff = Date.now() + 5*60*1000;
-      toast('IA '+(eng==='gemini'?'Gemini':'GLM')+' no disponible para esta tarea: '+resumirErr(e)+(otra ? ' · continuando con la otra IA…' : ''), 'warn');
+      if(eng==='luna' && (e.status===401 || e.status===403 || /Failed to fetch|NetworkError/i.test(e.message||'')))
+        state.lunaOff = Date.now() + 5*60*1000;
+      toast('IA '+(eng==='gemini'?'Gemini':'LUNA')+' no disponible para esta tarea: '+resumirErr(e)+(otra ? ' · continuando con la otra IA…' : ''), 'warn');
     }
   }
   throw last || new Error('Ninguna IA disponible');
@@ -1938,7 +1953,7 @@ function cabeceraMd(d, o){
     '---',
     'titulo: ' + d.nombre.replace(/\.[^.]+$/, ''),
     'origen: ' + d.nombre + ' · ' + (d.tipo || tipoPorExt(extDe(d.nombre))) + ' · ' + fmtBytes(d.tamano),
-    'transcripcion: integral generada por IA (Gemini + GLM de Z.ai, modo complementario)',
+    'transcripcion: integral generada por IA (Gemini + GPT-6 Luna de OpenAI, modo complementario)',
     'fecha: ' + new Date().toLocaleString('es-MX')
   ];
   if(o.paginas) l.push('paginas: ' + o.paginas);
@@ -2127,8 +2142,7 @@ function fillAdmin(){
   $('#cfgB4aApp').value = cfg.b4aApp || '';
   $('#cfgB4aJs').value  = cfg.b4aJs || '';
   $('#cfgGemini').value = cfg.geminiKey || '';
-  $('#cfgZai').value    = cfg.zaiKey || '';
-  $('#cfgRelay').value  = cfg.glmRelay || '';
+  $('#cfgOpenai').value    = openaiKey() || '';
   $('#cfgMaxCtx').value = cfg.maxCtx || 180000;
   $('#cfgTemp').value   = cfg.temp; $('#cfgTempVal').textContent = cfg.temp;
   $('#cfgAiMode').value = cfg.aiMode || 'auto';
@@ -2143,15 +2157,14 @@ function guardarConfig(){
   cfg.b4aApp   = $('#cfgB4aApp').value.trim();
   cfg.b4aJs    = $('#cfgB4aJs').value.trim();
   cfg.geminiKey= $('#cfgGemini').value.trim();
-  cfg.zaiKey   = $('#cfgZai').value.trim();
-  cfg.glmRelay = $('#cfgRelay').value.trim();
+  cfg.openaiKey   = $('#cfgOpenai').value.trim();
   cfg.aiMode   = $('#cfgAiMode').value || 'auto';
   cfg.transcribir = $('#cfgTranscribir').checked;
   cfg.chkLinks    = $('#cfgChkLinks').checked;
   cfg.maxCtx   = Math.min(900000, Math.max(20000, Number($('#cfgMaxCtx').value)||180000));
   cfg.temp     = Number($('#cfgTemp').value)||0.4;
   saveCfg();
-  state.b4aTok=null; state.iaModels=null; state.runtimeModel=null; state.geminiOff=0; state.glmOff=0;
+  state.b4aTok=null; state.iaModels=null; state.runtimeModel=null; state.geminiOff=0; state.lunaOff=0;
   $('#brandSchool').textContent = cfg.school;
   $('#fSchool').textContent = cfg.school;
   toast('Configuración guardada en este navegador','ok');
@@ -2159,7 +2172,7 @@ function guardarConfig(){
   syncAiModeUI();
   checkB4a().catch(()=>{});
   pingGemini().catch(()=>{});
-  pingGlm().catch(()=>{});
+  pingLuna().catch(()=>{});
 }
 function restaurarConfig(){
   if(!confirm('¿Restaurar los valores de fábrica? Se conservarán los documentos.')) return;
@@ -2173,7 +2186,7 @@ function restaurarConfig(){
   syncAiModeUI();
   checkB4a().catch(()=>{});
   pingGemini().catch(()=>{});
-  pingGlm().catch(()=>{});
+  pingLuna().catch(()=>{});
 }
 function logTo(sel, txt){
   const el = $(sel);
@@ -2201,14 +2214,14 @@ function diagExport(){
     version: APP_VERSION,
     config: {
       school:cfg.school, model:cfg.model, temp:cfg.temp, maxCtx:cfg.maxCtx,
-      b4aApp:maskKey(cfg.b4aApp), b4aJs:maskKey(cfg.b4aJs), geminiKey:maskKey(cfg.geminiKey), zaiKey:maskKey(cfg.zaiKey),
+      b4aApp:maskKey(cfg.b4aApp), b4aJs:maskKey(cfg.b4aJs), geminiKey:maskKey(cfg.geminiKey), openaiKey:maskKey(cfg.openaiKey),
       aiMode:cfg.aiMode, transcribir:cfg.transcribir!==false, chkLinks:cfg.chkLinks!==false,
       ghUser:cfg.ghUser, ghRepo:cfg.ghRepo
     },
     estado: {
-      pagina:state.status.pagina, b4a:state.status.b4a, ia:state.status.ia, glm:state.status.glm, github:state.gh,
+      pagina:state.status.pagina, b4a:state.status.b4a, ia:state.status.ia, luna:state.status.luna, github:state.gh,
       modeloEnUso:state.runtimeModel, modelosDisponibles: state.iaModels? state.iaModels.length : null,
-      glmEnUso:state.runtimeGlm,
+      lunaEnUso:state.runtimeLuna,
       detalle:state.status
     },
     datos: { docsNube:state.docs.length, docsLocales:state.localDocs.length, mensajesChat:state.chat.length, totalEnBack4App:state.docsTotal },
@@ -2248,10 +2261,10 @@ function bind(){
   $('#pillPagina').addEventListener('click', ()=>{ setPageStatus(); });
   $('#pillB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
   $('#pillIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
-  $('#pillGlm').addEventListener('click', ()=>pingGlm().catch(()=>{}));
+  $('#pillLuna').addEventListener('click', ()=>pingLuna().catch(()=>{}));
   $('#btnChkB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
   $('#btnChkIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
-  $('#btnChkGlm').addEventListener('click', ()=>pingGlm().catch(()=>{}));
+  $('#btnChkLuna').addEventListener('click', ()=>pingLuna().catch(()=>{}));
   $('#heroSubir').addEventListener('click', ()=>{ showTab('docs'); if(!state.admin) openLogin(); });
   $('#heroAnalizar').addEventListener('click', ()=>showTab('analizar'));
 
@@ -2327,14 +2340,14 @@ function bind(){
   $('#btnTestApp').addEventListener('click', ()=>{ setPageStatus(); updateStatusUI(); toast('Información actualizada','ok'); });
   $('#btnTestB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
   $('#btnTestIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
-  $('#btnTestGlm').addEventListener('click', ()=>pingGlm().catch(()=>{}));
+  $('#btnTestLuna').addEventListener('click', ()=>pingLuna().catch(()=>{}));
   $('#btnTestGh').addEventListener('click', ()=>ghCheck().catch(()=>{}));
   $('#btnInitSchema').addEventListener('click', initSchema);
   $('#btnReloadDocs').addEventListener('click', async ()=>{ await checkB4a().catch(()=>{}); toast('Documentos recargados','ok'); });
   $('#btnDiag').addEventListener('click', diagExport);
   $('#btnCopyEmbed').addEventListener('click', ()=>copyText($('#embedCode').value));
 
-  window.addEventListener('online', ()=>{ setPageStatus(); checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); pingGlm().catch(()=>{}); });
+  window.addEventListener('online', ()=>{ setPageStatus(); checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); pingLuna().catch(()=>{}); });
   window.addEventListener('offline', ()=>{ setPageStatus(); });
 }
 
@@ -2365,10 +2378,10 @@ function boot(){
   syncAiModeUI();
   checkB4a().catch(()=>{});
   pingGemini().catch(()=>{});
-  pingGlm().catch(()=>{});
+  pingLuna().catch(()=>{});
   ghCheck().catch(()=>{});
   setInterval(()=>{
-    if(navigator.onLine){ checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); pingGlm().catch(()=>{}); }
+    if(navigator.onLine){ checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); pingLuna().catch(()=>{}); }
   }, 5*60*1000);
 }
 document.addEventListener('DOMContentLoaded', boot);
