@@ -1743,7 +1743,7 @@ async function lunaStream(model, msgs, o={}){
       }catch(e){ /* fragmento incompleto */ }
     }
   }
-  if(!full.trim()) throw new Error('La IA (LUNA) devolvió una respuesta vacía');
+  if(!full.trim()) throw new Error('La IA (GPT-6 Luna) devolvió una respuesta vacía');
   return full;
 }
 function buildLunaMsgs(o){
@@ -1870,7 +1870,7 @@ async function aiCall(o){
         state.geminiOff = Date.now() + 5*60*1000;
       if(eng==='luna' && (e.status===401 || e.status===403 || /Failed to fetch|NetworkError/i.test(e.message||'')))
         state.lunaOff = Date.now() + 5*60*1000;
-      toast('IA '+(eng==='gemini'?'Gemini':'LUNA')+' no disponible para esta tarea: '+resumirErr(e)+(otra ? ' · continuando con la otra IA…' : ''), 'warn');
+      toast('IA '+(eng==='gemini'?'Gemini':'GPT-6 Luna')+' no disponible para esta tarea: '+resumirErr(e)+(otra ? ' · continuando con la otra IA…' : ''), 'warn');
     }
   }
   throw last || new Error('Ninguna IA disponible');
