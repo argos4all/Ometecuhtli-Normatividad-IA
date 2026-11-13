@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<!-- EduDocsIA v2.0 · archivo único · backend: Back4App · IA: Gemini · hosting: GitHub Pages -->
+<!-- EduDocsIA v3.0 · archivo único · backend: Back4App · IA dual: Gemini + GLM (Z.ai) vía relay de CORS · hosting: GitHub Pages -->
 <html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="EduDocs IA v2 - Revisor, analizador y chat de documentos escolares con IA (Gemini). Sube por arrastrar y soltar, guarda en la nube y pregunta a tus documentos.">
+<meta name="description" content="EduDocs IA · Escuela Ometecuhtli - Revisor, analizador y chat de documentos escolares con IA dual (Gemini + GLM). Sube por arrastrar y soltar, guarda en la nube y pregunta a tus documentos.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#0d8a7d" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0c1518" media="(prefers-color-scheme: dark)">
-<title>EduDocs IA · Documentos y Chat para tu Escuela</title>
+<title>EduDocs IA · Ometecuhtli · Documentos y Chat con IA dual</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230d8a7d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 2v6h6'/%3E%3Cpath d='M9 15l2 2 4-4'/%3E%3C/svg%3E">
 <style>
 /* ================= Base y variables ================= */
@@ -342,7 +342,7 @@ body.embed main{min-height:0}
 <section id="sec-inicio" class="sec" role="tabpanel">
   <div class="hero">
     <div class="hero-l">
-      <span class="kicker">Plataforma escolar · <span id="brandSchool">Mi Escuela</span></span>
+      <span class="kicker">Plataforma escolar · <span id="brandSchool">Ometecuhtli</span></span>
       <h1>Tus documentos escolares,<br>revisados y entendidos con IA</h1>
       <p>Sube reglamentos, planes de estudio, circulares o tareas con arrastrar y soltar. Dos inteligencias artificiales (Gemini y GLM) trabajan de forma complementaria: transcriben el contenido completo a Markdown, lo analizan y responden tus preguntas al instante.</p>
       <div class="ctas">
@@ -520,7 +520,7 @@ body.embed main{min-height:0}
   <div class="sectitle"><h2>Configuración</h2><p class="hint">Se guarda solo en este navegador (localStorage).</p></div>
   <div class="card">
     <div class="formgrid">
-      <div><label class="lbl" for="cfgSchool">Nombre de la escuela</label><input id="cfgSchool" class="in" placeholder="Mi Escuela"></div>
+      <div><label class="lbl" for="cfgSchool">Nombre de la escuela</label><input id="cfgSchool" class="in" placeholder="Ometecuhtli"></div>
       <div><label class="lbl" for="cfgModel">Modelo de IA<input id="cfgModel" class="in mono" list="modelList" placeholder="gemini-3.5-flash-lite o auto" spellcheck="false" style="margin-top:5px"></label>
         <datalist id="modelList"><option value="auto"></option><option value="gemini-3.5-flash-lite"></option><option value="gemini-3.8-flash"></option><option value="gemini-3.5-flash"></option><option value="gemini-3.0-flash-lite"></option><option value="gemini-2.5-flash-lite"></option><option value="gemini-2.5-flash"></option><option value="gemini-2.0-flash"></option></datalist>
       </div>
@@ -531,7 +531,7 @@ body.embed main{min-height:0}
       <div><label class="lbl" for="cfgB4aJs">Back4App · JavaScript Key</label><input id="cfgB4aJs" class="in mono" spellcheck="false"></div>
       <div style="grid-column:1/-1"><label class="lbl" for="cfgGemini">Gemini · API Key</label><input id="cfgGemini" class="in mono" spellcheck="false"></div>
       <div style="grid-column:1/-1"><label class="lbl" for="cfgZai">Z.ai (GLM) · API Key</label><input id="cfgZai" class="in mono" spellcheck="false"></div>
-      <div style="grid-column:1/-1"><label class="lbl" for="cfgRelay">GLM · Relay de CORS (opcional)</label><input id="cfgRelay" class="in mono" placeholder="https://mi-worker.tu-cuenta.workers.dev" spellcheck="false"><p class="hint" style="margin:4px 0 0">Z.ai limita las llamadas directas desde el navegador. Si GLM aparece "Bloqueada por CORS", publica el relay (es un archivo pequeño; instrucciones en el README del repositorio) y pega aquí su URL: la app antepone automáticamente ?url= al destino. Sin relay, Gemini cubre todas las tareas.</p></div>
+      <div style="grid-column:1/-1"><label class="lbl" for="cfgRelay">GLM · Relay de CORS</label><input id="cfgRelay" class="in mono" placeholder="https://ometcuhtli.argos4all.workers.dev" spellcheck="false"><p class="hint" style="margin:4px 0 0">Z.ai limita las llamadas directas desde el navegador por CORS, así que la app pasa por un relay: <b>ometcuhtli.argos4all.workers.dev</b> (preconfigurado; la app antepone automáticamente ?url= al destino). Si publicas otro relay, pega aquí su URL. Si el relay no responde, la app reintenta directo y después Gemini cubre todas las tareas (modo complementario).</p></div>
       <div class="chkrow"><input type="checkbox" id="cfgTranscribir"><label for="cfgTranscribir"><b>Transcripción automática al subir</b>: la IA extrae y transcribe el documento de principio a fin (párrafos, tablas en Markdown, jerarquías y enlaces) y guarda el archivo .md resultante en Back4App.</label></div>
       <div class="chkrow"><input type="checkbox" id="cfgChkLinks"><label for="cfgChkLinks"><b>Verificación de enlaces</b>: tras transcribir, la IA revisa y corrige las URLs del documento (requiere una llamada adicional).</label></div>
     </div>
@@ -556,7 +556,7 @@ body.embed main{min-height:0}
       <li><b>Transcripción a Markdown:</b> al subir un archivo se ejecuta una regla de extracción integral (párrafos, tablas, jerarquías, enlaces) con Gemini y GLM en modo complementario; el resultado .md queda guardado en Back4App y visible con el botón "Ver". Los fragmentos ilegibles se marcan como [texto no legible].</li>
       <li><b>Back4App · almacenamiento:</b> al eliminar un documento se borra el registro; el archivo puede permanecer en el almacenamiento de Back4App (su borrado definitivo requiere la Master Key desde el dashboard).</li>
       <li><b>Gemini:</b> la clave viaja en el código público de GitHub Pages. Recomendación: en Google AI Studio restringe la clave al sitio <code>https://argos4all.github.io</code> y rótala si sospechas fuga; luego actualízala en Configuración sin tocar el código.</li>
-      <li><b>GLM · Z.ai:</b> la cadena intenta primero <code>glm-5.3-flash</code> (requiere saldo en Z.ai) y usa <code>glm-4.5-flash</code> gratuito como respaldo. Z.ai limita las llamadas directas desde el navegador (CORS): si la píldora GLM muestra "Bloqueada por CORS", publica el relay opcional (instrucciones en el README) y pega su URL en Configuración; mientras tanto Gemini cubre todas las tareas de forma automática.</li>
+      <li><b>GLM · Z.ai:</b> la cadena intenta primero <code>glm-5.3-flash</code> (requiere saldo en Z.ai) y usa <code>glm-4.5-flash</code> gratuito como respaldo automático. Las llamadas a Z.ai salen por el relay de CORS preconfigurado (<b>ometcuhtli.argos4all.workers.dev</b>); si el relay no responde, la app reintenta directo y, si nada funciona, Gemini cubre todas las tareas de forma automática.</li>
       <li><b>Gemini:</b> si ves "User location is not supported", la red actual bloquea la API de Google; abre el sitio desde tu navegador y red habituales (GLM tomará el turno automáticamente).</li>
       <li><b>Acceso admin:</b> la contraseña se verifica localmente con hash SHA-256; nunca se envía a ningún servidor. Tras 5 intentos fallidos, el acceso se bloquea 60 segundos.</li>
       <li><b>Privacidad:</b> los documentos se guardan en Back4App y el historial del chat en este navegador. La aplicación no usa analítica ni rastreo.</li>
@@ -567,7 +567,7 @@ body.embed main{min-height:0}
 </div></main>
 
 <footer class="app"><div class="wrap">
-  <span>EduDocs IA · Documentos escolares con IA dual para <b id="fSchool">Mi Escuela</b></span>
+  <span>EduDocs IA · Documentos escolares con IA dual para <b id="fSchool">Ometecuhtli</b></span>
   <span>IA: Gemini + GLM (Z.ai) · Datos: Back4App · Frontend: GitHub Pages</span>
 </div></footer>
 
@@ -636,13 +636,13 @@ const MAX_STORE_CHARS = 350000;
 const MAX_VISION_MB = 14;
 const MODEL_FALLBACKS = ['gemini-3.5-flash-lite','gemini-3.8-flash','gemini-3.5-flash','gemini-3.0-flash-lite','gemini-2.5-flash-lite','gemini-2.5-flash','gemini-2.0-flash'];
 const DEFAULTS = {
-  school:'Mi Escuela',
+  school:'Ometecuhtli',
   b4aApp:'TCm0bdqC4FKjIb63OHPI8tDbIXlGHlzDL3Audz2K',
   b4aJs:'oBQP9UXQ45NGwdnJE5AbZIvBLWBILyEc4dHQWRjB',
   geminiKey:'AQ.Ab8RN6JoWWCB6QeMvnyhn6Ei-LMeo1PS2yhNXFq70P18j0Osdw',
   zaiKey:'b8ebd416e21749b6bab6aec4170a1894.s1HppwkmNnJdY13O',
   model:'gemini-3.5-flash-lite', aiMode:'auto',
-  transcribir:true, chkLinks:true, glmRelay:'',
+  transcribir:true, chkLinks:true, glmRelay:'https://ometcuhtli.argos4all.workers.dev',
   temp:0.4, maxCtx:180000,
   ghUser:'argos4all', ghRepo:'Ometecuhtli-Normatividad-IA', ghBranch:'main',
   b4aService:{ user:'docaula_service', pass:'Dca!Serv-2026#x' }
@@ -692,7 +692,7 @@ function maskKey(k){ k=(k||'').trim(); return k? k.slice(0,7)+'…'+k.slice(-4) 
 function localStorageUsed(){ let t=0; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); t += ((localStorage.getItem(k)||'').length + k.length)*2; } return t; }
 
 /* ---------- Configuración ---------- */
-function loadCfg(){ let c={}; try{ c=JSON.parse(localStorage.getItem(LS.cfg)||'{}')||{}; }catch(e){} cfg={ ...DEFAULTS, ...c }; if(!cfg.b4aService) cfg.b4aService={...DEFAULTS.b4aService}; }
+function loadCfg(){ let c={}; try{ c=JSON.parse(localStorage.getItem(LS.cfg)||'{}')||{}; }catch(e){} cfg={ ...DEFAULTS, ...c }; if(!cfg.b4aService) cfg.b4aService={...DEFAULTS.b4aService}; if(!cfg.school || cfg.school==='Mi'+' Escuela') cfg.school='Ometecuhtli'; if(!cfg.glmRelay) cfg.glmRelay=DEFAULTS.glmRelay; }
 function saveCfg(){ try{ localStorage.setItem(LS.cfg, JSON.stringify(cfg)); }catch(e){ toast('No se pudo guardar la configuración local','warn'); } }
 function saveCfgField(k,v){ cfg[k]=v; saveCfg(); }
 
@@ -1376,8 +1376,9 @@ async function pingGemini(){
 }
 function amigableErr(e){
   const m = (e && e.message) || String(e);
-  if(e && e.cors) return 'GLM (Z.ai) no es alcanzable desde el navegador: Z.ai limita las llamadas directas por CORS. Configura un relay opcional en el panel Admin o deja que Gemini continúe (modo complementario).';
+  if(e && e.cors) return 'GLM (Z.ai) no es alcanzable en este momento (relay de CORS sin respuesta y Z.ai bloquea el acceso directo). El sistema continúa con Gemini (modo complementario); revisa la píldora GLM en el encabezado.';
   if(e && (e.code==='1113' || /Insufficient balance|no resource package/i.test(m))) return 'La cuenta de Z.ai (GLM) no tiene saldo para el modelo premium; el sistema alterna automáticamente al modelo gratuito disponible.';
+  if(e && e.code==='1210') return 'El modelo GLM indicado rechaza el modo de razonamiento configurado (Z.ai exige low/high/max en ese modelo); la app alterna automáticamente al siguiente modelo disponible.';
   if(e && e.code==='1211') return 'El modelo GLM indicado no existe en Z.ai. Verifica el nombre en el panel de administración.';
   if(e && (e.status===401 || e.status===403) && /z\.ai|glm/i.test(m)) return 'La clave de Z.ai (GLM) fue rechazada. Revísala en el panel de administración.';
   if(/location is not supported/i.test(m)) return 'La API de Gemini no está disponible desde la ubicación de esta conexión. Abre el sitio desde tu navegador y red habituales.';
@@ -1433,7 +1434,7 @@ async function ctxPartsVision(ids){
   return parts;
 }
 function sysBase(){
-  return 'Eres el asistente académico de la escuela "'+(cfg.school||'Mi Escuela')+'". Ayudas a docentes y alumnos a revisar, analizar y comprender documentos escolares (reglamentos, planes de estudio, circulares, tareas, evaluaciones). Reglas: responde SIEMPRE en español claro; usa markdown con viñetas y negritas cuando ayude; sé conciso pero completo; cuando uses información de un documento, menciona su nombre entre corchetes, por ejemplo [Reglamento.pdf]; NO inventes datos, nombres, fechas ni cifras: si algo no aparece en los documentos, dilo con franqueza.';
+  return 'Eres el asistente académico de la escuela "'+(cfg.school||'Ometecuhtli')+'". Ayudas a docentes y alumnos a revisar, analizar y comprender documentos escolares (reglamentos, planes de estudio, circulares, tareas, evaluaciones). Reglas: responde SIEMPRE en español claro; usa markdown con viñetas y negritas cuando ayude; sé conciso pero completo; cuando uses información de un documento, menciona su nombre entre corchetes, por ejemplo [Reglamento.pdf]; NO inventes datos, nombres, fechas ni cifras: si algo no aparece en los documentos, dilo con franqueza.';
 }
 
 /* ---------- Markdown (render seguro) ---------- */
@@ -1756,7 +1757,7 @@ function buildGlmMsgs(o){
 async function glmCall(o){
   if(!zaiKey()) throw new Error('Falta la clave de Z.ai (GLM). Configúrala en el panel de administración.');
   const msgs = buildGlmMsgs(o);
-  let last=null, sinSaldo=false;
+  let last=null, sinSaldo=false, notaModelo=null;
   for(const m of GLM_MODELS){
     try{
       const t = o.stream ? await glmStream(m, msgs, o) : await glmOnce(m, msgs, o);
@@ -1767,13 +1768,17 @@ async function glmCall(o){
     }catch(e){
       last = e;
       if(e.name==='AbortError') throw e;
-      if(e.code==='1113'){ sinSaldo=true; continue; }
-      if(e.code==='1211' || e.status===404 || e.status===503) continue;
+      if(e.code==='1113'){ sinSaldo=true; notaModelo='sin saldo para '+m; continue; }
+      if(e.code==='1210'){ notaModelo='Z.ai rechaza el modo de razonamiento de '+m; continue; }
+      if(e.code==='1211' || e.status===404 || e.status===503){ notaModelo='modelo no disponible: '+m; continue; }
       throw e;
     }
   }
   if(sinSaldo){
     state.status.glm='warn'; state.status.glmMsg='Sin saldo para los modelos GLM'; state.status.glmSub='recarga la cuenta de Z.ai';
+    updateStatusUI();
+  } else if(notaModelo){
+    state.status.glm='warn'; state.status.glmMsg='GLM premium no disponible'; state.status.glmSub=notaModelo;
     updateStatusUI();
   }
   throw last || new Error('Ningún modelo GLM disponible');
@@ -1793,18 +1798,19 @@ async function pingGlm(){
       state.runtimeGlm = m;
       state.status.glm='ok';
       state.status.glmMsg='En línea ('+state.glmMs+' ms)';
-      state.status.glmSub='modelo: '+m+(m!==GLM_MODELS[0] ? ' · respaldo (sin saldo para '+GLM_MODELS[0]+')' : '');
+      state.status.glmSub='modelo: '+m+(m!==GLM_MODELS[0] && nota ? ' · respaldo ('+nota+')' : '');
       updateStatusUI();
       return;
     }catch(e){
       if(e.cors){
         state.status.glm='warn';
         state.status.glmMsg='Bloqueada por CORS de Z.ai';
-        state.status.glmSub=(cfg.glmRelay||'').trim() ? 'relay configurado pero sin respuesta' : 'para activar GLM publica el relay gratuito (Admin → README) · Gemini sigue cubriendo todo';
+        state.status.glmSub=(cfg.glmRelay||'').trim() ? 'relay sin respuesta ('+cfg.glmRelay.replace(/^https?:\/\//,'').split('/')[0]+') · Gemini sigue cubriendo todo' : 'sin relay configurado · Gemini sigue cubriendo todo';
         updateStatusUI();
         return;
       }
       if(e.code==='1113'){ nota='sin saldo para '+m; continue; }
+      if(e.code==='1210'){ nota='Z.ai rechaza el modo de razonamiento de '+m; continue; }
       if(e.code==='1211' || e.status===404){ nota='modelo no disponible: '+m; continue; }
       state.status.glm='bad';
       state.status.glmMsg = (e.status===401 || e.status===403) ? 'Clave rechazada' : 'Sin conexión';
@@ -2132,7 +2138,7 @@ function fillAdmin(){
   updateStatusUI();
 }
 function guardarConfig(){
-  cfg.school   = $('#cfgSchool').value.trim() || 'Mi Escuela';
+  cfg.school   = $('#cfgSchool').value.trim() || 'Ometecuhtli';
   cfg.model    = $('#cfgModel').value.trim() || 'auto';
   cfg.b4aApp   = $('#cfgB4aApp').value.trim();
   cfg.b4aJs    = $('#cfgB4aJs').value.trim();
@@ -2342,8 +2348,8 @@ function boot(){
   if(!th){ th = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'; }
   applyTheme(th);
   if(EMBED) document.body.classList.add('embed');
-  $('#brandSchool').textContent = cfg.school || 'Mi Escuela';
-  $('#fSchool').textContent = cfg.school || 'Mi Escuela';
+  $('#brandSchool').textContent = cfg.school || 'Ometecuhtli';
+  $('#fSchool').textContent = cfg.school || 'Ometecuhtli';
   $('#vchip').textContent = 'v'+APP_VERSION.split('.').slice(0,2).join('.');
   try{
     const base = location.origin + location.pathname;

@@ -45,15 +45,15 @@ Cadena de modelos GLM: `glm-5.3-flash` (requiere saldo en Z.ai) → `glm-4.5-fla
 
 Cadena de modelos Gemini: `gemini-3.5-flash-lite` y respaldos (`gemini-3.8-flash`, `gemini-3.5-flash`, `gemini-3.0-flash-lite`, `gemini-2.5-flash*`, `gemini-2.0-flash`).
 
-## Activar GLM desde el navegador (relay de CORS, opcional)
+## GLM desde el navegador (relay de CORS preconfigurado)
 
-Z.ai limita las llamadas directas desde el navegador (su gateway no siempre responde el preflight CORS). La aplicación lo gestiona así:
+Z.ai limita las llamadas directas desde el navegador (su gateway no siempre responde el preflight CORS). La aplicación ya viene configurada para gestionarlo sola:
 
-1. Intenta la llamada directa a `https://api.z.ai` (funciona en la mayoría de los navegadores actuales).
-2. Si el navegador la bloquea, usa el **relay opcional** configurado en **Admin → Configuración → "GLM · Relay de CORS"**.
-3. Si no hay relay, muestra el estado "Bloqueada por CORS de Z.ai" y Gemini cubre todas las tareas.
+1. Intenta primero la llamada por el **relay de CORS preconfigurado**: `https://ometcuhtli.argos4all.workers.dev` (la app antepone automáticamente `?url=` con el destino).
+2. Si el relay no responde, reintenta la llamada **directa** a `https://api.z.ai`.
+3. Si nada funciona, muestra el estado en la píldora GLM y **Gemini cubre todas las tareas** (modo complementario).
 
-Para publicar tu relay (gratis, ~2 minutos con cuenta de Cloudflare):
+Para reemplazar o volver a publicar el relay (gratis, ~2 minutos con cuenta de Cloudflare):
 
 1. Entra a [workers.cloudflare.com](https://workers.cloudflare.com/) → "Create worker" y pega este código:
 
@@ -79,7 +79,7 @@ export default {
 };
 ```
 
-2. Copia la URL del worker (ej. `https://mi-relay.tu-cuenta.workers.dev`) y pégala en **Admin → Configuración → GLM · Relay de CORS** → Guardar.
+2. Copia la URL del worker (ej. `https://ometcuhtli.argos4all.workers.dev`) y pégala en **Admin → Configuración → GLM · Relay de CORS** → Guardar (ya viene preconfigurada; solo cambia la URL si publicas otro relay).
 3. Pulsa "Probar" en la tarjeta GLM · Z.ai: la píldora debe quedar en verde.
 
 > Consejo de seguridad: el relay solo reenvía la petición; la clave de Z.ai viaja desde el navegador del usuario. Puedes endurecer el worker restringiendo el `Origin` permitido a `https://argos4all.github.io`.
@@ -90,7 +90,7 @@ export default {
 | --- | --- |
 | [Back4App](https://www.back4app.com) (Parse REST) | Guarda los documentos (clase `Documento`) y los archivos. Campos: `nombre`, `tipo`, `tamano`, `texto`, `archivo`, `estado`, `transcripcionMd`, `mdArchivo`, `motor`, `paginas`, `transcripcionFecha`, `subidoPor`. La app inicia sesión con un usuario de servicio para subir archivos si el servidor lo exige (error 130). |
 | Google Gemini (`generativelanguage.googleapis.com`) | Análisis, chat y transcripción, con streaming (SSE) y cadena de respaldo entre modelos. |
-| Z.ai (`api.z.ai`) | GLM para chat, análisis y transcripción (cadena `glm-5.3-flash` → `glm-4.5-flash`), con respaldo por saldo y transporte directo/relay. |
+| Z.ai (`api.z.ai`) | GLM para chat, análisis y transcripción (cadena `glm-5.3-flash` → `glm-4.5-flash`), con respaldo por saldo y transporte **relay preconfigurado** (`ometcuhtli.argos4all.workers.dev`) / directo. |
 | GitHub Pages | Hospeda el archivo `index.html` desde este repositorio. |
 
 Las claves de servicio viven en el bloque `DEFAULTS` dentro de `index.html` (aplicación client-side). Recomendaciones: restringir la clave de Gemini al sitio publicado y rotarla periódicamente; recargar saldo en Z.ai para habilitar `glm-5.3-flash`.
@@ -106,7 +106,7 @@ Las versiones anteriores se conservan en la carpeta `versiones/`.
 ## Estructura
 
 ```
-index.html                      → aplicación completa (v3.0)
+index.html                      → aplicación completa (v3.0 · IA dual + relay preconfigurado)
 versiones/edudocs-ia-v2.0.html  → respaldo versión anterior (Gemini simple)
 versiones/edudocs-ia-v1.0.html  → respaldo primera versión
 ```
