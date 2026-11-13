@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- EduDocsIA v3.4 · archivo único · backend: Back4App · IA: Gemini · hosting: GitHub Pages · subida pública sin contraseña, admin con contraseña -->
+<!-- EduDocsIA v3.5 · archivo único · backend: Back4App · IA: Gemini · hosting: GitHub Pages · subida pública sin contraseña, admin con contraseña, interfaz pública sin marcas técnicas, con ilustraciones -->
 <html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="EduDocs IA · Escuela Ometecuhtli - Revisor, analizador y chat de documentos escolares con IA Gemini. Sube por arrastrar y soltar, guarda en la nube y pregunta a tus documentos.">
+<meta name="description" content="EduDocs IA · Escuela Ometecuhtli - Revisor, analizador y chat de documentos escolares con inteligencia artificial. Sube por arrastrar y soltar, guarda en la nube y pregunta a tus documentos.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#0d8a7d" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0c1518" media="(prefers-color-scheme: dark)">
@@ -26,12 +26,14 @@ html[data-theme="light"]{
   --bg:#eef4f2; --bg2:#e4ece9; --surface:#ffffff; --surface2:#f5faf8; --border:#d7e3df;
   --tx:#17252b; --tx2:#4e6167; --tx3:#7b8d93;
   --pri:#0d8a7d; --pri2:#0b6f65; --prisoft:#e0f0ed; --pritx:#ffffff;
+  --acc1:#b4532c; --acc1soft:#f8e7dc; --acc2:#8f6f14; --acc2soft:#f6ecd3; --acc3:#3e5fa8; --acc3soft:#e4eaf8;
   --hero1:#0d8a7d; --hero2:#0a5f5b; --shadow:0 8px 28px rgba(13,60,55,.10); --shadow2:0 2px 10px rgba(13,60,55,.08);
 }
 html[data-theme="dark"]{
   --bg:#0c1518; --bg2:#0a1113; --surface:#121f23; --surface2:#16262b; --border:#23383e;
   --tx:#e8f0ee; --tx2:#a7b8bd; --tx3:#7d9198;
   --pri:#2fc2b0; --pri2:#2aa897; --prisoft:#143029; --pritx:#062019;
+  --acc1:#e3926a; --acc1soft:#3a2318; --acc2:#d9b45f; --acc2soft:#382c12; --acc3:#93abe0; --acc3soft:#1a2540;
   --hero1:#134e48; --hero2:#0c3433; --shadow:0 10px 30px rgba(0,0,0,.45); --shadow2:0 2px 10px rgba(0,0,0,.35);
   --link:#4fd8c6;
 }
@@ -123,15 +125,18 @@ textarea.in{resize:vertical}
 @media (max-width:920px){ .grid3,.grid4{grid-template-columns:1fr 1fr} }
 @media (max-width:620px){ .grid2,.grid3,.grid4{grid-template-columns:1fr} }
 .sectitle{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:22px 0 10px;flex-wrap:wrap}
-.sectitle h2{font-size:17px}
+.sectitle h2{font-size:17px;position:relative;padding-bottom:7px}
+.sectitle h2::after{content:'';position:absolute;left:0;bottom:0;width:52px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--pri),var(--acc1),var(--acc2))}
 .sectitle .hint{margin:0}
 
 /* ================= Hero (Inicio) ================= */
 .hero{display:grid;grid-template-columns:1.25fr .95fr;gap:0;overflow:hidden;border-radius:18px;border:1px solid var(--border);
   background:var(--surface);box-shadow:var(--shadow2)}
 .hero-l{padding:30px 28px;background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;display:flex;flex-direction:column;gap:14px;justify-content:center;min-width:0}
-.hero-l .kicker{font-size:12px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;opacity:.85}
-.hero-l h1{font-size:27px;line-height:1.2}
+.hero-l .kicker{font-size:11.5px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;opacity:.8}
+.hero-l h1.hero-title{font-size:clamp(28px,3.6vw,40px);line-height:1.14;margin:0}
+.hero-l h1 .school{display:inline-block;margin-top:2px;font-size:clamp(34px,4.6vw,50px);font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#f7d9a4;background:linear-gradient(90deg,#ffffff,#f7d9a4);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-l .herosub{margin:0;font-size:clamp(15.5px,1.9vw,18.5px);font-weight:650;opacity:.97}
 .hero-l p{margin:0;opacity:.92;max-width:46ch}
 .hero-l .ctas{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
 .hero-l .btn.main{background:#fff;color:var(--pri2)}
@@ -149,8 +154,15 @@ textarea.in{resize:vertical}
   cursor:pointer;padding:5px 10px;flex:none;transition:.15s}
 .sbtn:hover{color:var(--pri);border-color:var(--pri)}
 @media (max-width:860px){ .hero{grid-template-columns:1fr} .hero-l{padding:24px 20px} }
-.feat{display:flex;flex-direction:column;gap:8px}
+.feat{display:flex;flex-direction:column;gap:8px;border-top:3px solid transparent}
+.feat-a1{border-top-color:color-mix(in srgb,var(--acc1) 60%,transparent)}
+.feat-a2{border-top-color:color-mix(in srgb,var(--acc2) 60%,transparent)}
+.feat-a3{border-top-color:color-mix(in srgb,var(--acc3) 60%,transparent)}
+.feat-a4{border-top-color:color-mix(in srgb,var(--pri) 60%,transparent)}
 .feat .fic{width:36px;height:36px;border-radius:10px;background:var(--prisoft);color:var(--pri);display:grid;place-items:center}
+.feat-a1 .fic{background:var(--acc1soft);color:var(--acc1)}
+.feat-a2 .fic{background:var(--acc2soft);color:var(--acc2)}
+.feat-a3 .fic{background:var(--acc3soft);color:var(--acc3)}
 .feat .fic svg{width:19px;height:19px}
 .feat b{font-size:14.5px}
 .feat span{font-size:12.8px;color:var(--tx2)}
@@ -173,6 +185,10 @@ textarea.in{resize:vertical}
 .dz .hint{margin-top:4px}
 .dz .dzacts{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
 .dz .dzacts .btn,.dz .dzacts .mini{pointer-events:auto}
+.dztags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px}
+.dztags .tag{font-size:11.6px;font-weight:700;letter-spacing:.5px;color:var(--tx2);background:var(--surface);border:1px solid var(--border);padding:3px 11px;border-radius:999px}
+.dzlimit{display:inline-flex;align-items:center;gap:8px;margin-top:12px;font-weight:800;font-size:13.6px;color:var(--acc1);background:var(--acc1soft);border:1.5px solid color-mix(in srgb,var(--acc1) 45%,transparent);padding:6px 15px;border-radius:999px}
+.dzlimit svg{width:15px;height:15px}
 .uplog{margin-top:12px;display:flex;flex-direction:column;gap:6px}
 .uprow{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border:1px solid var(--border);
   border-radius:11px;padding:8px 12px;font-size:13px}
@@ -201,6 +217,10 @@ textarea.in{resize:vertical}
 .empty{text-align:center;padding:34px 16px;color:var(--tx2);border:1.5px dashed var(--border);border-radius:16px;background:var(--surface2)}
 .empty strong{display:block;font-size:15px;color:var(--tx);margin-bottom:3px}
 .empty.sm{padding:20px}
+.heroband{margin:14px 0 0;border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:var(--shadow2);background:var(--surface)}
+.heroband img{display:block;width:100%;height:clamp(170px,26vw,320px);object-fit:cover}
+.empty .emptyimg{display:block;width:min(190px,62%);border-radius:14px;border:1px solid var(--border);margin:0 auto 12px;box-shadow:var(--shadow2)}
+.empty.sm .emptyimg{width:min(150px,58%);margin-bottom:10px}
 
 /* ================= Análisis ================= */
 .anabtns{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
@@ -296,7 +316,8 @@ body.embed main{min-height:0}
   .ditem{flex-wrap:wrap}
   .dact{width:100%;justify-content:flex-start}
   .msg{max-width:96%}
-  .hero-l h1{font-size:22px}
+  .hero-l h1.hero-title{font-size:25px}
+  .hero-l h1 .school{font-size:30px}
 }
 </style>
 </head>
@@ -305,7 +326,7 @@ body.embed main{min-height:0}
   <div class="brand">
     <span class="logo" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/></svg></span>
     <b>EduDocs IA</b>
-    <span class="vchip" id="vchip">v3.4</span>
+    <span class="vchip" id="vchip">v3.5</span>
   </div>
   <nav class="tabs" role="tablist">
     <button class="tab" data-tab="inicio" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Inicio</button>
@@ -317,8 +338,8 @@ body.embed main{min-height:0}
   <div class="hact">
     <div class="pills" role="status" aria-live="polite">
       <button class="pill" id="pillPagina" data-st="wait" title="Estado de la página y tu conexión"><span class="dot"></span><span class="plbl">Página</span></button>
-      <button class="pill" id="pillB4a" data-st="wait" title="Estado de Back4App (clic para probar)"><span class="dot"></span><span class="plbl">Back4App</span></button>
-      <button class="pill" id="pillIa" data-st="wait" title="Estado de la IA Gemini (clic para probar)"><span class="dot"></span><span class="plbl">IA Gemini</span></button>
+      <button class="pill" id="pillB4a" data-st="wait" title="Estado de la base de datos (clic para probar)"><span class="dot"></span><span class="plbl">Base de datos</span></button>
+      <button class="pill" id="pillIa" data-st="wait" title="Estado de la IA (clic para probar)"><span class="dot"></span><span class="plbl">IA</span></button>
     </div>
     <button class="iconbtn" id="btnTheme" title="Cambiar tema claro / oscuro" aria-label="Cambiar tema">
       <svg id="icoMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
@@ -336,9 +357,10 @@ body.embed main{min-height:0}
 <section id="sec-inicio" class="sec" role="tabpanel">
   <div class="hero">
     <div class="hero-l">
-      <span class="kicker">Plataforma escolar · <span id="brandSchool">Ometecuhtli</span></span>
-      <h1>Tus documentos escolares,<br>revisados y entendidos con IA</h1>
-      <p>Sube reglamentos, planes de estudio, circulares o tareas con arrastrar y soltar. La inteligencia artificial Gemini transcribe el contenido completo a Markdown, lo analiza y responde tus preguntas al instante.</p>
+      <span class="kicker">Documentos · Análisis · Chat</span>
+      <h1 class="hero-title">Plataforma Escolar<br><span class="school" id="brandSchool">Ometecuhtli</span></h1>
+      <p class="herosub">Tus documentos escolares, revisados y entendidos con IA</p>
+      <p>Sube reglamentos, planes de estudio, circulares o tareas con arrastrar y soltar. La inteligencia artificial de la plataforma transcribe el contenido completo a texto digital, lo analiza y responde tus preguntas al instante.</p>
       <div class="ctas">
         <button class="btn main" id="heroSubir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>Subir documentos</button>
         <button class="btn line" id="heroAnalizar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analizar con IA</button>
@@ -351,23 +373,25 @@ body.embed main{min-height:0}
       </div>
       <div class="scard">
         <span class="sdot" id="sdB4a" data-st="wait"></span>
-        <div class="sinfo"><small>Back4App · documentos</small><strong id="bB4aVal">Verificando…</strong><em id="bB4aSub">base de datos en la nube</em></div>
+        <div class="sinfo"><small>Base de datos · documentos</small><strong id="bB4aVal">Verificando…</strong><em id="bB4aSub">base de datos en la nube</em></div>
         <button class="sbtn" id="btnChkB4a">Probar</button>
       </div>
       <div class="scard">
         <span class="sdot" id="sdIa" data-st="wait"></span>
-        <div class="sinfo"><small>IA Gemini</small><strong id="bIaVal">Verificando…</strong><em id="bIaSub">análisis y chat</em></div>
+        <div class="sinfo"><small>IA</small><strong id="bIaVal">Verificando…</strong><em id="bIaSub">análisis y chat</em></div>
         <button class="sbtn" id="btnChkIa">Probar</button>
       </div>
     </div>
   </div>
 
+  <figure class="heroband"><img src="assets/hero.jpg" alt="Ilustración de documentos escolares con apoyo de inteligencia artificial" loading="eager"></figure>
+
   <div class="sectitle"><h2>Qué puedes hacer</h2></div>
   <div class="grid4">
-    <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></span><b>Arrastra y suelta</b><span>Sube PDF, DOCX, TXT, CSV o imágenes desde tu computadora o carpeta completa.</span></div>
-    <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg></span><b>Transcripción y análisis con IA</b><span>Al subir, la IA transcribe el documento completo a Markdown y genera resúmenes, cuestionarios y más.</span></div>
-    <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span><b>Chat con tus documentos</b><span>Pregunta en lenguaje natural; la IA responde citando el documento de origen.</span></div>
-    <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><b>Sin trucos raros</b><span>La subida se configura sola en Back4App y el chat se guarda solo en tu navegador.</span></div>
+    <div class="card feat feat-a1"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></span><b>Arrastra y suelta</b><span>Sube PDF, DOCX, TXT, CSV o imágenes desde tu computadora o carpeta completa.</span></div>
+    <div class="card feat feat-a2"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg></span><b>Transcripción y análisis con IA</b><span>Al subir, la IA transcribe el documento completo a texto digital y genera resúmenes, cuestionarios y más.</span></div>
+    <div class="card feat feat-a3"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span><b>Chat con tus documentos</b><span>Pregunta en lenguaje natural; la IA responde citando el documento de origen.</span></div>
+    <div class="card feat feat-a4"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><b>Sin trucos raros</b><span>La subida se configura sola en la base de datos y el chat se guarda solo en tu navegador.</span></div>
   </div>
 
   <div class="grid2" style="margin-top:14px">
@@ -375,7 +399,7 @@ body.embed main{min-height:0}
       <h3 style="font-size:15px;margin-bottom:12px">Cómo funciona</h3>
       <div class="steps">
         <div class="step"><span class="n">1</span><div><b>Sube tus documentos</b><span>Arrastra y suelta, elige archivos o una carpeta completa. No necesitas contraseña.</span></div></div>
-        <div class="step"><span class="n">2</span><div><b>Se transcriben automáticamente</b><span>Gemini transcribe cada documento completo a Markdown y lo guarda en Back4App.</span></div></div>
+        <div class="step"><span class="n">2</span><div><b>Se transcriben automáticamente</b><span>La IA transcribe cada documento completo a texto digital y lo guarda en la base de datos.</span></div></div>
         <div class="step"><span class="n">3</span><div><b>Analiza y pregunta</b><span>Genera resúmenes, cuestionarios o conversa con los documentos en el Chat.</span></div></div>
       </div>
     </div>
@@ -385,7 +409,7 @@ body.embed main{min-height:0}
         <button class="mini" data-goto="docs"><span>Ver todos</span></button>
       </div>
       <div class="dlist" id="recentList"></div>
-      <div class="empty sm" id="recentEmpty"><strong>Aún no hay documentos</strong><span>Sube el primero desde la sección Documentos.</span></div>
+      <div class="empty sm" id="recentEmpty"><img class="emptyimg" src="assets/vacio.jpg" alt="" loading="lazy"><strong>Aún no hay documentos</strong><span>Sube el primero desde la sección Documentos.</span></div>
     </div>
   </div>
 </section>
@@ -396,7 +420,9 @@ body.embed main{min-height:0}
     <div class="dz" id="dz" tabindex="0" role="button" aria-label="Zona para subir documentos">
       <span class="dzic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></span>
       <b>Arrastra tus documentos aquí</b>
-      <p class="hint">o haz clic para seleccionarlos · PDF, DOCX, TXT, MD, CSV, JSON o imágenes · máx. 25 MB por archivo · se guardan en Back4App<br>Al subir, la IA (Gemini) transcribe el contenido completo a un archivo <b>Markdown (.md)</b> y lo guarda automáticamente en Back4App para consultarlo desde la aplicación.</p>
+      <div class="dztags"><span class="tag">PDF</span><span class="tag">DOCX</span><span class="tag">TXT</span><span class="tag">MD</span><span class="tag">CSV</span><span class="tag">JSON</span><span class="tag">XML</span><span class="tag">LOG</span><span class="tag">SRT</span><span class="tag">Imágenes</span></div>
+      <div class="dzlimit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>Máximo 25 MB por archivo</div>
+      <p class="hint">o haz clic para seleccionarlos · se guardan automáticamente en la base de datos de la escuela<br>Al subir, la IA transcribe el contenido completo a un <b>documento de texto digital</b> y lo guarda automáticamente para que lo consultes desde la aplicación.</p>
       <div class="dzacts">
         <button class="btn soft" id="btnFiles"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Elegir archivos</button>
         <button class="mini" id="btnFolder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Elegir carpeta</button>
@@ -416,19 +442,19 @@ body.embed main{min-height:0}
   <div class="dlist" id="listaNube"></div>
   <div class="sectitle" id="hLocal" hidden><h2>En este dispositivo</h2><p class="hint">Se subirán automáticamente cuando haya conexión (o pulsa "Subir pendientes").</p></div>
   <div class="dlist" id="listaLocal"></div>
-  <div class="empty" id="emptyDocs" hidden><strong>Sin documentos todavía</strong><span>Sube PDF, DOCX, TXT o imágenes con el panel de arriba. No necesitas contraseña.</span></div>
+  <div class="empty" id="emptyDocs" hidden><img class="emptyimg" src="assets/vacio.jpg" alt="" loading="lazy"><strong>Sin documentos todavía</strong><span>Sube PDF, DOCX, TXT o imágenes con el panel de arriba. No necesitas contraseña.</span></div>
 </section>
 
 <!-- ================= ANÁLISIS ================= -->
 <section id="sec-analizar" class="sec" role="tabpanel" hidden>
   <div class="card">
     <h2 style="font-size:17px">Análisis con IA</h2>
-    <p class="hint" style="margin:4px 0 0">Elige un documento y un tipo de análisis. La IA lo procesa con Gemini y devuelve el resultado en español.</p>
+    <p class="hint" style="margin:4px 0 0">Elige un documento y un tipo de análisis. La IA lo procesa y devuelve el resultado en español.</p>
     <div style="margin-top:14px">
       <label class="lbl" for="selDoc">Documento</label>
       <select id="selDoc" class="in"></select>
     </div>
-    <div class="empty sm" id="anaEmpty" style="margin-top:12px"><strong>Sin documentos</strong><span>Sube documentos para analizarlos aquí.</span></div>
+    <div class="empty sm" id="anaEmpty" style="margin-top:12px"><img class="emptyimg" src="assets/ia.jpg" alt="" loading="lazy"><strong>Sin documentos</strong><span>Sube documentos para analizarlos aquí.</span></div>
     <div class="anabtns" id="anabtns">
       <button class="btn soft anabtn" data-ana="resumen">Resumen ejecutivo</button>
       <button class="btn soft anabtn" data-ana="claves">Puntos clave</button>
@@ -541,7 +567,7 @@ body.embed main{min-height:0}
 
 <footer class="app"><div class="wrap">
   <span>EduDocs IA · Documentos escolares con IA para <b id="fSchool">Ometecuhtli</b></span>
-  <span>IA: Gemini · Datos: Back4App · Frontend: GitHub Pages</span>
+  <span>Plataforma escolar · IA integrada · Base de datos en línea · Publicación web de la escuela</span>
 </div></footer>
 
 <!-- Modal: login admin -->
@@ -573,13 +599,13 @@ body.embed main{min-height:0}
 <script>
 'use strict';
 /* ================================================================
-   EduDocs IA v3.4 — Documentos escolares con IA (archivo único)
+   EduDocs IA v3.5 — Documentos escolares con IA (archivo único)
    Backend: Back4App (Parse REST) · IA: Gemini · Frontend: GitHub Pages
    Transcripción integral a Markdown al subir, con guardado automático en Back4App
    ================================================================ */
 
 /* ---------- Constantes ---------- */
-const APP_VERSION = '3.4.0';
+const APP_VERSION = '3.5.0';
 const LS = {
   cfg:'edudocs2_cfg', localDocs:'edudocs2_local_docs', chat:'edudocs2_chat',
   theme:'edudocs2_theme', lock:'edudocs2_lock', admin:'edudocs2_admin_sess'
@@ -681,7 +707,7 @@ async function b4aFetch(path, opts={}){
   if(opts.tok) headers['X-Parse-Session-Token'] = opts.tok;
   let res;
   try{ res = await fetch(B4A_URL + path, { method: opts.method||'GET', headers, body: opts.body }); }
-  catch(e){ const er=new Error('Sin conexión con Back4App'); er.network=true; throw er; }
+  catch(e){ const er=new Error('Sin conexión con la base de datos'); er.network=true; throw er; }
   let j=null; try{ j = await res.json(); }catch(e){}
   if(!res.ok){ const er=new Error((j && j.error) || ('HTTP '+res.status)); er.code=j&&j.code; er.status=res.status; throw er; }
   return j || {};
@@ -710,7 +736,7 @@ async function b4aToken(force){
   const j = await b4aFetch('/users', { method:'POST', body: JSON.stringify({username:user, password:pass}) });
   saveCfgField('b4aService', { user, pass });
   state.b4aTok = j.sessionToken;
-  toast('Back4App: sesión automática creada para subir archivos','ok');
+  toast('Base de datos: sesión de subida creada automáticamente','ok');
   return state.b4aTok;
 }
 async function b4aCreateDoc(doc, file, tok){
@@ -894,16 +920,16 @@ function docItem(d){
     ? '<span class="dbadge ok">En la nube</span>'
     : '<span class="dbadge warn">'+(d.pendiente?'Pendiente':'Local')+'</span>';
   const mdBadge = (d.transcripcionMd || d.mdUrl)
-    ? '<span class="dbadge ok">md listo</span>'
+    ? '<span class="dbadge ok">texto listo</span>'
     : (d.estado==='transcribiendo' ? '<span class="dbadge warn">transcribiendo…</span>'
-    : (d.estado==='error' ? '<span class="dbadge warn">md con error</span>' : ''));
+    : (d.estado==='error' ? '<span class="dbadge warn">texto con error</span>' : ''));
   const acts = [
     '<button class="mini" data-act="ver"><span>Ver</span></button>',
     '<button class="mini" data-act="analizar"><span>Analizar</span></button>',
     '<button class="mini" data-act="preguntar"><span>Preguntar</span></button>',
-    d.mdUrl ? '<a class="mini" href="'+esc(d.mdUrl)+'" target="_blank" rel="noopener noreferrer" title="Descargar transcripción .md"><span>.md</span></a>' : '',
+    d.mdUrl ? '<a class="mini" href="'+esc(d.mdUrl)+'" target="_blank" rel="noopener noreferrer" title="Descargar transcripción"><span>Texto</span></a>' : '',
     d.url ? '<a class="mini" href="'+esc(d.url)+'" target="_blank" rel="noopener noreferrer" title="Descargar archivo original"><span>Descargar</span></a>' : '',
-    state.admin ? '<button class="mini" data-act="transcribir" title="Generar (o regenerar) la transcripción .md con IA"><span>Transcribir</span></button>' : '',
+    state.admin ? '<button class="mini" data-act="transcribir" title="Generar (o regenerar) la transcripción con IA"><span>Transcribir</span></button>' : '',
     state.admin ? '<button class="mini danger" data-act="borrar"><span>Eliminar</span></button>' : ''
   ].join('');
   return '<div class="ditem" data-id="'+esc(d.id)+'">'
@@ -911,7 +937,7 @@ function docItem(d){
     + '<div class="dmain"><div class="dname">'+esc(d.nombre)+'</div>'
     + '<div class="dmeta">'+badge+mdBadge+'<span>'+fmtBytes(d.tamano)+'</span><span>'+fmtFecha(d.creado)+'</span>'
     + (d.texto ? '<span>texto listo</span>' : '<span>sin texto</span>')
-    + (d.motor ? '<span>md: '+esc(d.motor)+'</span>' : '') + '</div></div>'
+    + (d.motor ? '<span>transcripción con IA</span>' : '') + '</div></div>'
     + '<div class="dact">'+acts+'</div></div>';
 }
 function renderDocs(){
@@ -938,14 +964,14 @@ async function docAction(act, id){
   if(act==='ver'){
     $('#tDoc').textContent = d.nombre;
     const md = d.transcripcionMd || '';
-    $('#docViewMeta').textContent = (d.tipo||tipoPorExt((d.nombre.split('.').pop()||'').toLowerCase())) + ' · ' + fmtBytes(d.tamano) + ' · ' + fmtFecha(d.creado) + ' · ' + (d.fuente==='nube'?'en la nube':'local') + (md ? ' · transcripción IA ('+(d.motor||'')+')' : '');
+    $('#docViewMeta').textContent = (d.tipo||tipoPorExt((d.nombre.split('.').pop()||'').toLowerCase())) + ' · ' + fmtBytes(d.tamano) + ' · ' + fmtFecha(d.creado) + ' · ' + (d.fuente==='nube'?'en la nube':'local') + (md ? ' · transcripción con IA' : '');
     if(md){
-      $('#docViewBody').innerHTML = mdRender(md.slice(0, 60000) + (md.length>60000 ? '\n\n*(…transcripción truncada para vista previa; usa el botón ".md" para descargar el archivo completo…)*' : ''));
+      $('#docViewBody').innerHTML = mdRender(md.slice(0, 60000) + (md.length>60000 ? '\n\n*(…transcripción truncada para vista previa; usa el botón "Texto" para descargar el archivo completo…)*' : ''));
     } else {
       const t = d.texto || '';
       $('#docViewBody').innerHTML = t
         ? mdRender('# Contenido extraído\n\n' + t.slice(0, 12000) + (t.length>12000 ? '\n\n*(…texto truncado para vista previa; la IA analiza hasta '+fmtBytes((d.texto||'').length)+' caracteres…)*' : ''))
-        : mdRender('*(Este documento no tiene texto extraído: es una imagen o un PDF escaneado. Usa el botón "Transcribir" para generar la transcripción .md con IA; también puedes analizarlo o preguntarle directamente: la IA lo leerá como imagen o PDF.)*');
+        : mdRender('*(Este documento no tiene texto extraído: es una imagen o un PDF escaneado. La transcripción con IA puede generarse desde el modo administrador; mientras tanto puedes analizarlo o preguntarle directamente: la IA lo leerá como imagen o PDF.)*');
     }
     $('#modalDoc').hidden = false;
   }
@@ -1152,20 +1178,20 @@ async function procesarArchivo(file, row){
       creado:new Date().toISOString()
     };
     if(ex.vision) state.visionMem[idPrevio] = ex.vision;
-    rowSet(row,'wait','Guardando en Back4App…');
+    rowSet(row,'wait','Guardando en la base de datos…');
     let tok=null;
     try{ tok = await b4aToken(); }catch(e){ /* intento público */ }
     try{
       const r = await b4aCreateDoc(doc, file, tok);
       doc.id=r.id; doc.url=r.url; doc.fuente='nube'; doc.pendiente=false;
-      rowSet(row,'ok','Guardado en Back4App');
+      rowSet(row,'ok','Guardado en la base de datos');
     }catch(e1){
       if(e1.code===130 || /public is disabled/i.test(e1.message||'')){
-        rowSet(row,'wait','Creando sesión automática en Back4App…');
+        rowSet(row,'wait','Creando sesión de subida automática…');
         const tok2 = await b4aToken(true);
         const r = await b4aCreateDoc(doc, file, tok2);
         doc.id=r.id; doc.url=r.url; doc.fuente='nube'; doc.pendiente=false;
-        rowSet(row,'ok','Guardado en Back4App (con sesión automática)');
+        rowSet(row,'ok','Guardado en la base de datos (con sesión automática)');
       } else { throw e1; }
     }
     if(doc.fuente==='nube'){
@@ -1177,7 +1203,7 @@ async function procesarArchivo(file, row){
           await transcribirDoc(doc, row, { texto: ex.texto || '' });
         }catch(eT){ /* el estado de error ya quedó registrado en la nube */ }
       } else {
-        rowSet(row,'ok','Guardado en Back4App (transcripción automática desactivada)');
+        rowSet(row,'ok','Guardado en la base de datos (transcripción automática desactivada)');
       }
     }
   }catch(e1){
@@ -1251,7 +1277,7 @@ function resolveRuntimeModel(){
 }
 async function geminiCall(contents, sys, opts={}){
   const { stream=false, onDelta=null, signal=null } = opts;
-  if(!apiKey()) throw new Error('Falta la API Key de Gemini. Configúrala en el panel de administración.');
+  if(!apiKey()) throw new Error('Falta la clave de la IA. Configúrala en el panel de administración.');
   const cola = [];
   const enCola = new Set();
   const push = m=>{ if(m && !enCola.has(m)){ enCola.add(m); cola.push(m); } };
@@ -1314,7 +1340,7 @@ async function pingGemini(){
 }
 function amigableErr(e){
   const m = (e && e.message) || String(e);
-  if(/location is not supported/i.test(m)) return 'La API de Gemini no está disponible desde la ubicación de esta conexión. Abre el sitio desde tu navegador y red habituales.';
+  if(/location is not supported/i.test(m)) return 'El servicio de IA no está disponible desde la ubicación de esta conexión. Abre el sitio desde tu navegador y red habituales.';
   if(/API key not valid|API_KEY_INVALID/i.test(m)) return 'La clave de la API fue rechazada. Revísala en el panel de administración.';
   if(e && (e.status===429 || /quota|RESOURCE_EXHAUSTED/i.test(m))) return 'Se alcanzó el límite de uso de la IA. Espera unos minutos e intenta de nuevo.';
   if(/Failed to fetch|NetworkError/i.test(m)) return 'Sin conexión con el servicio de IA. Verifica tu internet.';
@@ -1426,7 +1452,7 @@ function saveChat(){ try{ localStorage.setItem(LS.chat, JSON.stringify(state.cha
 function msgHtml(m, i){
   const cls = m.role==='user' ? 'user' : (m.err ? 'ia err' : 'ia');
   const body = m.role==='user' ? esc(m.text) : (m.done===false ? esc(m.text)+'<span class="cursor"></span>' : mdRender(m.text));
-  const eng = (m.role==='ia' && m.done===true && m.engine) ? '<span class="eng">IA: '+esc(m.engine)+'</span>' : '';
+  const eng = (m.role==='ia' && m.done===true) ? '<span class="eng">Generado con IA</span>' : '';
   const copiar = (m.role!=='user' && m.done===true && m.text) ? '<button class="mcopy" data-mi="'+i+'" title="Copiar respuesta">Copiar</button>' : '';
   return '<div class="msg '+cls+'"><div class="bubble">'+body+eng+copiar+'</div></div>';
 }
@@ -1469,7 +1495,7 @@ function setBusy(b){
 }
 async function sendMsg(){
   if(state.busy) return;
-  if(!apiKey()){ toast('Falta la API Key de Gemini. Configúrala en el panel Admin.','warn'); return; }
+  if(!apiKey()){ toast('Falta la clave de la IA. Configúrala en el panel de administración.','warn'); return; }
   const ta = $('#chatInput');
   const q = ta.value.trim();
   if(!q) return;
@@ -1530,7 +1556,7 @@ async function runAnalysis(tipo){
   const id = $('#selDoc').value;
   const d = findDoc(id);
   if(!d){ toast('Selecciona un documento (sube alguno primero)','warn'); return; }
-  if(!apiKey()){ toast('Falta la API Key de Gemini. Configúrala en el panel Admin.','warn'); return; }
+  if(!apiKey()){ toast('Falta la clave de la IA. Configúrala en el panel de administración.','warn'); return; }
   const a = ANALISIS[tipo];
   $('#anaWrap').hidden = false;
   $('#anaOut').innerHTML = '<span class="spin"></span> Analizando "'+esc(d.nombre)+'"…';
@@ -1546,7 +1572,7 @@ async function runAnalysis(tipo){
     const textoCtx = tparts.map(p=>p.text).join('') + '\n\n---\n\nTarea: ' + a.p + '\n\nDocumento: ' + d.nombre;
     const r = await aiCall({ sys, text:textoCtx, images, signal: ctrl.signal, maxTokens: 6000 });
     const full = r.text;
-    state.lastAna = { text: full, meta: a.t + ' · ' + d.nombre + ' · ' + new Date().toLocaleTimeString('es-MX') + ' · IA: ' + r.engine + (r.model ? ' ('+r.model+')' : '') };
+    state.lastAna = { text: full, meta: a.t + ' · ' + d.nombre + ' · ' + new Date().toLocaleTimeString('es-MX') + ' · generado con IA' };
     $('#anaOut').innerHTML = mdRender(full);
     $('#anaMeta').textContent = state.lastAna.meta;
   }catch(e){
@@ -1672,11 +1698,10 @@ function cabeceraMd(d, o){
     '---',
     'titulo: ' + d.nombre.replace(/\.[^.]+$/, ''),
     'origen: ' + d.nombre + ' · ' + (d.tipo || tipoPorExt(extDe(d.nombre))) + ' · ' + fmtBytes(d.tamano),
-    'transcripcion: integral generada por IA (Gemini)',
+    'transcripcion: integral generada por IA',
     'fecha: ' + new Date().toLocaleString('es-MX')
   ];
   if(o.paginas) l.push('paginas: ' + o.paginas);
-  l.push('motores: ' + Array.from(o.motores).join(' + '));
   l.push('verificacion_de_enlaces: ' + (o.linksChecked ? 'revisados y corregidos por IA' : 'no aplicada'));
   l.push('---', '');
   return l.join('\n');
@@ -1816,7 +1841,7 @@ async function transcribirDoc(d, row, extra){
       }catch(eL){ /* la revisión de enlaces es de mejor esfuerzo */ }
     }
 
-    rowSet(row,'wait','Guardando transcripción .md en Back4App…');
+    rowSet(row,'wait','Guardando la transcripción en la base de datos…');
     const md = cabeceraMd(d, { paginas, motores, linksChecked }) + cuerpo;
     const mdNombre = d.nombre.replace(/\.[^.]+$/, '') + '_transcripcion.md';
     let up = null;
@@ -1838,7 +1863,7 @@ async function transcribirDoc(d, row, extra){
     d.motor = campos.motor;
     d.paginas = paginas;
     renderDocs(); renderRecent();
-    rowSet(row,'ok','Transcripción .md generada ('+Array.from(motores).join(' + ')+(paginas ? ' · '+paginas+' pág.' : '')+') y guardada en Back4App');
+    rowSet(row,'ok','Transcripción generada'+(paginas ? ' · '+paginas+' pág.' : '')+' y guardada en la base de datos');
     toast('Transcripción lista: '+d.nombre,'ok');
   }catch(e){
     const tokE = state.b4aTok || null;
