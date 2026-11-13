@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- EduDocsIA v3.5 · archivo único · backend: Back4App · IA: Gemini · hosting: GitHub Pages · subida pública sin contraseña, admin con contraseña, interfaz pública sin marcas técnicas, con ilustraciones -->
+<!-- EduDocsIA v3.6 · archivo único · backend: Back4App · IA: Gemini · hosting: GitHub Pages · subida pública sin contraseña, admin con contraseña, interfaz pública sin marcas técnicas ni nombre de modelo (solo panel de administración), con ilustraciones -->
 <html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
@@ -605,7 +605,7 @@ body.embed main{min-height:0}
    ================================================================ */
 
 /* ---------- Constantes ---------- */
-const APP_VERSION = '3.5.0';
+const APP_VERSION = '3.6.0';
 const LS = {
   cfg:'edudocs2_cfg', localDocs:'edudocs2_local_docs', chat:'edudocs2_chat',
   theme:'edudocs2_theme', lock:'edudocs2_lock', admin:'edudocs2_admin_sess'
@@ -651,6 +651,7 @@ function esc(s){ return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;
 function fmtBytes(n){ if(n==null) return '—'; if(n<1024) return n+' B'; if(n<1048576) return (n/1024).toFixed(1)+' KB'; return (n/1048576).toFixed(2)+' MB'; }
 function fmtFecha(iso){ try{ return new Date(iso).toLocaleString('es-MX',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); }catch(e){ return ''; } }
 function resumirErr(e){ return String((e && e.message) || e).slice(0,90); }
+function ocultarModelo(t){ return String(t||'').replace(/models\/[A-Za-z0-9._\-]+/gi,'el modelo seleccionado').replace(/gemini[-\w.]*/gi,'el modelo seleccionado'); }
 async function sha256Hex(txt){
   if(!(window.crypto && crypto.subtle)) return 'nosubtle-' + txt;
   const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt));
@@ -785,7 +786,7 @@ function updateStatusUI(){
   setD('#sdPagina', st.pagina); setT('#bPaginaVal', st.pagina==='ok' ? 'En línea' : (st.pagina==='bad' ? 'Sin conexión' : 'Cargando…'));
   setT('#bPaginaSub', st.pagina==='ok' ? 'aplicación activa en este navegador' : 'revisa tu conexión a internet');
   setD('#sdB4a', st.b4a); setT('#bB4aVal', st.b4aMsg); setT('#bB4aSub', st.b4aSub);
-  setD('#sdIa', st.ia);  setT('#bIaVal', st.iaMsg);  setT('#bIaSub', st.iaSub);
+  setD('#sdIa', st.ia);  setT('#bIaVal', st.iaMsg);  setT('#bIaSub', ocultarModelo(st.iaSub));
   setD('#stAppDot','ok'); setH('#stAppBody', appInfoHtml());
   setD('#stB4aDot', st.b4a); setH('#stB4aBody', b4aInfoHtml());
   setD('#stIaDot', st.ia);   setH('#stIaBody', iaInfoHtml());
@@ -815,7 +816,7 @@ function iaInfoHtml(){
   return [
     '<b>Estado</b> ' + esc(st.iaMsg) + (st.iaSub ? ' · ' + esc(st.iaSub) : ''),
     '<b>API Key</b> ' + esc(maskKey(cfg.geminiKey)),
-    '<b>Modelo configurado</b> ' + esc(cfg.model||'auto') + (state.runtimeModel && state.runtimeModel!==cfg.model ? ' (en uso: ' + esc(state.runtimeModel) + ')' : ''),
+    '<b>Modelo configurado</b> ' + esc(cfg.model||'auto') + ' · <b>En uso</b> ' + esc(state.runtimeModel || 'detección automática'),
     '<b>Modelos disponibles</b> ' + (state.iaModels ? state.iaModels.length : '—'),
     '<b>Temperatura</b> ' + cfg.temp
   ].join('<br>');
@@ -1293,7 +1294,7 @@ async function geminiCall(contents, sys, opts={}){
         ? await geminiStream(m, contents, sys, onDelta, signal, opts.maxTokens)
         : await geminiOnce(m, contents, sys, signal, opts.maxTokens);
       state.runtimeModel = m;
-      state.status.ia='ok'; state.status.iaMsg='En línea'; state.status.iaSub='modelo: '+m;
+      state.status.ia='ok'; state.status.iaMsg='En línea'; state.status.iaSub='análisis y chat con IA';
       updateStatusUI();
       return r;
     }catch(e){
@@ -1322,10 +1323,9 @@ async function pingGemini(){
       .filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent'))
       .map(m=>m.name.replace(/^models\//,''));
     state.iaMs = Date.now()-t0;
-    const rt = resolveRuntimeModel();
     state.status.ia='ok';
     state.status.iaMsg='En línea ('+state.iaMs+' ms)';
-    state.status.iaSub='modelo: '+rt+(cfg.model && cfg.model!=='auto' && cfg.model!==rt ? ' · respaldo (no se encontró '+cfg.model+')' : '');
+    state.status.iaSub='análisis y chat con IA';
   }catch(e){
     if(/location is not supported|FAILED_PRECONDITION/i.test(e.message||'')){
       state.status.ia='warn'; state.status.iaMsg='Bloqueada por ubicación';
@@ -1344,7 +1344,7 @@ function amigableErr(e){
   if(/API key not valid|API_KEY_INVALID/i.test(m)) return 'La clave de la API fue rechazada. Revísala en el panel de administración.';
   if(e && (e.status===429 || /quota|RESOURCE_EXHAUSTED/i.test(m))) return 'Se alcanzó el límite de uso de la IA. Espera unos minutos e intenta de nuevo.';
   if(/Failed to fetch|NetworkError/i.test(m)) return 'Sin conexión con el servicio de IA. Verifica tu internet.';
-  return m.length>320 ? m.slice(0,320)+'…' : m;
+  return ocultarModelo(m.length>320 ? m.slice(0,320)+'…' : m);
 }
 
 /* ---------- Contexto de documentos ---------- */
@@ -1516,7 +1516,7 @@ async function sendMsg(){
     const images = vparts.map(p=>({ mime: p.inline_data.mime_type, data: p.inline_data.data }));
     const textoCtx = tparts.map(p=>p.text).join('') + '\n\n---\n\nPregunta del usuario: ' + q;
     const r = await aiCall({ sys, text:textoCtx, images, history:historial, stream:true, onDelta:bubbleAppend, signal:ctrl.signal });
-    state.chat[state.chat.length-1] = { role:'ia', text:r.text, done:true, engine: r.engine + (r.model ? ' · '+r.model : '') };
+    state.chat[state.chat.length-1] = { role:'ia', text:r.text, done:true, engine: r.engine };
   }catch(e){
     if(e.name==='AbortError'){
       state.chat[state.chat.length-1] = { role:'ia', text:(state.chat[state.chat.length-1].text||'')+'\n\n*(respuesta detenida)*', done:true };

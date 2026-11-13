@@ -7,7 +7,7 @@ Aplicación de archivo único (`index.html`) para escuelas: sube documentos con 
 ## Características
 
 - **Archivo único**: todo (HTML + CSS + JS) vive en `index.html`; sin instalación ni build.
-- **IA Gemini** con cadena de respaldo entre modelos: si un modelo no está disponible, la app continúa automáticamente con el siguiente. Cada respuesta y transcripción indica el motor que la produjo (ej. "Gemini · gemini-3.5-flash-lite").
+- **IA Gemini** con cadena de respaldo entre modelos: si un modelo no está disponible, la app continúa automáticamente con el siguiente. La interfaz pública **nunca muestra el nombre del modelo** (solo "IA", "En línea", "Generado con IA", incluso en los mensajes de error); el modelo configurado y el modelo en uso se muestran únicamente en el panel de administración.
 - **Transcripción integral al subir**: al subir un archivo, la IA lo transcribe de principio a fin siguiendo una regla de máxima precisión:
   - No omite párrafos, notas al pie, encabezados, números, fechas ni detalles.
   - Transporta las **tablas íntegramente a Markdown** conservando celdas, filas y columnas.
@@ -19,7 +19,7 @@ Aplicación de archivo único (`index.html`) para escuelas: sube documentos con 
 - **PDF con texto y PDF escaneado**: extracción con pdf.js; si el PDF no tiene capa de texto, las páginas se rasterizan y se transcriben con visión (hasta 40 páginas por proceso).
 - **Formatos**: PDF, DOCX, TXT, MD, CSV, JSON, XML y imágenes (máx. 25 MB por archivo); selección de carpeta completa.
 - **Responsive**: PC, tablet y celular; tema **claro y oscuro** recordado entre visitas.
-- **Indicadores de estado** en cabecera e inicio: Página, Back4App e IA Gemini (verificación automática cada 5 minutos y al iniciar).
+- **Indicadores de estado** en cabecera e inicio: Página, Base de datos e IA (verificación automática cada 5 minutos y al iniciar).
 - **Panel de administración** (contraseña): eliminación de documentos, regeneración de transcripciones, estado y configuración de Back4App, Gemini y GitHub Pages; claves enmascaradas; diagnóstico exportable; mantenimiento del esquema.
 - **Chat con los documentos**: contexto seleccionable, respuestas en streaming y citas al documento de origen.
 - **Análisis con IA**: resumen ejecutivo, puntos clave, análisis académico, cuestionario y mapa de ideas.
@@ -35,9 +35,9 @@ La subida de documentos es **pública (sin contraseña)**; el modo administrador
 
 ## Cadena de modelos Gemini
 
-`gemini-3.5-flash-lite` y respaldos automáticos (`gemini-3.8-flash`, `gemini-3.5-flash`, `gemini-3.0-flash-lite`, `gemini-2.5-flash*`, `gemini-2.0-flash`). Si un modelo no responde o no existe en la cuenta, la app lo salta y continúa con el siguiente; el modelo en uso se muestra en el panel Admin.
+`gemini-3.5-flash-lite` y respaldos automáticos (`gemini-3.8-flash`, `gemini-3.5-flash`, `gemini-3.0-flash-lite`, `gemini-2.5-flash*`, `gemini-2.0-flash`). Si un modelo no responde o no existe en la cuenta, la app lo salta y continúa con el siguiente; el modelo configurado y el modelo en uso se muestran únicamente en el panel de administración (la vista pública solo dice "IA").
 
-Estados que la app muestra solos:
+Estados que la app muestra solo al público:
 
 - **Clave rechazada o sin cuota** → píldora de IA en rojo/ámbar con la causa exacta en el panel Admin.
 - **"User location is not supported"** → la red actual bloquea la API de Google; abre el sitio desde tu navegador y red habituales.
@@ -64,7 +64,7 @@ Las versiones anteriores se conservan en la carpeta `versiones/`.
 ## Estructura
 
 ```
-index.html                      → aplicación completa (v3.4 · IA Gemini · subida pública)
+index.html                      → aplicación completa (v3.6 · IA Gemini · subida pública · modelo oculto en la vista pública)
 versiones/edudocs-ia-v2.0.html  → respaldo versión anterior (Gemini simple)
 versiones/edudocs-ia-v1.0.html  → respaldo primera versión
 ```
