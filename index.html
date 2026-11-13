@@ -293,6 +293,10 @@ footer.app .wrap{display:flex;align-items:center;justify-content:space-between;g
 body.embed footer.app{display:none}
 body.embed .hero-l{padding:20px}
 body.embed main{min-height:0}
+.eng{display:block;font-size:10.5px;opacity:.62;margin-top:7px}
+.chkrow{grid-column:1/-1;display:flex;gap:9px;align-items:flex-start;font-size:13.5px;line-height:1.45}
+.chkrow input{margin-top:3px;accent-color:var(--pri);flex:none}
+.modosel{max-width:340px}
 @media (max-width:620px){
   .ditem{flex-wrap:wrap}
   .dact{width:100%;justify-content:flex-start}
@@ -306,7 +310,7 @@ body.embed main{min-height:0}
   <div class="brand">
     <span class="logo" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/></svg></span>
     <b>EduDocs IA</b>
-    <span class="vchip" id="vchip">v2.0</span>
+    <span class="vchip" id="vchip">v3.0</span>
   </div>
   <nav class="tabs" role="tablist">
     <button class="tab" data-tab="inicio" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Inicio</button>
@@ -320,6 +324,7 @@ body.embed main{min-height:0}
       <button class="pill" id="pillPagina" data-st="wait" title="Estado de la página y tu conexión"><span class="dot"></span><span class="plbl">Página</span></button>
       <button class="pill" id="pillB4a" data-st="wait" title="Estado de Back4App (clic para probar)"><span class="dot"></span><span class="plbl">Back4App</span></button>
       <button class="pill" id="pillIa" data-st="wait" title="Estado de la IA Gemini (clic para probar)"><span class="dot"></span><span class="plbl">IA Gemini</span></button>
+      <button class="pill" id="pillGlm" data-st="wait" title="Estado de la IA GLM · Z.ai (clic para probar)"><span class="dot"></span><span class="plbl">IA GLM</span></button>
     </div>
     <button class="iconbtn" id="btnTheme" title="Cambiar tema claro / oscuro" aria-label="Cambiar tema">
       <svg id="icoMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
@@ -339,7 +344,7 @@ body.embed main{min-height:0}
     <div class="hero-l">
       <span class="kicker">Plataforma escolar · <span id="brandSchool">Mi Escuela</span></span>
       <h1>Tus documentos escolares,<br>revisados y entendidos con IA</h1>
-      <p>Sube reglamentos, planes de estudio, circulares o tareas con arrastrar y soltar. La IA los analiza, los resume y responde tus preguntas al instante.</p>
+      <p>Sube reglamentos, planes de estudio, circulares o tareas con arrastrar y soltar. Dos inteligencias artificiales (Gemini y GLM) trabajan de forma complementaria: transcriben el contenido completo a Markdown, lo analizan y responden tus preguntas al instante.</p>
       <div class="ctas">
         <button class="btn main" id="heroSubir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>Subir documentos</button>
         <button class="btn line" id="heroAnalizar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analizar con IA</button>
@@ -360,13 +365,18 @@ body.embed main{min-height:0}
         <div class="sinfo"><small>IA Gemini</small><strong id="bIaVal">Verificando…</strong><em id="bIaSub">análisis y chat</em></div>
         <button class="sbtn" id="btnChkIa">Probar</button>
       </div>
+      <div class="scard">
+        <span class="sdot" id="sdGlm" data-st="wait"></span>
+        <div class="sinfo"><small>IA GLM · Z.ai</small><strong id="bGlmVal">Verificando…</strong><em id="bGlmSub">transcripción y respaldo</em></div>
+        <button class="sbtn" id="btnChkGlm">Probar</button>
+      </div>
     </div>
   </div>
 
   <div class="sectitle"><h2>Qué puedes hacer</h2></div>
   <div class="grid4">
     <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></span><b>Arrastra y suelta</b><span>Sube PDF, DOCX, TXT, CSV o imágenes desde tu computadora o carpeta completa.</span></div>
-    <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg></span><b>Análisis con IA</b><span>Resumen ejecutivo, puntos clave, cuestionarios y mapa de ideas en un clic.</span></div>
+    <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg></span><b>Transcripción y análisis con IA dual</b><span>Al subir, la IA transcribe el documento completo a Markdown y genera resúmenes, cuestionarios y más.</span></div>
     <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span><b>Chat con tus documentos</b><span>Pregunta en lenguaje natural; la IA responde citando el documento de origen.</span></div>
     <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><b>Sin trucos raros</b><span>La subida se configura sola en Back4App y el chat se guarda solo en tu navegador.</span></div>
   </div>
@@ -398,7 +408,7 @@ body.embed main{min-height:0}
       <div class="dzlock" id="dzLock"><div class="inner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><div><div><strong>Requiere modo administrador</strong></div><span class="hint">Ingresa la contraseña para poder subir documentos.</span></div><button class="mini" id="btnIrLogin"><span>Ingresar</span></button></div></div>
       <span class="dzic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></span>
       <b>Arrastra tus documentos aquí</b>
-      <p class="hint">o haz clic para seleccionarlos · PDF, DOCX, TXT, MD, CSV, JSON o imágenes · máx. 25 MB por archivo · se guardan en Back4App</p>
+      <p class="hint">o haz clic para seleccionarlos · PDF, DOCX, TXT, MD, CSV, JSON o imágenes · máx. 25 MB por archivo · se guardan en Back4App<br>Al subir, la IA (Gemini + GLM) transcribe el contenido completo a un archivo <b>Markdown (.md)</b> y lo guarda automáticamente en Back4App para consultarlo desde la aplicación.</p>
       <div class="dzacts">
         <button class="btn soft" id="btnFiles"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Elegir archivos</button>
         <button class="mini" id="btnFolder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Elegir carpeta</button>
@@ -425,10 +435,14 @@ body.embed main{min-height:0}
 <section id="sec-analizar" class="sec" role="tabpanel" hidden>
   <div class="card">
     <h2 style="font-size:17px">Análisis con IA</h2>
-    <p class="hint" style="margin:4px 0 0">Elige un documento y un tipo de análisis. La IA lo procesa con Gemini y devuelve el resultado en español.</p>
+    <p class="hint" style="margin:4px 0 0">Elige un documento y un tipo de análisis. La IA lo procesa con Gemini y GLM (modo complementario) y devuelve el resultado en español.</p>
     <div style="margin-top:14px">
       <label class="lbl" for="selDoc">Documento</label>
       <select id="selDoc" class="in"></select>
+    </div>
+    <div style="margin-top:10px">
+      <label class="lbl" for="anaMode">Motor de IA</label>
+      <select id="anaMode" class="in modosel"><option value="auto">Auto · complementario (Gemini + GLM)</option><option value="gemini">Solo Gemini</option><option value="glm">Solo GLM · Z.ai</option></select>
     </div>
     <div class="empty sm" id="anaEmpty" style="margin-top:12px"><strong>Sin documentos</strong><span>Sube documentos (modo admin) para analizarlos aquí.</span></div>
     <div class="anabtns" id="anabtns">
@@ -451,6 +465,10 @@ body.embed main{min-height:0}
     <div class="card ctxpanel">
       <h3 style="font-size:14.5px">Contexto del chat</h3>
       <p class="hint" style="margin:4px 0 0">La IA responderá con base en: <b id="ctxSummary">todos los documentos</b></p>
+      <div style="margin-top:10px">
+        <label class="lbl" for="chatMode">Motor de IA</label>
+        <select id="chatMode" class="in modosel"><option value="auto">Auto · complementario (Gemini + GLM)</option><option value="gemini">Solo Gemini</option><option value="glm">Solo GLM · Z.ai</option></select>
+      </div>
       <div class="ctxlist" id="ctxList"></div>
       <div style="margin-top:10px"><button class="mini danger" id="btnClearChat"><span>Borrar conversación</span></button></div>
     </div>
@@ -489,6 +507,10 @@ body.embed main{min-height:0}
       <div class="body" id="stIaBody"></div>
     </div>
     <div class="statcard">
+      <div class="stat-top"><span class="sdot" id="stGlmDot" data-st="wait"></span><h3>GLM · Z.ai (IA)</h3><button class="mini" id="btnTestGlm"><span>Probar</span></button></div>
+      <div class="body" id="stGlmBody"></div>
+    </div>
+    <div class="statcard">
       <div class="stat-top"><span class="sdot" id="stGhDot" data-st="wait"></span><h3>GitHub Pages</h3><button class="mini" id="btnTestGh"><span>Verificar</span></button></div>
       <div class="body" id="stGhBody">Consultando…</div>
       <div class="acts"><a class="mini" id="btnOpenRepo" href="https://github.com/argos4all/Ometecuhtli-Normatividad-IA" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg><span>Ver repositorio</span></a></div>
@@ -504,9 +526,14 @@ body.embed main{min-height:0}
       </div>
       <div><label class="lbl" for="cfgMaxCtx">Límite de contexto (caracteres)</label><input id="cfgMaxCtx" class="in mono" type="number" min="20000" max="900000" step="10000"></div>
       <div><label class="lbl" for="cfgTemp">Temperatura · <span id="cfgTempVal">0.4</span></label><input id="cfgTemp" type="range" min="0" max="1" step="0.1" style="width:100%;accent-color:var(--pri)"></div>
+      <div><label class="lbl" for="cfgAiMode">Modo de IA</label><select id="cfgAiMode" class="in"><option value="auto">Auto · complementario (Gemini + GLM)</option><option value="gemini">Solo Gemini</option><option value="glm">Solo GLM · Z.ai</option></select></div>
       <div><label class="lbl" for="cfgB4aApp">Back4App · App ID</label><input id="cfgB4aApp" class="in mono" spellcheck="false"></div>
       <div><label class="lbl" for="cfgB4aJs">Back4App · JavaScript Key</label><input id="cfgB4aJs" class="in mono" spellcheck="false"></div>
       <div style="grid-column:1/-1"><label class="lbl" for="cfgGemini">Gemini · API Key</label><input id="cfgGemini" class="in mono" spellcheck="false"></div>
+      <div style="grid-column:1/-1"><label class="lbl" for="cfgZai">Z.ai (GLM) · API Key</label><input id="cfgZai" class="in mono" spellcheck="false"></div>
+      <div style="grid-column:1/-1"><label class="lbl" for="cfgRelay">GLM · Relay de CORS (opcional)</label><input id="cfgRelay" class="in mono" placeholder="https://mi-worker.tu-cuenta.workers.dev" spellcheck="false"><p class="hint" style="margin:4px 0 0">Z.ai limita las llamadas directas desde el navegador. Si GLM aparece "Bloqueada por CORS", publica el relay (es un archivo pequeño; instrucciones en el README del repositorio) y pega aquí su URL: la app antepone automáticamente ?url= al destino. Sin relay, Gemini cubre todas las tareas.</p></div>
+      <div class="chkrow"><input type="checkbox" id="cfgTranscribir"><label for="cfgTranscribir"><b>Transcripción automática al subir</b>: la IA extrae y transcribe el documento de principio a fin (párrafos, tablas en Markdown, jerarquías y enlaces) y guarda el archivo .md resultante en Back4App.</label></div>
+      <div class="chkrow"><input type="checkbox" id="cfgChkLinks"><label for="cfgChkLinks"><b>Verificación de enlaces</b>: tras transcribir, la IA revisa y corrige las URLs del documento (requiere una llamada adicional).</label></div>
     </div>
     <div style="display:flex;gap:9px;margin-top:14px;flex-wrap:wrap">
       <button class="btn" id="btnSaveCfg">Guardar configuración</button>
@@ -517,7 +544,7 @@ body.embed main{min-height:0}
 
   <div class="sectitle"><h2>Publicación y modo embebido</h2></div>
   <div class="card">
-    <p class="hint" style="margin:0 0 8px">Esta versión <b>no usa tokens de acceso (PAT)</b>: la publicación la realiza quien administra el repositorio <b>argos4all/Ometecuhtli-Normatividad-IA</b> reemplazando <code>index.html</code> (por Git o con "Add file" en GitHub). GitHub Pages despliega el sitio automáticamente en 1 o 2 minutos. Para insertar la app en otra página (sitio del colegio, intranet), copia este código:</p>
+    <p class="hint" style="margin:0 0 8px">La publicación la realiza quien administra el repositorio <b>argos4all/Ometecuhtli-Normatividad-IA</b> reemplazando <code>index.html</code> (por Git o con "Add file" en GitHub). GitHub Pages despliega el sitio automáticamente en 1 o 2 minutos. Para insertar la app en otra página (sitio del colegio, intranet), copia este código:</p>
     <textarea id="embedCode" class="snippet" readonly></textarea>
     <div style="margin-top:9px"><button class="mini" id="btnCopyEmbed"><span>Copiar código</span></button></div>
   </div>
@@ -526,9 +553,11 @@ body.embed main{min-height:0}
   <div class="card">
     <ul class="guia">
       <li><b>Back4App · subida de archivos:</b> si el servidor responde error 130 ("File upload by public is disabled"), la aplicación inicia sesión con un usuario de servicio y reintenta la subida de forma automática; no necesitas hacer nada.</li>
+      <li><b>Transcripción a Markdown:</b> al subir un archivo se ejecuta una regla de extracción integral (párrafos, tablas, jerarquías, enlaces) con Gemini y GLM en modo complementario; el resultado .md queda guardado en Back4App y visible con el botón "Ver". Los fragmentos ilegibles se marcan como [texto no legible].</li>
       <li><b>Back4App · almacenamiento:</b> al eliminar un documento se borra el registro; el archivo puede permanecer en el almacenamiento de Back4App (su borrado definitivo requiere la Master Key desde el dashboard).</li>
       <li><b>Gemini:</b> la clave viaja en el código público de GitHub Pages. Recomendación: en Google AI Studio restringe la clave al sitio <code>https://argos4all.github.io</code> y rótala si sospechas fuga; luego actualízala en Configuración sin tocar el código.</li>
-      <li><b>Gemini:</b> si ves "User location is not supported", la red actual bloquea la API de Google; abre el sitio desde tu navegador y red habituales.</li>
+      <li><b>GLM · Z.ai:</b> la cadena intenta primero <code>glm-5.3-flash</code> (requiere saldo en Z.ai) y usa <code>glm-4.5-flash</code> gratuito como respaldo. Z.ai limita las llamadas directas desde el navegador (CORS): si la píldora GLM muestra "Bloqueada por CORS", publica el relay opcional (instrucciones en el README) y pega su URL en Configuración; mientras tanto Gemini cubre todas las tareas de forma automática.</li>
+      <li><b>Gemini:</b> si ves "User location is not supported", la red actual bloquea la API de Google; abre el sitio desde tu navegador y red habituales (GLM tomará el turno automáticamente).</li>
       <li><b>Acceso admin:</b> la contraseña se verifica localmente con hash SHA-256; nunca se envía a ningún servidor. Tras 5 intentos fallidos, el acceso se bloquea 60 segundos.</li>
       <li><b>Privacidad:</b> los documentos se guardan en Back4App y el historial del chat en este navegador. La aplicación no usa analítica ni rastreo.</li>
     </ul>
@@ -538,8 +567,8 @@ body.embed main{min-height:0}
 </div></main>
 
 <footer class="app"><div class="wrap">
-  <span>EduDocs IA · Documentos escolares con IA para <b id="fSchool">Mi Escuela</b></span>
-  <span>IA: Gemini · Datos: Back4App · Frontend: GitHub Pages</span>
+  <span>EduDocs IA · Documentos escolares con IA dual para <b id="fSchool">Mi Escuela</b></span>
+  <span>IA: Gemini + GLM (Z.ai) · Datos: Back4App · Frontend: GitHub Pages</span>
 </div></footer>
 
 <!-- Modal: login admin -->
@@ -571,13 +600,13 @@ body.embed main{min-height:0}
 <script>
 'use strict';
 /* ================================================================
-   EduDocs IA v2.0 — Documentos escolares con IA (archivo único)
-   Backend: Back4App (Parse REST) · IA: Gemini REST · Frontend: GitHub Pages
-   Publicación: sin tokens PAT (se publica reemplazando index.html en el repo)
+   EduDocs IA v3.0 — Documentos escolares con IA dual (archivo único)
+   Backend: Back4App (Parse REST) · IA: Gemini + GLM (Z.ai) · Frontend: GitHub Pages
+   Transcripción integral a Markdown al subir, con guardado automático en Back4App
    ================================================================ */
 
 /* ---------- Constantes ---------- */
-const APP_VERSION = '2.0.0';
+const APP_VERSION = '3.0.0';
 const LS = {
   cfg:'edudocs2_cfg', localDocs:'edudocs2_local_docs', chat:'edudocs2_chat',
   theme:'edudocs2_theme', lock:'edudocs2_lock', admin:'edudocs2_admin_sess'
@@ -585,6 +614,23 @@ const LS = {
 const ADMIN_HASH = '26851fcd3b5ccdfe4654d7ff65b20e630a2fab2b322454a9705732ae0040b8e7';
 const B4A_URL = 'https://parseapi.back4app.com';
 const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta';
+const ZAI_URL = 'https://api.z.ai/api/paas/v4/chat/completions';
+function glmTransportes(){
+  const outs = [];
+  const relay = (cfg.glmRelay||'').trim();
+  if(relay){
+    const urlRelay = relay.includes('{url}')
+      ? relay.replace('{url}', encodeURIComponent(ZAI_URL))
+      : relay + (relay.includes('?') ? '&' : '?') + 'url=' + encodeURIComponent(ZAI_URL);
+    outs.push(urlRelay);
+  }
+  outs.push(ZAI_URL);
+  return outs;
+}
+const GLM_MODELS = ['glm-5.3-flash', 'glm-4.5-flash'];
+const MAX_TRANSCRIPCION = 500000;
+const TRANSC_VISION_MAX_PAG = 40;
+const TRANSC_CHUNK = 9000;
 const MAX_FILE_MB = 25;
 const MAX_STORE_CHARS = 350000;
 const MAX_VISION_MB = 14;
@@ -594,7 +640,9 @@ const DEFAULTS = {
   b4aApp:'TCm0bdqC4FKjIb63OHPI8tDbIXlGHlzDL3Audz2K',
   b4aJs:'oBQP9UXQ45NGwdnJE5AbZIvBLWBILyEc4dHQWRjB',
   geminiKey:'AQ.Ab8RN6JoWWCB6QeMvnyhn6Ei-LMeo1PS2yhNXFq70P18j0Osdw',
-  model:'gemini-3.5-flash-lite',
+  zaiKey:'b8ebd416e21749b6bab6aec4170a1894.s1HppwkmNnJdY13O',
+  model:'gemini-3.5-flash-lite', aiMode:'auto',
+  transcribir:true, chkLinks:true, glmRelay:'',
   temp:0.4, maxCtx:180000,
   ghUser:'argos4all', ghRepo:'Ometecuhtli-Normatividad-IA', ghBranch:'main',
   b4aService:{ user:'docaula_service', pass:'Dca!Serv-2026#x' }
@@ -606,8 +654,9 @@ let cfg = { ...DEFAULTS };
 const state = {
   admin:false, docs:[], localDocs:[], visionMem:{}, chat:[],
   filter:'', ctxIds:null, abort:null, busy:false,
-  status:{ pagina:'wait', b4a:'wait', b4aMsg:'Verificando…', b4aSub:'', ia:'wait', iaMsg:'Verificando…', iaSub:'' },
-  docsTotal:null, b4aTok:null, iaModels:null, iaMs:null, runtimeModel:null,
+  status:{ pagina:'wait', b4a:'wait', b4aMsg:'Verificando…', b4aSub:'', ia:'wait', iaMsg:'Verificando…', iaSub:'', glm:'wait', glmMsg:'Verificando…', glmSub:'' },
+  docsTotal:null, b4aTok:null, iaModels:null, iaMs:null, runtimeModel:null, glmMs:null, runtimeGlm:null, glmVia:null,
+  geminiOff:0, glmOff:0,
   gh:'wait', ghBody:'Consultando…', lastAna:null
 };
 
@@ -753,9 +802,12 @@ function updateStatusUI(){
   setT('#bPaginaSub', st.pagina==='ok' ? 'aplicación activa en este navegador' : 'revisa tu conexión a internet');
   setD('#sdB4a', st.b4a); setT('#bB4aVal', st.b4aMsg); setT('#bB4aSub', st.b4aSub);
   setD('#sdIa', st.ia);  setT('#bIaVal', st.iaMsg);  setT('#bIaSub', st.iaSub);
+  const pillG=$('#pillGlm'); if(pillG) pillG.dataset.st = st.glm;
+  setD('#sdGlm', st.glm); setT('#bGlmVal', st.glmMsg); setT('#bGlmSub', st.glmSub);
   setD('#stAppDot','ok'); setH('#stAppBody', appInfoHtml());
   setD('#stB4aDot', st.b4a); setH('#stB4aBody', b4aInfoHtml());
   setD('#stIaDot', st.ia);   setH('#stIaBody', iaInfoHtml());
+  setD('#stGlmDot', st.glm); setH('#stGlmBody', glmInfoHtml());
   setD('#stGhDot', state.gh); setH('#stGhBody', state.ghBody);
 }
 function appInfoHtml(){
@@ -787,6 +839,21 @@ function iaInfoHtml(){
     '<b>Temperatura</b> ' + cfg.temp
   ].join('<br>');
 }
+function etiquetaModo(){
+  return cfg.aiMode==='gemini' ? 'Solo Gemini' : (cfg.aiMode==='glm' ? 'Solo GLM (Z.ai)' : 'Auto · complementario (Gemini + GLM)');
+}
+function glmInfoHtml(){
+  const st = state.status;
+  const relay = (cfg.glmRelay||'').trim();
+  return [
+    '<b>Estado</b> ' + esc(st.glmMsg) + (st.glmSub ? ' · ' + esc(st.glmSub) : ''),
+    '<b>API Key Z.ai</b> ' + esc(maskKey(cfg.zaiKey)),
+    '<b>Modelo en uso</b> ' + (state.runtimeGlm || '—') + ' · <b>Cadena</b> ' + GLM_MODELS.join(' → '),
+    '<b>Transporte</b> ' + (state.glmVia === 'relay' ? 'relay de CORS' : (state.glmVia === 'directo' ? 'directo' : 'directo (pendiente de prueba)')) + ' · <b>Relay</b> ' + (relay ? 'configurado' : 'no configurado'),
+    '<b>Latencia</b> ' + (state.glmMs==null ? '—' : state.glmMs + ' ms'),
+    '<b>Modo</b> ' + etiquetaModo()
+  ].join('<br>');
+}
 
 /* ---------- Verificaciones ---------- */
 function setPageStatus(){ state.status.pagina = navigator.onLine ? 'ok' : 'bad'; updateStatusUI(); }
@@ -813,7 +880,9 @@ async function loadDocs(){
   const j = await b4aFetch('/classes/Documento?limit=200&order=-createdAt');
   state.docs = (j.results||[]).map(r=>({
     id:r.objectId, nombre:r.nombre||'documento', tipo:r.tipo||'', tamano:r.tamano||0,
-    texto:r.texto||'', url:(r.archivo && r.archivo.url) || '', fuente:'nube', creado:r.createdAt
+    texto:r.texto||'', url:(r.archivo && r.archivo.url) || '', fuente:'nube', creado:r.createdAt,
+    estado:r.estado||'', transcripcionMd:r.transcripcionMd||'', mdUrl:(r.mdArchivo && r.mdArchivo.url) || '',
+    motor:r.motor||'', paginas:(typeof r.paginas==='number' ? r.paginas : null)
   }));
   renderDocs();
 }
@@ -833,7 +902,7 @@ async function ghCheck(){
     state.ghBody = '<b>Repositorio</b> <a href="https://github.com/'+esc(u)+'/'+esc(r)+'" target="_blank" rel="noopener noreferrer">'+esc(j.full_name)+'</a>'+(j.private?' (privado)':' (público)')
       +'<br><b>Rama</b> '+esc(j.default_branch)+' · <b>Último envío</b> '+fmtFecha(j.pushed_at)
       +'<br><b>GitHub Pages</b> '+(j.has_pages?'activa':'sin activar')+' · <b>Sitio</b> '+esc(sitioSt)
-      +'<br><b>Publicación</b> sin tokens PAT: reemplaza index.html en el repositorio';
+      +'<br><b>Publicación</b> reemplazando index.html en el repositorio';
   }catch(e){
     state.gh='bad';
     const m = resumirErr(e);
@@ -884,18 +953,25 @@ function docItem(d){
   const badge = d.fuente==='nube'
     ? '<span class="dbadge ok">En la nube</span>'
     : '<span class="dbadge warn">'+(d.pendiente?'Pendiente':'Local')+'</span>';
+  const mdBadge = (d.transcripcionMd || d.mdUrl)
+    ? '<span class="dbadge ok">md listo</span>'
+    : (d.estado==='transcribiendo' ? '<span class="dbadge warn">transcribiendo…</span>'
+    : (d.estado==='error' ? '<span class="dbadge warn">md con error</span>' : ''));
   const acts = [
     '<button class="mini" data-act="ver"><span>Ver</span></button>',
     '<button class="mini" data-act="analizar"><span>Analizar</span></button>',
     '<button class="mini" data-act="preguntar"><span>Preguntar</span></button>',
-    d.url ? '<a class="mini" href="'+esc(d.url)+'" target="_blank" rel="noopener noreferrer" title="Descargar archivo"><span>Descargar</span></a>' : '',
+    d.mdUrl ? '<a class="mini" href="'+esc(d.mdUrl)+'" target="_blank" rel="noopener noreferrer" title="Descargar transcripción .md"><span>.md</span></a>' : '',
+    d.url ? '<a class="mini" href="'+esc(d.url)+'" target="_blank" rel="noopener noreferrer" title="Descargar archivo original"><span>Descargar</span></a>' : '',
+    state.admin ? '<button class="mini" data-act="transcribir" title="Generar (o regenerar) la transcripción .md con IA"><span>Transcribir</span></button>' : '',
     state.admin ? '<button class="mini danger" data-act="borrar"><span>Eliminar</span></button>' : ''
   ].join('');
   return '<div class="ditem" data-id="'+esc(d.id)+'">'
     + '<span class="dicon">'+esc(ext)+'</span>'
     + '<div class="dmain"><div class="dname">'+esc(d.nombre)+'</div>'
-    + '<div class="dmeta">'+badge+'<span>'+fmtBytes(d.tamano)+'</span><span>'+fmtFecha(d.creado)+'</span>'
-    + (d.texto ? '<span>texto listo</span>' : '<span>sin texto</span>') + '</div></div>'
+    + '<div class="dmeta">'+badge+mdBadge+'<span>'+fmtBytes(d.tamano)+'</span><span>'+fmtFecha(d.creado)+'</span>'
+    + (d.texto ? '<span>texto listo</span>' : '<span>sin texto</span>')
+    + (d.motor ? '<span>md: '+esc(d.motor)+'</span>' : '') + '</div></div>'
     + '<div class="dact">'+acts+'</div></div>';
 }
 function renderDocs(){
@@ -921,12 +997,26 @@ async function docAction(act, id){
   if(!d) return;
   if(act==='ver'){
     $('#tDoc').textContent = d.nombre;
-    $('#docViewMeta').textContent = (d.tipo||tipoPorExt((d.nombre.split('.').pop()||'').toLowerCase())) + ' · ' + fmtBytes(d.tamano) + ' · ' + fmtFecha(d.creado) + ' · ' + (d.fuente==='nube'?'en la nube':'local');
-    const t = d.texto || '';
-    $('#docViewBody').innerHTML = t
-      ? mdRender('# Contenido extraído\n\n' + t.slice(0, 12000) + (t.length>12000 ? '\n\n*(…texto truncado para vista previa; la IA analiza hasta '+fmtBytes((d.texto||'').length)+' caracteres…)*' : ''))
-      : mdRender('*(Este documento no tiene texto extraído: es una imagen o un PDF escaneado. La IA lo leerá directamente como imagen o PDF al analizarlo o preguntarle.)*');
+    const md = d.transcripcionMd || '';
+    $('#docViewMeta').textContent = (d.tipo||tipoPorExt((d.nombre.split('.').pop()||'').toLowerCase())) + ' · ' + fmtBytes(d.tamano) + ' · ' + fmtFecha(d.creado) + ' · ' + (d.fuente==='nube'?'en la nube':'local') + (md ? ' · transcripción IA ('+(d.motor||'')+')' : '');
+    if(md){
+      $('#docViewBody').innerHTML = mdRender(md.slice(0, 60000) + (md.length>60000 ? '\n\n*(…transcripción truncada para vista previa; usa el botón ".md" para descargar el archivo completo…)*' : ''));
+    } else {
+      const t = d.texto || '';
+      $('#docViewBody').innerHTML = t
+        ? mdRender('# Contenido extraído\n\n' + t.slice(0, 12000) + (t.length>12000 ? '\n\n*(…texto truncado para vista previa; la IA analiza hasta '+fmtBytes((d.texto||'').length)+' caracteres…)*' : ''))
+        : mdRender('*(Este documento no tiene texto extraído: es una imagen o un PDF escaneado. Usa el botón "Transcribir" para generar la transcripción .md con IA; también puedes analizarlo o preguntarle directamente: la IA lo leerá como imagen o PDF.)*');
+    }
     $('#modalDoc').hidden = false;
+  }
+  else if(act==='transcribir'){
+    if(!state.admin){ toast('Requiere modo administrador','warn'); return; }
+    $('#uplog').hidden = false;
+    const row = document.createElement('div');
+    row.className = 'uprow';
+    row.innerHTML = '<b>'+esc(d.nombre)+'</b><span class="st st-wait">En cola…</span>';
+    $('#uplog').appendChild(row);
+    transcribirDoc(d, row).catch(()=>{});
   }
   else if(act==='analizar'){ showTab('analizar'); $('#selDoc').value = d.id; }
   else if(act==='preguntar'){ showTab('chat'); state.ctxIds = new Set([d.id]); renderCtx(); }
@@ -1144,6 +1234,13 @@ async function procesarArchivo(file, row){
       if(ex.vision){ delete state.visionMem[idPrevio]; state.visionMem[doc.id]=ex.vision; }
       state.docs.unshift(doc);
       toast('Documento subido: '+file.name,'ok');
+      if(cfg.transcribir !== false){
+        try{
+          await transcribirDoc(doc, row, { texto: ex.texto || '' });
+        }catch(eT){ /* el estado de error ya quedó registrado en la nube */ }
+      } else {
+        rowSet(row,'ok','Guardado en Back4App (transcripción automática desactivada)');
+      }
     }
   }catch(e1){
     if(doc){ state.localDocs.unshift(doc); }
@@ -1164,14 +1261,14 @@ function gErr(res, j){
   if(sug) e.suggested = sug[1];
   return e;
 }
-function gBody(contents, sys){
-  const b = { contents, generationConfig:{ temperature: Number(cfg.temp)||0.4, maxOutputTokens: 4096 } };
+function gBody(contents, sys, maxTokens){
+  const b = { contents, generationConfig:{ temperature: Number(cfg.temp)||0.4, maxOutputTokens: maxTokens||4096 } };
   if(sys) b.systemInstruction = { parts:[{ text: sys }] };
   return b;
 }
-async function geminiStream(model, contents, sys, onDelta, signal){
+async function geminiStream(model, contents, sys, onDelta, signal, maxTokens){
   const res = await fetch(GEMINI_URL+'/models/'+encodeURIComponent(model)+':streamGenerateContent?alt=sse',
-    { method:'POST', headers: gemHeaders(), signal, body: JSON.stringify(gBody(contents, sys)) });
+    { method:'POST', headers: gemHeaders(), signal, body: JSON.stringify(gBody(contents, sys, maxTokens)) });
   if(!res.ok){ const j = await res.json().catch(()=>null); throw gErr(res, j); }
   const reader = res.body.getReader();
   const dec = new TextDecoder();
@@ -1198,9 +1295,9 @@ async function geminiStream(model, contents, sys, onDelta, signal){
   if(!full.trim()) throw new Error('La IA devolvió una respuesta vacía');
   return full;
 }
-async function geminiOnce(model, contents, sys, signal){
+async function geminiOnce(model, contents, sys, signal, maxTokens){
   const res = await fetch(GEMINI_URL+'/models/'+encodeURIComponent(model)+':generateContent',
-    { method:'POST', headers: gemHeaders(), signal, body: JSON.stringify(gBody(contents, sys)) });
+    { method:'POST', headers: gemHeaders(), signal, body: JSON.stringify(gBody(contents, sys, maxTokens)) });
   const j = await res.json().catch(()=>null);
   if(!res.ok) throw gErr(res, j);
   const parts = (((j.candidates||[])[0]||{}).content||{}).parts || [];
@@ -1229,8 +1326,8 @@ async function geminiCall(contents, sys, opts={}){
     probados++;
     try{
       const r = stream
-        ? await geminiStream(m, contents, sys, onDelta, signal)
-        : await geminiOnce(m, contents, sys, signal);
+        ? await geminiStream(m, contents, sys, onDelta, signal, opts.maxTokens)
+        : await geminiOnce(m, contents, sys, signal, opts.maxTokens);
       state.runtimeModel = m;
       state.status.ia='ok'; state.status.iaMsg='En línea'; state.status.iaSub='modelo: '+m;
       updateStatusUI();
@@ -1279,6 +1376,10 @@ async function pingGemini(){
 }
 function amigableErr(e){
   const m = (e && e.message) || String(e);
+  if(e && e.cors) return 'GLM (Z.ai) no es alcanzable desde el navegador: Z.ai limita las llamadas directas por CORS. Configura un relay opcional en el panel Admin o deja que Gemini continúe (modo complementario).';
+  if(e && (e.code==='1113' || /Insufficient balance|no resource package/i.test(m))) return 'La cuenta de Z.ai (GLM) no tiene saldo para el modelo premium; el sistema alterna automáticamente al modelo gratuito disponible.';
+  if(e && e.code==='1211') return 'El modelo GLM indicado no existe en Z.ai. Verifica el nombre en el panel de administración.';
+  if(e && (e.status===401 || e.status===403) && /z\.ai|glm/i.test(m)) return 'La clave de Z.ai (GLM) fue rechazada. Revísala en el panel de administración.';
   if(/location is not supported/i.test(m)) return 'La API de Gemini no está disponible desde la ubicación de esta conexión. Abre el sitio desde tu navegador y red habituales.';
   if(/API key not valid|API_KEY_INVALID/i.test(m)) return 'La clave de la API fue rechazada. Revísala en el panel de administración.';
   if(e && (e.status===429 || /quota|RESOURCE_EXHAUSTED/i.test(m))) return 'Se alcanzó el límite de uso de la IA. Espera unos minutos e intenta de nuevo.';
@@ -1310,10 +1411,11 @@ function ctxPartsTexto(ids){
   let budget = Number(cfg.maxCtx)||180000;
   for(const id of ids){
     const d = findDoc(id);
-    if(!d || !d.texto) continue;
-    const t = d.texto.slice(0, Math.max(0, budget));
+    const base = (d && (d.transcripcionMd || d.texto)) || '';
+    if(!d || !base) continue;
+    const t = base.slice(0, Math.max(0, budget));
     budget -= t.length;
-    parts.push({ text:'\n\n===== DOCUMENTO: '+d.nombre+' =====\n'+t + (t.length < d.texto.length ? '\n[...texto truncado por límite de contexto...]' : '') });
+    parts.push({ text:'\n\n===== DOCUMENTO: '+d.nombre+' =====\n'+t + (t.length < base.length ? '\n[...texto truncado por límite de contexto...]' : '') });
   }
   return parts;
 }
@@ -1390,8 +1492,9 @@ function saveChat(){ try{ localStorage.setItem(LS.chat, JSON.stringify(state.cha
 function msgHtml(m, i){
   const cls = m.role==='user' ? 'user' : (m.err ? 'ia err' : 'ia');
   const body = m.role==='user' ? esc(m.text) : (m.done===false ? esc(m.text)+'<span class="cursor"></span>' : mdRender(m.text));
+  const eng = (m.role==='ia' && m.done===true && m.engine) ? '<span class="eng">IA: '+esc(m.engine)+'</span>' : '';
   const copiar = (m.role!=='user' && m.done===true && m.text) ? '<button class="mcopy" data-mi="'+i+'" title="Copiar respuesta">Copiar</button>' : '';
-  return '<div class="msg '+cls+'"><div class="bubble">'+body+copiar+'</div></div>';
+  return '<div class="msg '+cls+'"><div class="bubble">'+body+eng+copiar+'</div></div>';
 }
 function renderChat(){
   const box = $('#chatBox');
@@ -1432,7 +1535,8 @@ function setBusy(b){
 }
 async function sendMsg(){
   if(state.busy) return;
-  if(!apiKey()){ toast('Falta la API Key de Gemini. Configúrala en el panel Admin.','warn'); return; }
+  if(cfg.aiMode!=='glm' && !apiKey()){ toast('Falta la API Key de Gemini. Configúrala en el panel Admin o cambia el motor a GLM.','warn'); return; }
+  if(cfg.aiMode==='glm' && !zaiKey()){ toast('Falta la API Key de Z.ai (GLM). Configúrala en el panel Admin.','warn'); return; }
   const ta = $('#chatInput');
   const q = ta.value.trim();
   if(!q) return;
@@ -1448,11 +1552,12 @@ async function sendMsg(){
     const vparts = await ctxPartsVision(ids);
     const tparts = ctxPartsTexto(ids);
     const historial = state.chat.filter(m=>m.done!==false && m.text).slice(-9,-1)
-      .map(m=>({ role: m.role==='user' ? 'user' : 'model', parts:[{ text:m.text }] }));
-    const contents = [...historial, { role:'user', parts:[...vparts, ...tparts, { text:q }] }];
+      .map(m=>({ role: m.role==='user' ? 'user' : 'assistant', text:m.text }));
     const sys = sysBase() + (ids.length ? '\n\nTienes acceso al contenido de los documentos seleccionados como contexto, entre los marcadores "===== DOCUMENTO".' : '\n\nNo hay documentos cargados: puedes responder con conocimiento general, dejando claro cuando algo no proviene de los documentos.');
-    const full = await geminiCall(contents, sys, { stream:true, onDelta:bubbleAppend, signal:ctrl.signal });
-    state.chat[state.chat.length-1] = { role:'ia', text:full, done:true };
+    const images = vparts.map(p=>({ mime: p.inline_data.mime_type, data: p.inline_data.data }));
+    const textoCtx = tparts.map(p=>p.text).join('') + '\n\n---\n\nPregunta del usuario: ' + q;
+    const r = await aiCall({ sys, text:textoCtx, images, history:historial, stream:true, onDelta:bubbleAppend, signal:ctrl.signal });
+    state.chat[state.chat.length-1] = { role:'ia', text:r.text, done:true, engine: r.engine + (r.model ? ' · '+r.model : '') };
   }catch(e){
     if(e.name==='AbortError'){
       state.chat[state.chat.length-1] = { role:'ia', text:(state.chat[state.chat.length-1].text||'')+'\n\n*(respuesta detenida)*', done:true };
@@ -1492,7 +1597,8 @@ async function runAnalysis(tipo){
   const id = $('#selDoc').value;
   const d = findDoc(id);
   if(!d){ toast('Selecciona un documento (sube alguno primero)','warn'); return; }
-  if(!apiKey()){ toast('Falta la API Key de Gemini. Configúrala en el panel Admin.','warn'); return; }
+  if(cfg.aiMode!=='glm' && !apiKey()){ toast('Falta la API Key de Gemini. Configúrala en el panel Admin o cambia el motor a GLM.','warn'); return; }
+  if(cfg.aiMode==='glm' && !zaiKey()){ toast('Falta la API Key de Z.ai (GLM). Configúrala en el panel Admin.','warn'); return; }
   const a = ANALISIS[tipo];
   $('#anaWrap').hidden = false;
   $('#anaOut').innerHTML = '<span class="spin"></span> Analizando "'+esc(d.nombre)+'"…';
@@ -1503,10 +1609,12 @@ async function runAnalysis(tipo){
   try{
     const vparts = await ctxPartsVision([id]);
     const tparts = ctxPartsTexto([id]);
-    const contents = [{ role:'user', parts:[...vparts, ...tparts, { text: a.p + '\n\nDocumento: ' + d.nombre }] }];
     const sys = sysBase() + '\n\nResponde con markdown claro y estructurado, basado únicamente en el documento proporcionado.';
-    const full = await geminiCall(contents, sys, { signal: ctrl.signal });
-    state.lastAna = { text: full, meta: a.t + ' · ' + d.nombre + ' · ' + new Date().toLocaleTimeString('es-MX') + ' · modelo: ' + (state.runtimeModel||'') };
+    const images = vparts.map(p=>({ mime: p.inline_data.mime_type, data: p.inline_data.data }));
+    const textoCtx = tparts.map(p=>p.text).join('') + '\n\n---\n\nTarea: ' + a.p + '\n\nDocumento: ' + d.nombre;
+    const r = await aiCall({ sys, text:textoCtx, images, signal: ctrl.signal, maxTokens: 6000 });
+    const full = r.text;
+    state.lastAna = { text: full, meta: a.t + ' · ' + d.nombre + ' · ' + new Date().toLocaleTimeString('es-MX') + ' · IA: ' + r.engine + (r.model ? ' ('+r.model+')' : '') };
     $('#anaOut').innerHTML = mdRender(full);
     $('#anaMeta').textContent = state.lastAna.meta;
   }catch(e){
@@ -1517,15 +1625,510 @@ async function runAnalysis(tipo){
   }
 }
 
+/* ================================================================
+   IA dual complementaria (Gemini + GLM · Z.ai)
+   ================================================================ */
+function zaiKey(){ return (cfg.zaiKey||'').trim(); }
+
+const EXTRACT_SYS = [
+  'Actúa como un sistema de extracción y transcripción de datos de alta precisión.',
+  'Tu tarea es leer de principio a fin el documento y extraer TODA su información de manera íntegra, literal y exhaustiva, transcribiéndola a Markdown.',
+  'Por favor, sigue estrictamente estas reglas:',
+  '1. No omitas ningún párrafo, nota al pie, encabezado, pie de página, número, fecha ni detalle menor.',
+  '2. Si el documento contiene tablas, transpórtalas íntegramente utilizando formato de Markdown (tablas) preservando cada celda, fila y columna.',
+  '3. Si el documento contiene listas, esquemas o apartados numerados, respeta exactamente su jerarquía original.',
+  '4. No resumas, no interpretes, no parafrasees ni omitas secciones "por repetición" o "relleno". Transcribe el contenido completo.',
+  '5. Si alguna parte del texto resulta ilegible o está borrosa (en caso de ser un escaneo), indícalo explícitamente entre corchetes, por ejemplo: [texto no legible].',
+  '6. Organiza la salida respetando el orden exacto de aparición de las páginas o secciones del documento original.',
+  '7. Revisa cada enlace del documento y verifica que estén correctos; de no ser así, haz las correcciones y, si aplicas un cambio, indícalo entre corchetes.',
+  '8. Devuelve ÚNICAMENTE la transcripción en Markdown, sin comentarios, saludos ni explicaciones adicionales.'
+].join('\n');
+
+const LINKS_SYS = [
+  'Eres un verificador de enlaces de documentos. Recibirás un documento en Markdown con URLs.',
+  'Tarea: revisa cada enlace y verifica que esté bien formado y sea coherente con su texto ancla; corrige errores evidentes (espacios, paréntesis, caracteres rotos, http/https, dominios mal escritos).',
+  'Si un enlace es irrecuperable, márcalo así: [enlace no verificable: URL original].',
+  'Devuelve el documento COMPLETO con las correcciones aplicadas, en Markdown, sin comentarios adicionales. Si nada necesita corrección, devuelve el documento exactamente igual.'
+].join('\n');
+
+function glmErr(res, j){
+  const er = (j && j.error) || {};
+  const e = new Error(er.message || ('HTTP ' + res.status));
+  e.code = (er.code != null) ? String(er.code) : null;
+  e.status = res.status;
+  return e;
+}
+function glmBody(model, msgs, o){
+  const b = { model, messages: msgs, temperature: (o.temp!=null ? o.temp : (Number(cfg.temp)||0.4)), max_tokens: o.maxTokens || 4096, stream: false };
+  b.thinking = { type: 'disabled' };
+  return b;
+}
+async function glmFetch(model, body, signal){
+  const H = { 'Content-Type':'application/json', 'Authorization':'Bearer ' + zaiKey() };
+  let lastErr = null;
+  for(const dest of glmTransportes()){
+    try{
+      let res = await fetch(dest, { method:'POST', headers: H, signal, body: JSON.stringify(body) });
+      if(res.status === 400 && body.thinking){
+        const b2 = { ...body }; delete b2.thinking;
+        res = await fetch(dest, { method:'POST', headers: H, signal, body: JSON.stringify(b2) });
+      }
+      const j = await res.json().catch(()=>null);
+      if(!res.ok) throw glmErr(res, j);
+      state.glmVia = (dest === ZAI_URL) ? 'directo' : 'relay';
+      return j;
+    }catch(e){
+      lastErr = e;
+      if(e && e.name === 'AbortError') throw e;
+      if(e && (e.code || e.status)) throw e; /* la API respondió: no es un problema de transporte */
+      continue; /* fallo de red/CORS: prueba el siguiente transporte */
+    }
+  }
+  const er = lastErr || new Error('GLM no alcanzable desde el navegador');
+  er.cors = true;
+  throw er;
+}
+async function glmOnce(model, msgs, o={}){
+  const j = await glmFetch(model, glmBody(model, msgs, o), o.signal);
+  if(j && j.error && !(j.choices||[]).length){
+    const e = new Error(j.error.message || 'Error de Z.ai');
+    e.code = (j.error.code != null) ? String(j.error.code) : null;
+    e.status = 200;
+    throw e;
+  }
+  const ch = (j.choices||[])[0] || {};
+  const t = String((((ch.message)||{}).content) || '');
+  if(!t.trim()) throw new Error('La IA (GLM) devolvió una respuesta vacía');
+  return t;
+}
+async function glmStream(model, msgs, o={}){
+  const body = glmBody(model, msgs, o);
+  body.stream = true;
+  const H = { 'Content-Type':'application/json', 'Authorization':'Bearer ' + zaiKey() };
+  let res = null;
+  for(const dest of glmTransportes()){
+    try{ res = await fetch(dest, { method:'POST', headers: H, signal:o.signal, body: JSON.stringify(body) }); break; }
+    catch(e){ if(e && e.name === 'AbortError') throw e; res = null; }
+  }
+  if(!res){ const er = new Error('GLM no alcanzable desde el navegador (CORS)'); er.cors = true; throw er; }
+  if(!res.ok){ const j = await res.json().catch(()=>null); throw glmErr(res, j); }
+  const reader = res.body.getReader();
+  const dec = new TextDecoder();
+  let buf='', full='';
+  for(;;){
+    const r = await reader.read();
+    if(r.done) break;
+    buf += dec.decode(r.value, { stream:true });
+    let ix;
+    while((ix = buf.indexOf('\n')) >= 0){
+      const line = buf.slice(0, ix).trim();
+      buf = buf.slice(ix+1);
+      if(!line.startsWith('data:')) continue;
+      const p = line.slice(5).trim();
+      if(!p || p==='[DONE]') continue;
+      try{
+        const j2 = JSON.parse(p);
+        const d = ((j2.choices||[])[0]||{}).delta || {};
+        const frag = d.content || '';
+        if(frag){ full += frag; if(o.onDelta) o.onDelta(frag); }
+      }catch(e){ /* fragmento incompleto */ }
+    }
+  }
+  if(!full.trim()) throw new Error('La IA (GLM) devolvió una respuesta vacía');
+  return full;
+}
+function buildGlmMsgs(o){
+  const msgs = [];
+  if(o.sys) msgs.push({ role:'system', content:o.sys });
+  if(o.history && o.history.length){
+    for(const h of o.history) msgs.push({ role: h.role==='user' ? 'user' : 'assistant', content: h.text || h.content || '' });
+  }
+  const imgs = (o.images||[]).filter(i=>/^image\//i.test(i.mime||''));
+  if(imgs.length){
+    const content = imgs.map(i=>({ type:'image_url', image_url:{ url:'data:'+(i.mime||'image/jpeg')+';base64,'+i.data } }));
+    content.push({ type:'text', text:o.text });
+    msgs.push({ role:'user', content });
+  } else {
+    msgs.push({ role:'user', content:o.text });
+  }
+  return msgs;
+}
+async function glmCall(o){
+  if(!zaiKey()) throw new Error('Falta la clave de Z.ai (GLM). Configúrala en el panel de administración.');
+  const msgs = buildGlmMsgs(o);
+  let last=null, sinSaldo=false;
+  for(const m of GLM_MODELS){
+    try{
+      const t = o.stream ? await glmStream(m, msgs, o) : await glmOnce(m, msgs, o);
+      state.runtimeGlm = m;
+      state.status.glm='ok'; state.status.glmMsg='En línea'; state.status.glmSub='modelo: '+m;
+      updateStatusUI();
+      return { text:t, model:m };
+    }catch(e){
+      last = e;
+      if(e.name==='AbortError') throw e;
+      if(e.code==='1113'){ sinSaldo=true; continue; }
+      if(e.code==='1211' || e.status===404 || e.status===503) continue;
+      throw e;
+    }
+  }
+  if(sinSaldo){
+    state.status.glm='warn'; state.status.glmMsg='Sin saldo para los modelos GLM'; state.status.glmSub='recarga la cuenta de Z.ai';
+    updateStatusUI();
+  }
+  throw last || new Error('Ningún modelo GLM disponible');
+}
+async function pingGlm(){
+  state.status.glm='wait'; state.status.glmMsg='Verificando…'; state.status.glmSub=''; updateStatusUI();
+  if(!zaiKey()){
+    state.status.glm='bad'; state.status.glmMsg='Falta clave Z.ai'; state.status.glmSub='configúrala en el panel Admin';
+    updateStatusUI(); return;
+  }
+  let nota=null;
+  for(const m of GLM_MODELS){
+    try{
+      const t0 = Date.now();
+      await glmOnce(m, [{ role:'user', content:'Responde únicamente: ok' }], { maxTokens: 64, temp: 0.1 });
+      state.glmMs = Date.now()-t0;
+      state.runtimeGlm = m;
+      state.status.glm='ok';
+      state.status.glmMsg='En línea ('+state.glmMs+' ms)';
+      state.status.glmSub='modelo: '+m+(m!==GLM_MODELS[0] ? ' · respaldo (sin saldo para '+GLM_MODELS[0]+')' : '');
+      updateStatusUI();
+      return;
+    }catch(e){
+      if(e.cors){
+        state.status.glm='warn';
+        state.status.glmMsg='Bloqueada por CORS de Z.ai';
+        state.status.glmSub=(cfg.glmRelay||'').trim() ? 'relay configurado pero sin respuesta' : 'configura un relay en Admin (opcional) · Gemini sigue cubriendo todo';
+        updateStatusUI();
+        return;
+      }
+      if(e.code==='1113'){ nota='sin saldo para '+m; continue; }
+      if(e.code==='1211' || e.status===404){ nota='modelo no disponible: '+m; continue; }
+      state.status.glm='bad';
+      state.status.glmMsg = (e.status===401 || e.status===403) ? 'Clave rechazada' : 'Sin conexión';
+      state.status.glmSub = resumirErr(e);
+      updateStatusUI();
+      return;
+    }
+  }
+  state.status.glm='warn'; state.status.glmMsg='Sin saldo en Z.ai'; state.status.glmSub=nota||'recarga la cuenta para usar GLM';
+  updateStatusUI();
+}
+
+/* ---------- Router de IA complementario ---------- */
+async function aiCall(o){
+  const imgs = o.images||[];
+  const hayPdf = imgs.some(i=>/pdf/i.test(i.mime||''));
+  let orden;
+  if(cfg.aiMode==='gemini') orden=['gemini'];
+  else if(cfg.aiMode==='glm') orden=['glm'];
+  else orden=['gemini','glm'];
+  if(hayPdf) orden = orden.filter(x=>x!=='glm');
+  orden = orden.filter(eng => Date.now() >= (eng==='gemini' ? state.geminiOff : state.glmOff));
+  if(!orden.length) throw new Error('Las IA están en pausa temporal tras un fallo reciente. Espera unos minutos o revisa la configuración en el panel Admin.');
+  let last=null;
+  for(let i=0;i<orden.length;i++){
+    const eng = orden[i];
+    const otra = i < orden.length-1;
+    try{
+      if(eng==='gemini'){
+        const parts = imgs.map(im=>({ inline_data:{ mime_type:im.mime, data:im.data } }));
+        parts.push({ text:o.text });
+        const t = await geminiCall([{ role:'user', parts }], o.sys, { stream:o.stream, onDelta:o.onDelta, signal:o.signal, maxTokens:o.maxTokens });
+        return { text:t, engine:'Gemini', model: state.runtimeModel || '' };
+      } else {
+        const r = await glmCall(o);
+        return { text:r.text, engine:'GLM', model:r.model };
+      }
+    }catch(e){
+      if(e.name==='AbortError') throw e;
+      last = e;
+      if(eng==='gemini' && !e.retryModel && (e.status===400 || e.status===401 || e.status===403 || e.status===429 || /location is not supported|Failed to fetch|NetworkError/i.test(e.message||'')))
+        state.geminiOff = Date.now() + 5*60*1000;
+      if(eng==='glm' && (e.status===401 || e.status===403 || /Failed to fetch|NetworkError/i.test(e.message||'')))
+        state.glmOff = Date.now() + 5*60*1000;
+      toast('IA '+(eng==='gemini'?'Gemini':'GLM')+' no disponible para esta tarea: '+resumirErr(e)+(otra ? ' · continuando con la otra IA…' : ''), 'warn');
+    }
+  }
+  throw last || new Error('Ninguna IA disponible');
+}
+
+/* ================================================================
+   Transcripción integral a Markdown (al subir un archivo)
+   ================================================================ */
+function extDe(nombre){ return (String(nombre||'').split('.').pop()||'').toLowerCase(); }
+function esTextoPlano(ext){ return ['txt','md','csv','json','log','xml','srt'].includes(ext); }
+
+function splitChunks(texto, target){
+  target = target || TRANSC_CHUNK;
+  const res = [];
+  const parags = String(texto||'').replace(/\r\n?/g,'\n').split(/\n{2,}/);
+  let cur = '';
+  const push = ()=>{ if(cur.trim()) res.push(cur.trim()); cur=''; };
+  for(const p of parags){
+    if(p.length > target){
+      push();
+      for(let i=0;i<p.length;i+=target){
+        let fin = Math.min(i+target, p.length);
+        if(fin < p.length){
+          const corte = Math.max(p.lastIndexOf('. ', fin), p.lastIndexOf('; ', fin), p.lastIndexOf('\n', fin));
+          if(corte > i + target*0.5) fin = corte+1;
+        }
+        const frag = p.slice(i, fin).trim();
+        if(frag) res.push(frag);
+      }
+      continue;
+    }
+    if(cur && (cur + '\n\n' + p).length > target) push();
+    cur = cur ? cur + '\n\n' + p : p;
+  }
+  push();
+  return res;
+}
+async function bufDeDoc(d){
+  if(!d.url) throw new Error('El documento no tiene archivo asociado para transcribir');
+  const res = await fetch(d.url);
+  if(!res.ok) throw new Error('No se pudo descargar el archivo ('+res.status+')');
+  return await res.arrayBuffer();
+}
+async function pdfPaginasTexto(buf){
+  await ensurePdfJs();
+  const pdf = await window.pdfjsLib.getDocument({ data: buf.slice(0) }).promise;
+  const paginas = [];
+  const maxPag = Math.min(pdf.numPages, 500);
+  for(let i=1;i<=maxPag;i++){
+    const page = await pdf.getPage(i);
+    const tc = await page.getTextContent();
+    const piezas = [];
+    for(const it of tc.items){
+      if(typeof it.str !== 'string') continue;
+      if(it.hasEOL) piezas.push('\n');
+      piezas.push(it.str);
+    }
+    paginas.push(piezas.join(''));
+  }
+  return { pdf, paginas };
+}
+async function pdfPaginasImagen(pdf, desde, hasta){
+  const imgs = [];
+  for(let p=desde; p<=hasta; p++){
+    const page = await pdf.getPage(p);
+    const vp = page.getViewport({ scale: 1.6 });
+    const cv = document.createElement('canvas');
+    cv.width = Math.min(1400, Math.round(vp.width));
+    cv.height = Math.min(1980, Math.round(vp.height));
+    const cx = cv.getContext('2d');
+    await page.render({ canvasContext: cx, viewport: vp }).promise;
+    const dataUrl = cv.toDataURL('image/jpeg', 0.85);
+    imgs.push({ mime:'image/jpeg', data: dataUrl.split(',')[1] });
+    cv.width = 0; cv.height = 0;
+  }
+  return imgs;
+}
+function cabeceraMd(d, o){
+  const l = [
+    '---',
+    'titulo: ' + d.nombre.replace(/\.[^.]+$/, ''),
+    'origen: ' + d.nombre + ' · ' + (d.tipo || tipoPorExt(extDe(d.nombre))) + ' · ' + fmtBytes(d.tamano),
+    'transcripcion: integral generada por IA (Gemini + GLM de Z.ai, modo complementario)',
+    'fecha: ' + new Date().toLocaleString('es-MX')
+  ];
+  if(o.paginas) l.push('paginas: ' + o.paginas);
+  l.push('motores: ' + Array.from(o.motores).join(' + '));
+  l.push('verificacion_de_enlaces: ' + (o.linksChecked ? 'revisados y corregidos por IA' : 'no aplicada'));
+  l.push('---', '');
+  return l.join('\n');
+}
+async function b4aUploadMd(nombre, contenido, tok){
+  const safe = (nombre.replace(/[^\w.\-]+/g,'_').slice(-120)) || 'transcripcion.md';
+  const fh = { 'X-Parse-Application-Id': cfg.b4aApp, 'X-Parse-JavaScript-Key': cfg.b4aJs, 'Content-Type': 'text/markdown' };
+  if(tok) fh['X-Parse-Session-Token'] = tok;
+  const fr = await fetch(B4A_URL + '/files/' + encodeURIComponent(safe), { method:'POST', headers: fh, body: contenido });
+  const fj = await fr.json().catch(()=>({}));
+  if(!fr.ok){ const er = new Error(fj.error || ('HTTP '+fr.status)); er.code = fj.code; er.status = fr.status; throw er; }
+  return fj;
+}
+async function b4aUpdateDoc(id, campos, tok){
+  try{ return await b4aFetch('/classes/Documento/' + encodeURIComponent(id), { method:'PUT', body: JSON.stringify(campos) }); }
+  catch(e){ if(!tok) throw e; return await b4aFetch('/classes/Documento/' + encodeURIComponent(id), { method:'PUT', body: JSON.stringify(campos), tok }); }
+}
+async function transcribirDoc(d, row, extra){
+  extra = extra || {};
+  const motores = new Set();
+  let paginas = null, fallosIA = 0;
+  const partes = [];
+  const fragmentos = [];
+  let modoVision = false, pdfObj = null, buf = null;
+  const ext = extDe(d.nombre);
+  try{
+    rowSet(row,'wait','Preparando transcripción con IA…');
+    let tok = null;
+    try{ tok = await b4aToken(); }catch(e){ tok = null; }
+    b4aUpdateDoc(d.id, { estado:'transcribiendo' }, tok).catch(()=>{});
+
+    if(ext==='pdf'){
+      buf = extra.buf || await bufDeDoc(d);
+      let paginasTexto = null;
+      try{ const r2 = await pdfPaginasTexto(buf); pdfObj = r2.pdf; paginasTexto = r2.paginas; }catch(e){ pdfObj = null; }
+      const totalTexto = (paginasTexto||[]).join('').trim();
+      if(pdfObj && totalTexto.length >= 80){
+        paginas = pdfObj.numPages || paginasTexto.length;
+        let i = 0;
+        while(i < paginasTexto.length){
+          let j = i, acum = 0, tx = '';
+          while(j < paginasTexto.length && (acum + paginasTexto[j].length) <= TRANSC_CHUNK + 1500){
+            acum += paginasTexto[j].length; tx += paginasTexto[j] + '\n\n'; j++;
+          }
+          if(j === i){ tx = paginasTexto[j] || ''; j = i + 1; }
+          fragmentos.push({ texto: tx.trim(), desde: i+1, hasta: j });
+          i = j;
+        }
+        let total = fragmentos.reduce((a,f)=>a+f.texto.length, 0);
+        if(total > MAX_TRANSCRIPCION){
+          let acum2 = 0, corte = fragmentos.length;
+          for(let k=0;k<fragmentos.length;k++){ acum2 += fragmentos[k].texto.length; if(acum2 > MAX_TRANSCRIPCION){ corte = k; break; } }
+          const omitidos = fragmentos.slice(corte).length;
+          fragmentos.length = corte;
+          fragmentos.push({ texto: '[El documento supera el límite de proceso automático: se transcribieron '+corte+' de '+(corte+omitidos)+' fragmentos ('+paginas+' páginas). Sube el resto en partes para completar la transcripción.]' });
+        }
+      } else if(pdfObj){
+        modoVision = true;
+        paginas = pdfObj.numPages;
+        const maxP = Math.min(pdfObj.numPages, TRANSC_VISION_MAX_PAG);
+        for(let p=1; p<=maxP; p+=4) fragmentos.push({ vision:true, desde:p, hasta: Math.min(p+3, maxP) });
+      } else {
+        throw new Error('No se pudo leer el PDF (posible archivo dañado o protegido)');
+      }
+    }
+    else if(/^image\//i.test(d.tipo||'') || ['png','jpg','jpeg','webp','gif'].includes(ext)){
+      modoVision = true;
+      fragmentos.push({ vision:true, desde:1, hasta:1 });
+    }
+    else {
+      let textoBase = extra.texto;
+      if(textoBase==null){
+        if(esTextoPlano(ext)){ const res2 = await fetch(d.url); textoBase = await res2.text(); }
+        else if(ext==='docx'){ await ensureMammoth(); textoBase = (await window.mammoth.extractRawText({ arrayBuffer: await bufDeDoc(d) })).value || ''; }
+        else textoBase = d.texto || '';
+      }
+      if(!String(textoBase||'').trim()) throw new Error('El documento no contiene texto transcribible');
+      if(textoBase.length > MAX_TRANSCRIPCION) textoBase = textoBase.slice(0, MAX_TRANSCRIPCION) + '\n\n[documento truncado por límite de proceso]';
+      splitChunks(textoBase).forEach(c=>fragmentos.push({ texto:c }));
+    }
+
+    if(!fragmentos.length) throw new Error('No se generaron fragmentos para transcribir');
+
+    for(let k=0;k<fragmentos.length;k++){
+      const f = fragmentos[k];
+      let r = null;
+      try{
+        if(f.vision){
+          let imgs;
+          if(ext==='pdf'){
+            rowSet(row,'wait','Transcribiendo con IA (páginas escaneadas '+f.desde+'–'+f.hasta+' de '+paginas+')…');
+            imgs = await pdfPaginasImagen(pdfObj, f.desde, f.hasta);
+          } else {
+            rowSet(row,'wait','Transcribiendo imagen con IA…');
+            if(!buf) buf = await bufDeDoc(d);
+            imgs = [{ mime: d.tipo || tipoPorExt(ext), data: abToB64(buf) }];
+          }
+          const rango = (ext==='pdf')
+            ? 'Páginas '+f.desde+'–'+f.hasta+' de '+paginas+' del documento escaneado. Transcribe cada página íntegramente, incluyendo encabezados, pies, números de página, sellos y anotaciones, en orden.'
+            : 'Transcribe íntegramente todo el contenido visible de la imagen (texto, tablas, sellos, manuscritos); marca [texto no legible] lo que no se pueda leer.';
+          r = await aiCall({ sys: EXTRACT_SYS, text: rango, images: imgs, maxTokens: 8000 });
+        } else {
+          rowSet(row,'wait','Transcribiendo con IA (fragmento '+(k+1)+'/'+fragmentos.length+')…');
+          const encabezado = (fragmentos.length>1)
+            ? 'FRAGMENTO '+(k+1)+' DE '+fragmentos.length+(f.desde ? ' — corresponde a las páginas '+f.desde+'–'+f.hasta+' del documento.' : ' del contenido del documento.')+' Transcribe este fragmento de forma íntegra y continua; si es la continuación de un fragmento anterior, continúa exactamente donde quedó, sin repetir contenido ya transcrito.'
+            : 'Transcribe el documento completo que se entrega a continuación.';
+          r = await aiCall({ sys: EXTRACT_SYS, text: encabezado + '\n\n---\n\n' + f.texto, maxTokens: 8000 });
+        }
+        motores.add(r.engine);
+        if(f.desde && fragmentos.length > 1){
+          partes.push('[— '+(ext==='pdf' ? 'páginas' : 'fragmento')+' '+f.desde+(f.hasta && f.hasta!==f.desde ? '–'+f.hasta : '')+' —]', '');
+        }
+        partes.push(r.text.trim());
+      }catch(eF){
+        fallosIA++;
+        partes.push('[fragmento '+(k+1)+' no transcrito por error de IA: '+resumirErr(eF)+']');
+      }
+    }
+    if(fallosIA >= fragmentos.length) throw new Error('Ninguna IA pudo transcribir el documento');
+
+    if(modoVision && ext==='pdf' && pdfObj.numPages > TRANSC_VISION_MAX_PAG){
+      partes.push('\n\n[Documento de '+pdfObj.numPages+' páginas: la transcripción visual automatizada cubre las primeras '+TRANSC_VISION_MAX_PAG+'. Sube el resto en archivos separados para completarla.]');
+    }
+
+    let cuerpo = partes.join('\n\n');
+    const links = cuerpo.match(/https?:\/\/[^\s)>\"']+/g) || [];
+    let linksChecked = false;
+    if(cfg.chkLinks !== false && links.length && cuerpo.length < 60000){
+      rowSet(row,'wait','Verificando y corrigiendo enlaces con IA…');
+      try{
+        const rL = await aiCall({ sys: LINKS_SYS, text: 'Documento a revisar:\n\n' + cuerpo, maxTokens: 8000 });
+        if(rL.text && rL.text.trim().length > cuerpo.length*0.4){
+          cuerpo = rL.text.trim();
+          linksChecked = true;
+          motores.add(rL.engine);
+        }
+      }catch(eL){ /* la revisión de enlaces es de mejor esfuerzo */ }
+    }
+
+    rowSet(row,'wait','Guardando transcripción .md en Back4App…');
+    const md = cabeceraMd(d, { paginas, motores, linksChecked }) + cuerpo;
+    const mdNombre = d.nombre.replace(/\.[^.]+$/, '') + '_transcripcion.md';
+    let up = null;
+    try{ up = await b4aUploadMd(mdNombre, md, tok); }
+    catch(eU){ tok = await b4aToken(true); up = await b4aUploadMd(mdNombre, md, tok); }
+    const campos = {
+      estado: 'listo',
+      transcripcionMd: md.slice(0, MAX_STORE_CHARS),
+      mdArchivo: { __type:'File', name: up.name, url: up.url },
+      motor: Array.from(motores).join(' + '),
+      paginas: paginas || null,
+      transcripcionFecha: { __type:'Date', iso: new Date().toISOString() }
+    };
+    try{ await b4aUpdateDoc(d.id, campos, tok); }
+    catch(eU2){ tok = await b4aToken(true); await b4aUpdateDoc(d.id, campos, tok); }
+    d.transcripcionMd = campos.transcripcionMd;
+    d.mdUrl = up.url;
+    d.estado = 'listo';
+    d.motor = campos.motor;
+    d.paginas = paginas;
+    renderDocs(); renderRecent();
+    rowSet(row,'ok','Transcripción .md generada ('+Array.from(motores).join(' + ')+(paginas ? ' · '+paginas+' pág.' : '')+') y guardada en Back4App');
+    toast('Transcripción lista: '+d.nombre,'ok');
+  }catch(e){
+    const tokE = state.b4aTok || null;
+    b4aUpdateDoc(d.id, { estado:'error', motor: Array.from(motores).join(' + ') || null }, tokE).catch(()=>{});
+    d.estado = 'error';
+    renderDocs();
+    rowSet(row,'bad','Transcripción con error: '+resumirErr(e));
+    toast('No se pudo transcribir "'+d.nombre+'": '+resumirErr(e),'bad');
+    throw e;
+  }
+}
+
 /* ---------- Panel admin: formulario y mantenimiento ---------- */
+function syncAiModeUI(){
+  ['#chatMode','#anaMode','#cfgAiMode'].forEach(sel=>{ const el=$(sel); if(el) el.value = cfg.aiMode || 'auto'; });
+}
 function fillAdmin(){
   $('#cfgSchool').value = cfg.school || '';
   $('#cfgModel').value  = cfg.model || '';
   $('#cfgB4aApp').value = cfg.b4aApp || '';
   $('#cfgB4aJs').value  = cfg.b4aJs || '';
   $('#cfgGemini').value = cfg.geminiKey || '';
+  $('#cfgZai').value    = cfg.zaiKey || '';
+  $('#cfgRelay').value  = cfg.glmRelay || '';
   $('#cfgMaxCtx').value = cfg.maxCtx || 180000;
   $('#cfgTemp').value   = cfg.temp; $('#cfgTempVal').textContent = cfg.temp;
+  $('#cfgAiMode').value = cfg.aiMode || 'auto';
+  $('#cfgTranscribir').checked = cfg.transcribir !== false;
+  $('#cfgChkLinks').checked = cfg.chkLinks !== false;
+  syncAiModeUI();
   updateStatusUI();
 }
 function guardarConfig(){
@@ -1534,16 +2137,23 @@ function guardarConfig(){
   cfg.b4aApp   = $('#cfgB4aApp').value.trim();
   cfg.b4aJs    = $('#cfgB4aJs').value.trim();
   cfg.geminiKey= $('#cfgGemini').value.trim();
+  cfg.zaiKey   = $('#cfgZai').value.trim();
+  cfg.glmRelay = $('#cfgRelay').value.trim();
+  cfg.aiMode   = $('#cfgAiMode').value || 'auto';
+  cfg.transcribir = $('#cfgTranscribir').checked;
+  cfg.chkLinks    = $('#cfgChkLinks').checked;
   cfg.maxCtx   = Math.min(900000, Math.max(20000, Number($('#cfgMaxCtx').value)||180000));
   cfg.temp     = Number($('#cfgTemp').value)||0.4;
   saveCfg();
-  state.b4aTok=null; state.iaModels=null; state.runtimeModel=null;
+  state.b4aTok=null; state.iaModels=null; state.runtimeModel=null; state.geminiOff=0; state.glmOff=0;
   $('#brandSchool').textContent = cfg.school;
   $('#fSchool').textContent = cfg.school;
   toast('Configuración guardada en este navegador','ok');
   updateStatusUI();
+  syncAiModeUI();
   checkB4a().catch(()=>{});
   pingGemini().catch(()=>{});
+  pingGlm().catch(()=>{});
 }
 function restaurarConfig(){
   if(!confirm('¿Restaurar los valores de fábrica? Se conservarán los documentos.')) return;
@@ -1554,8 +2164,10 @@ function restaurarConfig(){
   $('#fSchool').textContent = cfg.school;
   state.b4aTok=null; state.iaModels=null; state.runtimeModel=null;
   toast('Configuración restaurada','ok');
+  syncAiModeUI();
   checkB4a().catch(()=>{});
   pingGemini().catch(()=>{});
+  pingGlm().catch(()=>{});
 }
 function logTo(sel, txt){
   const el = $(sel);
@@ -1583,12 +2195,14 @@ function diagExport(){
     version: APP_VERSION,
     config: {
       school:cfg.school, model:cfg.model, temp:cfg.temp, maxCtx:cfg.maxCtx,
-      b4aApp:maskKey(cfg.b4aApp), b4aJs:maskKey(cfg.b4aJs), geminiKey:maskKey(cfg.geminiKey),
+      b4aApp:maskKey(cfg.b4aApp), b4aJs:maskKey(cfg.b4aJs), geminiKey:maskKey(cfg.geminiKey), zaiKey:maskKey(cfg.zaiKey),
+      aiMode:cfg.aiMode, transcribir:cfg.transcribir!==false, chkLinks:cfg.chkLinks!==false,
       ghUser:cfg.ghUser, ghRepo:cfg.ghRepo
     },
     estado: {
-      pagina:state.status.pagina, b4a:state.status.b4a, ia:state.status.ia, github:state.gh,
+      pagina:state.status.pagina, b4a:state.status.b4a, ia:state.status.ia, glm:state.status.glm, github:state.gh,
       modeloEnUso:state.runtimeModel, modelosDisponibles: state.iaModels? state.iaModels.length : null,
+      glmEnUso:state.runtimeGlm,
       detalle:state.status
     },
     datos: { docsNube:state.docs.length, docsLocales:state.localDocs.length, mensajesChat:state.chat.length, totalEnBack4App:state.docsTotal },
@@ -1628,8 +2242,10 @@ function bind(){
   $('#pillPagina').addEventListener('click', ()=>{ setPageStatus(); });
   $('#pillB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
   $('#pillIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
+  $('#pillGlm').addEventListener('click', ()=>pingGlm().catch(()=>{}));
   $('#btnChkB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
   $('#btnChkIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
+  $('#btnChkGlm').addEventListener('click', ()=>pingGlm().catch(()=>{}));
   $('#heroSubir').addEventListener('click', ()=>{ showTab('docs'); if(!state.admin) openLogin(); });
   $('#heroAnalizar').addEventListener('click', ()=>showTab('analizar'));
 
@@ -1693,19 +2309,26 @@ function bind(){
     sendMsg();
   });
 
+  ['#chatMode','#anaMode','#cfgAiMode'].forEach(sel=>{
+    const el = $(sel);
+    if(el) el.addEventListener('change', ()=>{ cfg.aiMode = el.value; saveCfg(); syncAiModeUI(); });
+  });
+  $('#cfgTranscribir').addEventListener('change', e=>{ cfg.transcribir = e.target.checked; saveCfg(); });
+  $('#cfgChkLinks').addEventListener('change', e=>{ cfg.chkLinks = e.target.checked; saveCfg(); });
   $('#btnSaveCfg').addEventListener('click', guardarConfig);
   $('#btnResetCfg').addEventListener('click', restaurarConfig);
   $('#cfgTemp').addEventListener('input', e=>{ $('#cfgTempVal').textContent = e.target.value; });
   $('#btnTestApp').addEventListener('click', ()=>{ setPageStatus(); updateStatusUI(); toast('Información actualizada','ok'); });
   $('#btnTestB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
   $('#btnTestIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
+  $('#btnTestGlm').addEventListener('click', ()=>pingGlm().catch(()=>{}));
   $('#btnTestGh').addEventListener('click', ()=>ghCheck().catch(()=>{}));
   $('#btnInitSchema').addEventListener('click', initSchema);
   $('#btnReloadDocs').addEventListener('click', async ()=>{ await checkB4a().catch(()=>{}); toast('Documentos recargados','ok'); });
   $('#btnDiag').addEventListener('click', diagExport);
   $('#btnCopyEmbed').addEventListener('click', ()=>copyText($('#embedCode').value));
 
-  window.addEventListener('online', ()=>{ setPageStatus(); checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); });
+  window.addEventListener('online', ()=>{ setPageStatus(); checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); pingGlm().catch(()=>{}); });
   window.addEventListener('offline', ()=>{ setPageStatus(); });
 }
 
@@ -1733,11 +2356,13 @@ function boot(){
   renderChat();
   setPageStatus();
   refreshSelDoc();
+  syncAiModeUI();
   checkB4a().catch(()=>{});
   pingGemini().catch(()=>{});
+  pingGlm().catch(()=>{});
   ghCheck().catch(()=>{});
   setInterval(()=>{
-    if(navigator.onLine){ checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); }
+    if(navigator.onLine){ checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); pingGlm().catch(()=>{}); }
   }, 5*60*1000);
 }
 document.addEventListener('DOMContentLoaded', boot);
