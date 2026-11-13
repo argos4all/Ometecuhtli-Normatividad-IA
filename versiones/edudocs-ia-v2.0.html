@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<!-- EduDocsIA v2.0 · archivo único · backend: Back4App · IA: Gemini · hosting: GitHub Pages -->
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="EduDocs IA v2 - Revisor, analizador y chat de documentos escolares con IA (Gemini). Sube por arrastrar y soltar, guarda en la nube y pregunta a tus documentos.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0d8a7d" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0c1518" media="(prefers-color-scheme: dark)">
+<title>EduDocs IA · Documentos y Chat para tu Escuela</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230d8a7d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 2v6h6'/%3E%3Cpath d='M9 15l2 2 4-4'/%3E%3C/svg%3E">
+<style>
+/* ================= Base y variables ================= */
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none !important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans',Ubuntu,'Helvetica Neue',Arial,sans-serif;
+  font-size:15px;line-height:1.55;color:var(--tx);background:var(--bg);transition:background .25s,color .25s}
+button,input,select,textarea{font:inherit;color:inherit}
+img,svg{vertical-align:middle}
+:root{
+  --ok:#16a34a; --warn:#d97706; --bad:#dc2626; --link:#0b6f65;
+}
+html[data-theme="light"]{
+  --bg:#eef4f2; --bg2:#e4ece9; --surface:#ffffff; --surface2:#f5faf8; --border:#d7e3df;
+  --tx:#17252b; --tx2:#4e6167; --tx3:#7b8d93;
+  --pri:#0d8a7d; --pri2:#0b6f65; --prisoft:#e0f0ed; --pritx:#ffffff;
+  --hero1:#0d8a7d; --hero2:#0a5f5b; --shadow:0 8px 28px rgba(13,60,55,.10); --shadow2:0 2px 10px rgba(13,60,55,.08);
+}
+html[data-theme="dark"]{
+  --bg:#0c1518; --bg2:#0a1113; --surface:#121f23; --surface2:#16262b; --border:#23383e;
+  --tx:#e8f0ee; --tx2:#a7b8bd; --tx3:#7d9198;
+  --pri:#2fc2b0; --pri2:#2aa897; --prisoft:#143029; --pritx:#062019;
+  --hero1:#134e48; --hero2:#0c3433; --shadow:0 10px 30px rgba(0,0,0,.45); --shadow2:0 2px 10px rgba(0,0,0,.35);
+  --link:#4fd8c6;
+}
+a{color:var(--link)}
+h1,h2,h3,h4{margin:0;line-height:1.25}
+small{color:var(--tx2)}
+code{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:1px 5px;font-size:.92em}
+hr{border:0;border-top:1px solid var(--border)}
+::selection{background:var(--pri);color:var(--pritx)}
+
+/* ================= Layout general ================= */
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+main{min-height:calc(100vh - 210px);padding-bottom:28px}
+.sec{margin-top:18px;animation:fadein .25s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+/* ================= Cabecera ================= */
+header.app{position:sticky;top:0;z-index:40;background:color-mix(in srgb, var(--bg) 86%, transparent);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.hbar{display:flex;align-items:center;gap:12px;height:58px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:34px;height:34px;flex:none;border-radius:10px;background:linear-gradient(135deg,var(--hero1),var(--hero2));
+  display:grid;place-items:center;color:#fff;box-shadow:var(--shadow2)}
+.brand b{font-size:16.5px;letter-spacing:.2px;white-space:nowrap}
+.vchip{font-size:11px;font-weight:700;color:var(--pri);background:var(--prisoft);border:1px solid var(--border);
+  padding:1.5px 7px;border-radius:999px;white-space:nowrap}
+nav.tabs{display:flex;gap:4px;margin-left:6px;overflow-x:auto;scrollbar-width:none;flex:1}
+nav.tabs::-webkit-scrollbar{display:none}
+.tab{border:0;background:transparent;cursor:pointer;color:var(--tx2);padding:8px 13px;border-radius:10px;
+  font-weight:600;font-size:13.8px;display:flex;align-items:center;gap:7px;white-space:nowrap;transition:.18s}
+.tab svg{width:16px;height:16px;flex:none}
+.tab:hover{color:var(--tx);background:var(--surface2)}
+.tab[aria-selected="true"]{color:var(--pri);background:var(--prisoft)}
+.hact{display:flex;align-items:center;gap:8px;margin-left:auto}
+.pills{display:flex;gap:6px}
+.pill{display:flex;align-items:center;gap:7px;border:1px solid var(--border);background:var(--surface);cursor:pointer;
+  padding:5px 11px;border-radius:999px;font-size:12.4px;font-weight:600;color:var(--tx2);transition:.18s}
+.pill:hover{border-color:var(--pri);color:var(--tx)}
+.pill .dot,.sdot{width:9px;height:9px;border-radius:50%;background:var(--tx3);flex:none;position:relative}
+.pill[data-st="ok"] .dot,.sdot[data-st="ok"]{background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 22%,transparent)}
+.pill[data-st="bad"] .dot,.sdot[data-st="bad"]{background:var(--bad);box-shadow:0 0 0 3px color-mix(in srgb,var(--bad) 20%,transparent)}
+.pill[data-st="warn"] .dot,.sdot[data-st="warn"]{background:var(--warn);box-shadow:0 0 0 3px color-mix(in srgb,var(--warn) 22%,transparent)}
+.pill[data-st="wait"] .dot,.sdot[data-st="wait"]{background:var(--tx3);animation:pulse 1.2s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.iconbtn{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--surface);cursor:pointer;
+  display:grid;place-items:center;color:var(--tx2);transition:.18s;flex:none}
+.iconbtn:hover{color:var(--pri);border-color:var(--pri)}
+.iconbtn.on{color:var(--pri);border-color:var(--pri);background:var(--prisoft)}
+.iconbtn svg{width:18px;height:18px}
+@media (max-width:760px){
+  .pill .plbl{display:none}
+  .pill{padding:5px 8px}
+  .brand b{display:none}
+  .hbar{height:54px;gap:8px}
+}
+
+/* ================= Botones y campos ================= */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;cursor:pointer;
+  background:var(--pri);color:var(--pritx);font-weight:700;font-size:14px;padding:10px 16px;border-radius:12px;transition:.18s;text-decoration:none}
+.btn:hover{background:var(--pri2)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--pri);border-color:var(--pri)}
+.btn.ghost:hover{background:var(--prisoft)}
+.btn.soft{background:var(--surface);color:var(--tx);border-color:var(--border)}
+.btn.soft:hover{border-color:var(--pri);color:var(--pri)}
+.btn.danger{background:var(--bad)}
+.btn.danger:hover{filter:brightness(.92)}
+.btn svg{width:17px;height:17px}
+.mini{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border);background:var(--surface);color:var(--tx2);
+  cursor:pointer;font-size:12.2px;font-weight:600;padding:5px 10px;border-radius:9px;text-decoration:none;transition:.15s}
+.mini:hover{border-color:var(--pri);color:var(--pri)}
+.mini.danger:hover{border-color:var(--bad);color:var(--bad)}
+.mini svg{width:13px;height:13px}
+.lbl{display:block;font-size:12.6px;font-weight:700;color:var(--tx2);margin-bottom:5px}
+.in{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:9.5px 12px;outline:none;transition:.15s}
+.in:focus{border-color:var(--pri);box-shadow:0 0 0 3px color-mix(in srgb,var(--pri) 18%,transparent)}
+textarea.in{resize:vertical}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.8px}
+.hint{color:var(--tx2);font-size:12.8px}
+.spin{display:inline-block;width:15px;height:15px;border:2px solid var(--border);border-top-color:var(--pri);border-radius:50%;
+  animation:spin .8s linear infinite;vertical-align:-2px;margin-right:7px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ================= Tarjetas ================= */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:var(--shadow2)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media (max-width:920px){ .grid3,.grid4{grid-template-columns:1fr 1fr} }
+@media (max-width:620px){ .grid2,.grid3,.grid4{grid-template-columns:1fr} }
+.sectitle{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:22px 0 10px;flex-wrap:wrap}
+.sectitle h2{font-size:17px}
+.sectitle .hint{margin:0}
+
+/* ================= Hero (Inicio) ================= */
+.hero{display:grid;grid-template-columns:1.25fr .95fr;gap:0;overflow:hidden;border-radius:18px;border:1px solid var(--border);
+  background:var(--surface);box-shadow:var(--shadow2)}
+.hero-l{padding:30px 28px;background:linear-gradient(135deg,var(--hero1),var(--hero2));color:#fff;display:flex;flex-direction:column;gap:14px;justify-content:center;min-width:0}
+.hero-l .kicker{font-size:12px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;opacity:.85}
+.hero-l h1{font-size:27px;line-height:1.2}
+.hero-l p{margin:0;opacity:.92;max-width:46ch}
+.hero-l .ctas{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.hero-l .btn.main{background:#fff;color:var(--pri2)}
+.hero-l .btn.main:hover{background:#f2fffc}
+.hero-l .btn.line{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.45)}
+.hero-l .btn.line:hover{background:rgba(255,255,255,.22)}
+.hero-r{padding:20px;display:flex;flex-direction:column;gap:10px;justify-content:center;background:var(--surface);min-width:0}
+.scard{display:flex;align-items:center;gap:12px;border:1px solid var(--border);border-radius:14px;padding:11px 14px;background:var(--surface2);min-width:0}
+.sdot{width:11px;height:11px}
+.sinfo{min-width:0;flex:1}
+.sinfo small{display:block;font-size:11.4px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--tx3)}
+.sinfo strong{display:block;font-size:14.6px}
+.sinfo em{display:block;font-style:normal;font-size:12.2px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sbtn{border:1px solid var(--border);background:var(--surface);border-radius:9px;font-size:12px;font-weight:600;color:var(--tx2);
+  cursor:pointer;padding:5px 10px;flex:none;transition:.15s}
+.sbtn:hover{color:var(--pri);border-color:var(--pri)}
+@media (max-width:860px){ .hero{grid-template-columns:1fr} .hero-l{padding:24px 20px} }
+.feat{display:flex;flex-direction:column;gap:8px}
+.feat .fic{width:36px;height:36px;border-radius:10px;background:var(--prisoft);color:var(--pri);display:grid;place-items:center}
+.feat .fic svg{width:19px;height:19px}
+.feat b{font-size:14.5px}
+.feat span{font-size:12.8px;color:var(--tx2)}
+.steps{display:flex;flex-direction:column;gap:10px}
+.step{display:flex;gap:12px;align-items:flex-start}
+.step .n{width:26px;height:26px;border-radius:50%;background:var(--pri);color:var(--pritx);font-weight:800;font-size:13px;
+  display:grid;place-items:center;flex:none}
+.step div b{font-size:13.8px}
+.step div span{display:block;font-size:12.6px;color:var(--tx2)}
+</style>
+<style>
+/* ================= Zona de subida ================= */
+.dz{border:2px dashed var(--border);border-radius:16px;background:var(--surface2);padding:26px 18px;text-align:center;
+  cursor:pointer;transition:.18s;position:relative;outline:none}
+.dz:hover,.dz:focus{border-color:var(--pri);background:var(--prisoft)}
+.dz.drag{border-color:var(--pri);background:var(--prisoft);transform:scale(1.005)}
+.dz .dzic{width:52px;height:52px;border-radius:14px;background:var(--prisoft);color:var(--pri);display:grid;place-items:center;margin:0 auto 10px}
+.dz .dzic svg{width:26px;height:26px}
+.dz b{font-size:15.5px}
+.dz .hint{margin-top:4px}
+.dz .dzacts{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.dz .dzacts .btn,.dz .dzacts .mini{pointer-events:auto}
+.dzlock{position:absolute;inset:0;border-radius:16px;background:color-mix(in srgb,var(--bg) 55%,transparent);
+  backdrop-filter:blur(2px);display:grid;place-items:center;z-index:2}
+.dzlock .inner{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);
+  padding:10px 16px;border-radius:13px;box-shadow:var(--shadow);font-weight:600}
+.dzlock svg{width:18px;height:18px;color:var(--pri)}
+.uplog{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.uprow{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border:1px solid var(--border);
+  border-radius:11px;padding:8px 12px;font-size:13px}
+.uprow b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st{flex:none;font-weight:700;font-size:12px}
+.st-wait{color:var(--warn)} .st-ok{color:var(--ok)} .st-bad{color:var(--bad)}
+
+/* ================= Lista de documentos ================= */
+.toolbar{display:flex;align-items:center;gap:10px;margin:14px 0;flex-wrap:wrap}
+.toolbar .in{max-width:320px}
+.count{font-size:12.6px;color:var(--tx2);font-weight:600;background:var(--surface);border:1px solid var(--border);
+  padding:4px 11px;border-radius:999px}
+.dlist{display:flex;flex-direction:column;gap:9px}
+.ditem{display:flex;align-items:center;gap:13px;background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:11px 14px;transition:.15s}
+.ditem:hover{border-color:var(--pri);box-shadow:var(--shadow2)}
+.dicon{width:42px;height:42px;border-radius:11px;background:var(--prisoft);color:var(--pri);font-weight:800;font-size:10.6px;
+  display:grid;place-items:center;flex:none;letter-spacing:.4px}
+.dmain{flex:1;min-width:0}
+.dname{font-weight:700;font-size:14.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dmeta{display:flex;gap:9px;align-items:center;flex-wrap:wrap;font-size:12.2px;color:var(--tx2);margin-top:2px}
+.dbadge{font-size:10.8px;font-weight:800;padding:1.5px 8px;border-radius:999px;letter-spacing:.3px}
+.dbadge.ok{color:var(--ok);background:color-mix(in srgb,var(--ok) 13%,transparent)}
+.dbadge.warn{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)}
+.dact{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.empty{text-align:center;padding:34px 16px;color:var(--tx2);border:1.5px dashed var(--border);border-radius:16px;background:var(--surface2)}
+.empty strong{display:block;font-size:15px;color:var(--tx);margin-bottom:3px}
+.empty.sm{padding:20px}
+
+/* ================= Análisis ================= */
+.anabtns{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.anaout{margin-top:16px}
+.anameta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.anameta small{font-weight:700}
+.mdout{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:16px 18px;max-height:560px;overflow:auto}
+.mdout h2,.mdout h3,.mdout h4,.mdout h5{margin:14px 0 7px;color:var(--pri2)}
+html[data-theme="dark"] .mdout h2,html[data-theme="dark"] .mdout h3,html[data-theme="dark"] .mdout h4,html[data-theme="dark"] .mdout h5{color:var(--pri)}
+.mdout h2:first-child,.mdout h3:first-child{margin-top:0}
+.mdout p{margin:7px 0}
+.mdout ul{margin:7px 0;padding-left:22px}
+.mdout li{margin:3.5px 0}
+.mdout table{border-collapse:collapse;width:100%;margin:10px 0;font-size:13.4px}
+.mdout td{border:1px solid var(--border);padding:6px 9px}
+.mdout pre.code{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:11px 13px;overflow:auto;
+  font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.6px;margin:9px 0}
+
+/* ================= Chat ================= */
+.chatgrid{display:grid;grid-template-columns:260px 1fr;gap:14px;align-items:start}
+@media (max-width:860px){ .chatgrid{grid-template-columns:1fr} .ctxpanel{order:2} }
+.ctxpanel{position:sticky;top:74px}
+.ctxlist{display:flex;flex-direction:column;gap:4px;max-height:300px;overflow:auto;margin-top:8px}
+.ctxrow{display:flex;gap:9px;align-items:center;font-size:13.2px;padding:7px 9px;border-radius:9px;cursor:pointer}
+.ctxrow:hover{background:var(--surface2)}
+.ctxrow input{accent-color:var(--pri);width:15px;height:15px;flex:none}
+.ctxrow span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ctxnone{font-size:12.8px;color:var(--tx2);padding:6px 2px}
+.chatbox{display:flex;flex-direction:column;height:calc(100vh - 235px);min-height:420px;background:var(--surface);
+  border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow2)}
+.msgs{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;background:var(--surface2)}
+.msg{display:flex;max-width:88%}
+.msg.user{align-self:flex-end;justify-content:flex-end}
+.msg .bubble{padding:10px 14px;border-radius:15px;font-size:14px;position:relative;overflow-wrap:anywhere}
+.msg.ia .bubble{background:var(--surface);border:1px solid var(--border);border-top-left-radius:5px;width:fit-content;max-width:100%}
+.msg.ia .bubble p:first-child{margin-top:0}
+.msg.ia .bubble p:last-child{margin-bottom:0}
+.msg.ia.err .bubble{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 7%,var(--surface))}
+.msg.user .bubble{background:var(--pri);color:var(--pritx);border-top-right-radius:5px}
+.cursor{display:inline-block;width:8px;height:15px;background:var(--pri);margin-left:3px;vertical-align:-2px;animation:pulse .8s infinite}
+.msgbar{display:flex;align-items:center;gap:9px;padding:11px 13px;border-top:1px solid var(--border);background:var(--surface)}
+.msgbar textarea{flex:1;max-height:170px;border-radius:12px}
+.sugs{display:flex;gap:8px;flex-wrap:wrap;padding:0 13px 11px;background:var(--surface)}
+.sug{border:1px solid var(--border);background:var(--surface2);color:var(--tx2);border-radius:999px;padding:6px 13px;
+  font-size:12.6px;font-weight:600;cursor:pointer;transition:.15s}
+.sug:hover{border-color:var(--pri);color:var(--pri);background:var(--prisoft)}
+.mcopy{position:absolute;top:6px;right:6px;opacity:0;transition:.15s;border:1px solid var(--border);background:var(--surface);
+  border-radius:8px;padding:3px 8px;font-size:11px;font-weight:700;cursor:pointer;color:var(--tx2)}
+.msg.ia:hover .mcopy{opacity:1}
+.mcopy:hover{color:var(--pri);border-color:var(--pri)}
+
+/* ================= Admin ================= */
+.statcard{border:1px solid var(--border);border-radius:16px;padding:15px 16px;background:var(--surface);box-shadow:var(--shadow2)}
+.statcard .stat-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.statcard h3{font-size:14.6px;flex:1}
+.statcard .body{font-size:12.9px;color:var(--tx2);display:flex;flex-direction:column;gap:3px;overflow-wrap:anywhere}
+.statcard .body b{color:var(--tx);font-weight:700}
+.statcard .acts{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+@media (max-width:700px){ .formgrid{grid-template-columns:1fr} }
+.logbox{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:10px 12px;font-family:ui-monospace,Menlo,Consolas,monospace;
+  font-size:11.8px;white-space:pre-wrap;max-height:150px;overflow:auto;color:var(--tx2);margin-top:9px}
+.snippet{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:10px 12px;
+  font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.8px;color:var(--tx2);resize:vertical;min-height:74px}
+.guia li{margin:7px 0;font-size:13.4px;color:var(--tx2)}
+.guia{padding-left:20px;margin:8px 0}
+.guia b{color:var(--tx)}
+
+/* ================= Modales y toasts ================= */
+.overlay{position:fixed;inset:0;z-index:60;background:rgba(8,20,22,.55);backdrop-filter:blur(3px);
+  display:grid;place-items:center;padding:18px}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;max-width:680px;width:100%;
+  max-height:86vh;overflow:auto;box-shadow:var(--shadow);animation:fadein .2s ease}
+.mhead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 18px;border-bottom:1px solid var(--border)}
+.mhead h3{font-size:16px}
+.mbody{padding:16px 18px}
+#toasts{position:fixed;right:16px;bottom:16px;z-index:80;display:flex;flex-direction:column;gap:8px;max-width:min(360px,86vw)}
+.toast{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--pri);border-radius:12px;
+  padding:10px 14px;font-size:13.2px;box-shadow:var(--shadow);animation:fadein .2s ease}
+.toast.ok{border-left-color:var(--ok)} .toast.bad{border-left-color:var(--bad)} .toast.warn{border-left-color:var(--warn)}
+
+/* ================= Pie y modo embebido ================= */
+footer.app{border-top:1px solid var(--border);margin-top:26px;padding:16px 0 22px;color:var(--tx2);font-size:12.6px}
+footer.app .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+body.embed footer.app{display:none}
+body.embed .hero-l{padding:20px}
+body.embed main{min-height:0}
+@media (max-width:620px){
+  .ditem{flex-wrap:wrap}
+  .dact{width:100%;justify-content:flex-start}
+  .msg{max-width:96%}
+  .hero-l h1{font-size:22px}
+}
+</style>
+</head>
+<body>
+<header class="app"><div class="wrap hbar">
+  <div class="brand">
+    <span class="logo" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/></svg></span>
+    <b>EduDocs IA</b>
+    <span class="vchip" id="vchip">v2.0</span>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button class="tab" data-tab="inicio" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>Inicio</button>
+    <button class="tab" data-tab="docs" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Documentos</button>
+    <button class="tab" data-tab="analizar" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Análisis</button>
+    <button class="tab" data-tab="chat" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>Chat</button>
+    <button class="tab" data-tab="admin" aria-selected="false" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admin</button>
+  </nav>
+  <div class="hact">
+    <div class="pills" role="status" aria-live="polite">
+      <button class="pill" id="pillPagina" data-st="wait" title="Estado de la página y tu conexión"><span class="dot"></span><span class="plbl">Página</span></button>
+      <button class="pill" id="pillB4a" data-st="wait" title="Estado de Back4App (clic para probar)"><span class="dot"></span><span class="plbl">Back4App</span></button>
+      <button class="pill" id="pillIa" data-st="wait" title="Estado de la IA Gemini (clic para probar)"><span class="dot"></span><span class="plbl">IA Gemini</span></button>
+    </div>
+    <button class="iconbtn" id="btnTheme" title="Cambiar tema claro / oscuro" aria-label="Cambiar tema">
+      <svg id="icoMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
+      <svg id="icoSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" hidden><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.9" y1="4.9" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.1" y2="19.1"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.9" y1="19.1" x2="6.3" y2="17.7"/><line x1="17.7" y1="6.3" x2="19.1" y2="4.9"/></svg>
+    </button>
+    <button class="iconbtn" id="btnAdmin" title="Modo administrador" aria-label="Modo administrador">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </button>
+  </div>
+</div></header>
+
+<main><div class="wrap">
+
+<!-- ================= INICIO ================= -->
+<section id="sec-inicio" class="sec" role="tabpanel">
+  <div class="hero">
+    <div class="hero-l">
+      <span class="kicker">Plataforma escolar · <span id="brandSchool">Mi Escuela</span></span>
+      <h1>Tus documentos escolares,<br>revisados y entendidos con IA</h1>
+      <p>Sube reglamentos, planes de estudio, circulares o tareas con arrastrar y soltar. La IA los analiza, los resume y responde tus preguntas al instante.</p>
+      <div class="ctas">
+        <button class="btn main" id="heroSubir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>Subir documentos</button>
+        <button class="btn line" id="heroAnalizar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analizar con IA</button>
+      </div>
+    </div>
+    <div class="hero-r" role="status" aria-live="polite">
+      <div class="scard">
+        <span class="sdot" id="sdPagina" data-st="wait"></span>
+        <div class="sinfo"><small>Página</small><strong id="bPaginaVal">Verificando…</strong><em id="bPaginaSub">conexión del navegador</em></div>
+      </div>
+      <div class="scard">
+        <span class="sdot" id="sdB4a" data-st="wait"></span>
+        <div class="sinfo"><small>Back4App · documentos</small><strong id="bB4aVal">Verificando…</strong><em id="bB4aSub">base de datos en la nube</em></div>
+        <button class="sbtn" id="btnChkB4a">Probar</button>
+      </div>
+      <div class="scard">
+        <span class="sdot" id="sdIa" data-st="wait"></span>
+        <div class="sinfo"><small>IA Gemini</small><strong id="bIaVal">Verificando…</strong><em id="bIaSub">análisis y chat</em></div>
+        <button class="sbtn" id="btnChkIa">Probar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sectitle"><h2>Qué puedes hacer</h2></div>
+  <div class="grid4">
+    <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></span><b>Arrastra y suelta</b><span>Sube PDF, DOCX, TXT, CSV o imágenes desde tu computadora o carpeta completa.</span></div>
+    <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg></span><b>Análisis con IA</b><span>Resumen ejecutivo, puntos clave, cuestionarios y mapa de ideas en un clic.</span></div>
+    <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span><b>Chat con tus documentos</b><span>Pregunta en lenguaje natural; la IA responde citando el documento de origen.</span></div>
+    <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><b>Sin trucos raros</b><span>La subida se configura sola en Back4App y el chat se guarda solo en tu navegador.</span></div>
+  </div>
+
+  <div class="grid2" style="margin-top:14px">
+    <div class="card">
+      <h3 style="font-size:15px;margin-bottom:12px">Cómo funciona</h3>
+      <div class="steps">
+        <div class="step"><span class="n">1</span><div><b>Entra como administrador</b><span>Usa el candado de la esquina y la contraseña de tu escuela.</span></div></div>
+        <div class="step"><span class="n">2</span><div><b>Sube tus documentos</b><span>Arrastra y suelta, elige archivos o una carpeta completa.</span></div></div>
+        <div class="step"><span class="n">3</span><div><b>Analiza y pregunta</b><span>Genera resúmenes, cuestionarios o conversa con los documentos en el Chat.</span></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px">
+        <h3 style="font-size:15px;margin:0">Documentos recientes</h3>
+        <button class="mini" data-goto="docs"><span>Ver todos</span></button>
+      </div>
+      <div class="dlist" id="recentList"></div>
+      <div class="empty sm" id="recentEmpty"><strong>Aún no hay documentos</strong><span>Sube el primero desde la sección Documentos.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DOCUMENTOS ================= -->
+<section id="sec-docs" class="sec" role="tabpanel" hidden>
+  <div class="card">
+    <div class="dz" id="dz" tabindex="0" role="button" aria-label="Zona para subir documentos">
+      <div class="dzlock" id="dzLock"><div class="inner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><div><div><strong>Requiere modo administrador</strong></div><span class="hint">Ingresa la contraseña para poder subir documentos.</span></div><button class="mini" id="btnIrLogin"><span>Ingresar</span></button></div></div>
+      <span class="dzic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></span>
+      <b>Arrastra tus documentos aquí</b>
+      <p class="hint">o haz clic para seleccionarlos · PDF, DOCX, TXT, MD, CSV, JSON o imágenes · máx. 25 MB por archivo · se guardan en Back4App</p>
+      <div class="dzacts">
+        <button class="btn soft" id="btnFiles"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Elegir archivos</button>
+        <button class="mini" id="btnFolder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Elegir carpeta</button>
+      </div>
+      <input type="file" id="fileInput" multiple accept=".pdf,.docx,.txt,.md,.csv,.json,.log,.xml,.srt,.png,.jpg,.jpeg,.webp,.gif" hidden>
+      <input type="file" id="folderInput" webkitdirectory multiple hidden>
+    </div>
+    <div class="uplog" id="uplog" hidden></div>
+  </div>
+
+  <div class="toolbar">
+    <input type="search" id="docFilter" class="in" placeholder="Buscar documento por nombre…" style="flex:1;min-width:200px;max-width:none">
+    <span class="count" id="docCount">0</span>
+    <button class="btn soft" id="btnSync" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Subir pendientes</button>
+    <button class="mini" id="btnCheckB4a" title="Volver a cargar documentos desde la nube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg><span>Actualizar</span></button>
+  </div>
+  <div class="dlist" id="listaNube"></div>
+  <div class="sectitle" id="hLocal" hidden><h2>En este dispositivo</h2><p class="hint">Se subirán automáticamente cuando haya conexión (o pulsa "Subir pendientes").</p></div>
+  <div class="dlist" id="listaLocal"></div>
+  <div class="empty" id="emptyDocs" hidden><strong>Sin documentos todavía</strong><span>Sube PDF, DOCX, TXT o imágenes con el panel de arriba (requiere modo administrador).</span></div>
+</section>
+
+<!-- ================= ANÁLISIS ================= -->
+<section id="sec-analizar" class="sec" role="tabpanel" hidden>
+  <div class="card">
+    <h2 style="font-size:17px">Análisis con IA</h2>
+    <p class="hint" style="margin:4px 0 0">Elige un documento y un tipo de análisis. La IA lo procesa con Gemini y devuelve el resultado en español.</p>
+    <div style="margin-top:14px">
+      <label class="lbl" for="selDoc">Documento</label>
+      <select id="selDoc" class="in"></select>
+    </div>
+    <div class="empty sm" id="anaEmpty" style="margin-top:12px"><strong>Sin documentos</strong><span>Sube documentos (modo admin) para analizarlos aquí.</span></div>
+    <div class="anabtns" id="anabtns">
+      <button class="btn soft anabtn" data-ana="resumen">Resumen ejecutivo</button>
+      <button class="btn soft anabtn" data-ana="claves">Puntos clave</button>
+      <button class="btn soft anabtn" data-ana="academico">Análisis académico</button>
+      <button class="btn soft anabtn" data-ana="cuestionario">Cuestionario</button>
+      <button class="btn soft anabtn" data-ana="ideas">Mapa de ideas</button>
+    </div>
+    <div class="anaout" id="anaWrap" hidden>
+      <div class="anameta"><small id="anaMeta"></small><button class="mini" id="btnAnaCopy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copiar</span></button></div>
+      <div class="mdout" id="anaOut"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CHAT ================= -->
+<section id="sec-chat" class="sec" role="tabpanel" hidden>
+  <div class="chatgrid">
+    <div class="card ctxpanel">
+      <h3 style="font-size:14.5px">Contexto del chat</h3>
+      <p class="hint" style="margin:4px 0 0">La IA responderá con base en: <b id="ctxSummary">todos los documentos</b></p>
+      <div class="ctxlist" id="ctxList"></div>
+      <div style="margin-top:10px"><button class="mini danger" id="btnClearChat"><span>Borrar conversación</span></button></div>
+    </div>
+    <div class="chatbox">
+      <div class="msgs" id="chatBox"></div>
+      <div class="sugs" id="sugs"></div>
+      <div class="msgbar">
+        <textarea id="chatInput" class="in" rows="1" placeholder="Pregunta algo sobre tus documentos… (Enter para enviar)"></textarea>
+        <button class="btn" id="btnSend" title="Enviar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+        <button class="btn danger" id="btnStop" title="Detener respuesta" hidden>Detener</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ADMIN ================= -->
+<section id="sec-admin" class="sec" role="tabpanel" hidden>
+  <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px">
+    <div><h2 style="font-size:17px">Panel de administración</h2><p class="hint" style="margin:2px 0 0">Conexiones, configuración y publicación. La sesión vive solo en este navegador.</p></div>
+    <button class="btn soft" id="btnLogout">Cerrar sesión</button>
+  </div>
+
+  <div class="grid2">
+    <div class="statcard">
+      <div class="stat-top"><span class="sdot" id="stAppDot" data-st="ok"></span><h3>Aplicación</h3><button class="mini" id="btnTestApp"><span>Actualizar</span></button></div>
+      <div class="body" id="stAppBody"></div>
+    </div>
+    <div class="statcard">
+      <div class="stat-top"><span class="sdot" id="stB4aDot" data-st="wait"></span><h3>Back4App</h3><button class="mini" id="btnTestB4a"><span>Probar</span></button></div>
+      <div class="body" id="stB4aBody"></div>
+      <div class="acts"><button class="mini" id="btnInitSchema"><span>Inicializar esquema</span></button><button class="mini" id="btnReloadDocs"><span>Recargar documentos</span></button></div>
+      <div class="logbox" id="b4aLog" hidden></div>
+    </div>
+    <div class="statcard">
+      <div class="stat-top"><span class="sdot" id="stIaDot" data-st="wait"></span><h3>Gemini (IA)</h3><button class="mini" id="btnTestIa"><span>Probar</span></button></div>
+      <div class="body" id="stIaBody"></div>
+    </div>
+    <div class="statcard">
+      <div class="stat-top"><span class="sdot" id="stGhDot" data-st="wait"></span><h3>GitHub Pages</h3><button class="mini" id="btnTestGh"><span>Verificar</span></button></div>
+      <div class="body" id="stGhBody">Consultando…</div>
+      <div class="acts"><a class="mini" id="btnOpenRepo" href="https://github.com/argos4all/Ometecuhtli-Normatividad-IA" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg><span>Ver repositorio</span></a></div>
+    </div>
+  </div>
+
+  <div class="sectitle"><h2>Configuración</h2><p class="hint">Se guarda solo en este navegador (localStorage).</p></div>
+  <div class="card">
+    <div class="formgrid">
+      <div><label class="lbl" for="cfgSchool">Nombre de la escuela</label><input id="cfgSchool" class="in" placeholder="Mi Escuela"></div>
+      <div><label class="lbl" for="cfgModel">Modelo de IA<input id="cfgModel" class="in mono" list="modelList" placeholder="gemini-3.5-flash-lite o auto" spellcheck="false" style="margin-top:5px"></label>
+        <datalist id="modelList"><option value="auto"></option><option value="gemini-3.5-flash-lite"></option><option value="gemini-3.8-flash"></option><option value="gemini-3.5-flash"></option><option value="gemini-3.0-flash-lite"></option><option value="gemini-2.5-flash-lite"></option><option value="gemini-2.5-flash"></option><option value="gemini-2.0-flash"></option></datalist>
+      </div>
+      <div><label class="lbl" for="cfgMaxCtx">Límite de contexto (caracteres)</label><input id="cfgMaxCtx" class="in mono" type="number" min="20000" max="900000" step="10000"></div>
+      <div><label class="lbl" for="cfgTemp">Temperatura · <span id="cfgTempVal">0.4</span></label><input id="cfgTemp" type="range" min="0" max="1" step="0.1" style="width:100%;accent-color:var(--pri)"></div>
+      <div><label class="lbl" for="cfgB4aApp">Back4App · App ID</label><input id="cfgB4aApp" class="in mono" spellcheck="false"></div>
+      <div><label class="lbl" for="cfgB4aJs">Back4App · JavaScript Key</label><input id="cfgB4aJs" class="in mono" spellcheck="false"></div>
+      <div style="grid-column:1/-1"><label class="lbl" for="cfgGemini">Gemini · API Key</label><input id="cfgGemini" class="in mono" spellcheck="false"></div>
+    </div>
+    <div style="display:flex;gap:9px;margin-top:14px;flex-wrap:wrap">
+      <button class="btn" id="btnSaveCfg">Guardar configuración</button>
+      <button class="btn soft" id="btnResetCfg">Restaurar valores</button>
+      <button class="btn soft" id="btnDiag">Exportar diagnóstico</button>
+    </div>
+  </div>
+
+  <div class="sectitle"><h2>Publicación y modo embebido</h2></div>
+  <div class="card">
+    <p class="hint" style="margin:0 0 8px">Esta versión <b>no usa tokens de acceso (PAT)</b>: la publicación la realiza quien administra el repositorio <b>argos4all/Ometecuhtli-Normatividad-IA</b> reemplazando <code>index.html</code> (por Git o con "Add file" en GitHub). GitHub Pages despliega el sitio automáticamente en 1 o 2 minutos. Para insertar la app en otra página (sitio del colegio, intranet), copia este código:</p>
+    <textarea id="embedCode" class="snippet" readonly></textarea>
+    <div style="margin-top:9px"><button class="mini" id="btnCopyEmbed"><span>Copiar código</span></button></div>
+  </div>
+
+  <div class="sectitle"><h2>Notas y seguridad</h2></div>
+  <div class="card">
+    <ul class="guia">
+      <li><b>Back4App · subida de archivos:</b> si el servidor responde error 130 ("File upload by public is disabled"), la aplicación inicia sesión con un usuario de servicio y reintenta la subida de forma automática; no necesitas hacer nada.</li>
+      <li><b>Back4App · almacenamiento:</b> al eliminar un documento se borra el registro; el archivo puede permanecer en el almacenamiento de Back4App (su borrado definitivo requiere la Master Key desde el dashboard).</li>
+      <li><b>Gemini:</b> la clave viaja en el código público de GitHub Pages. Recomendación: en Google AI Studio restringe la clave al sitio <code>https://argos4all.github.io</code> y rótala si sospechas fuga; luego actualízala en Configuración sin tocar el código.</li>
+      <li><b>Gemini:</b> si ves "User location is not supported", la red actual bloquea la API de Google; abre el sitio desde tu navegador y red habituales.</li>
+      <li><b>Acceso admin:</b> la contraseña se verifica localmente con hash SHA-256; nunca se envía a ningún servidor. Tras 5 intentos fallidos, el acceso se bloquea 60 segundos.</li>
+      <li><b>Privacidad:</b> los documentos se guardan en Back4App y el historial del chat en este navegador. La aplicación no usa analítica ni rastreo.</li>
+    </ul>
+  </div>
+</section>
+
+</div></main>
+
+<footer class="app"><div class="wrap">
+  <span>EduDocs IA · Documentos escolares con IA para <b id="fSchool">Mi Escuela</b></span>
+  <span>IA: Gemini · Datos: Back4App · Frontend: GitHub Pages</span>
+</div></footer>
+
+<!-- Modal: login admin -->
+<div class="overlay" id="modalLogin" hidden>
+  <div class="modal" style="max-width:420px">
+    <div class="mhead"><h3 id="tLogin">Modo administrador</h3><button class="iconbtn" data-close title="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="mbody">
+      <p class="hint" style="margin:0 0 10px">Ingresa la contraseña de administrador para subir documentos, eliminarlos y configurar la aplicación.</p>
+      <input type="password" id="loginPwd" class="in" placeholder="Contraseña de administrador" autocomplete="current-password">
+      <p class="hint" id="loginErr" style="color:var(--bad);font-weight:600;margin:8px 0 0" hidden></p>
+      <div style="margin-top:12px"><button class="btn" id="btnLogin" style="width:100%">Entrar</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: ver documento -->
+<div class="overlay" id="modalDoc" hidden>
+  <div class="modal">
+    <div class="mhead"><h3 id="tDoc">Documento</h3><button class="iconbtn" data-close title="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="mbody">
+      <p class="hint" id="docViewMeta" style="margin:0 0 10px"></p>
+      <div class="mdout" id="docViewBody" style="max-height:420px"></div>
+    </div>
+  </div>
+</div>
+
+<div id="toasts" aria-live="polite"></div>
+<noscript><p style="padding:20px">Esta aplicación necesita JavaScript para funcionar.</p></noscript>
+<script>
+'use strict';
+/* ================================================================
+   EduDocs IA v2.0 — Documentos escolares con IA (archivo único)
+   Backend: Back4App (Parse REST) · IA: Gemini REST · Frontend: GitHub Pages
+   Publicación: sin tokens PAT (se publica reemplazando index.html en el repo)
+   ================================================================ */
+
+/* ---------- Constantes ---------- */
+const APP_VERSION = '2.0.0';
+const LS = {
+  cfg:'edudocs2_cfg', localDocs:'edudocs2_local_docs', chat:'edudocs2_chat',
+  theme:'edudocs2_theme', lock:'edudocs2_lock', admin:'edudocs2_admin_sess'
+};
+const ADMIN_HASH = '26851fcd3b5ccdfe4654d7ff65b20e630a2fab2b322454a9705732ae0040b8e7';
+const B4A_URL = 'https://parseapi.back4app.com';
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta';
+const MAX_FILE_MB = 25;
+const MAX_STORE_CHARS = 350000;
+const MAX_VISION_MB = 14;
+const MODEL_FALLBACKS = ['gemini-3.5-flash-lite','gemini-3.8-flash','gemini-3.5-flash','gemini-3.0-flash-lite','gemini-2.5-flash-lite','gemini-2.5-flash','gemini-2.0-flash'];
+const DEFAULTS = {
+  school:'Mi Escuela',
+  b4aApp:'TCm0bdqC4FKjIb63OHPI8tDbIXlGHlzDL3Audz2K',
+  b4aJs:'oBQP9UXQ45NGwdnJE5AbZIvBLWBILyEc4dHQWRjB',
+  geminiKey:'AQ.Ab8RN6JoWWCB6QeMvnyhn6Ei-LMeo1PS2yhNXFq70P18j0Osdw',
+  model:'gemini-3.5-flash-lite',
+  temp:0.4, maxCtx:180000,
+  ghUser:'argos4all', ghRepo:'Ometecuhtli-Normatividad-IA', ghBranch:'main',
+  b4aService:{ user:'docaula_service', pass:'Dca!Serv-2026#x' }
+};
+const EMBED = (()=>{ try{ return new URLSearchParams(location.search).has('embed'); }catch(e){ return false; } })();
+
+/* ---------- Estado ---------- */
+let cfg = { ...DEFAULTS };
+const state = {
+  admin:false, docs:[], localDocs:[], visionMem:{}, chat:[],
+  filter:'', ctxIds:null, abort:null, busy:false,
+  status:{ pagina:'wait', b4a:'wait', b4aMsg:'Verificando…', b4aSub:'', ia:'wait', iaMsg:'Verificando…', iaSub:'' },
+  docsTotal:null, b4aTok:null, iaModels:null, iaMs:null, runtimeModel:null,
+  gh:'wait', ghBody:'Consultando…', lastAna:null
+};
+
+/* ---------- Utilidades ---------- */
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+function esc(s){ return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function fmtBytes(n){ if(n==null) return '—'; if(n<1024) return n+' B'; if(n<1048576) return (n/1024).toFixed(1)+' KB'; return (n/1048576).toFixed(2)+' MB'; }
+function fmtFecha(iso){ try{ return new Date(iso).toLocaleString('es-MX',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); }catch(e){ return ''; } }
+function resumirErr(e){ return String((e && e.message) || e).slice(0,90); }
+async function sha256Hex(txt){
+  if(!(window.crypto && crypto.subtle)) return 'nosubtle-' + txt;
+  const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt));
+  return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+function toast(msg, tipo){
+  const d = document.createElement('div');
+  d.className = 'toast ' + (tipo||'');
+  d.textContent = msg;
+  $('#toasts').appendChild(d);
+  setTimeout(()=>{ d.style.opacity='0'; setTimeout(()=>d.remove(), 320); }, 4600);
+}
+async function copyText(t){
+  try{ await navigator.clipboard.writeText(t); toast('Copiado al portapapeles','ok'); }
+  catch(e){
+    const ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); toast('Copiado','ok'); }catch(_){ toast('No se pudo copiar','bad'); }
+    ta.remove();
+  }
+}
+function maskKey(k){ k=(k||'').trim(); return k? k.slice(0,7)+'…'+k.slice(-4) : '(vacía)'; }
+function localStorageUsed(){ let t=0; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); t += ((localStorage.getItem(k)||'').length + k.length)*2; } return t; }
+
+/* ---------- Configuración ---------- */
+function loadCfg(){ let c={}; try{ c=JSON.parse(localStorage.getItem(LS.cfg)||'{}')||{}; }catch(e){} cfg={ ...DEFAULTS, ...c }; if(!cfg.b4aService) cfg.b4aService={...DEFAULTS.b4aService}; }
+function saveCfg(){ try{ localStorage.setItem(LS.cfg, JSON.stringify(cfg)); }catch(e){ toast('No se pudo guardar la configuración local','warn'); } }
+function saveCfgField(k,v){ cfg[k]=v; saveCfg(); }
+
+/* ---------- Tema ---------- */
+function applyTheme(t){
+  document.documentElement.dataset.theme = t;
+  try{ localStorage.setItem(LS.theme, t); }catch(e){}
+  const sun=$('#icoSun'), moon=$('#icoMoon');
+  if(sun) sun.hidden = (t==='dark');
+  if(moon) moon.hidden = (t!=='dark');
+}
+
+/* ---------- Pestañas ---------- */
+function showTab(name){
+  $$('.tab').forEach(b=>b.setAttribute('aria-selected', String(b.dataset.tab===name)));
+  ['inicio','docs','analizar','chat','admin'].forEach(t=>{ const s=$('#sec-'+t); if(s) s.hidden = (t!==name); });
+  if(name==='inicio'){ renderRecent(); }
+  if(name==='analizar') refreshSelDoc();
+  if(name==='admin') fillAdmin();
+  if(name==='chat'){ renderCtx(); const ta=$('#chatInput'); if(ta) ta.focus(); }
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+/* ---------- Cliente Back4App (REST) ---------- */
+async function b4aFetch(path, opts={}){
+  const headers = { 'X-Parse-Application-Id': cfg.b4aApp, 'X-Parse-JavaScript-Key': cfg.b4aJs };
+  if(opts.body) headers['Content-Type'] = opts.ct || 'application/json';
+  if(opts.tok) headers['X-Parse-Session-Token'] = opts.tok;
+  let res;
+  try{ res = await fetch(B4A_URL + path, { method: opts.method||'GET', headers, body: opts.body }); }
+  catch(e){ const er=new Error('Sin conexión con Back4App'); er.network=true; throw er; }
+  let j=null; try{ j = await res.json(); }catch(e){}
+  if(!res.ok){ const er=new Error((j && j.error) || ('HTTP '+res.status)); er.code=j&&j.code; er.status=res.status; throw er; }
+  return j || {};
+}
+/* Sesión automática: Back4App puede bloquear la subida pública de archivos (error 130).
+   La app inicia sesión con el usuario de servicio; si no existe lo crea;
+   como último recurso crea uno temporal y lo recuerda en este navegador. */
+async function b4aToken(force){
+  if(state.b4aTok && !force) return state.b4aTok;
+  const s = cfg.b4aService;
+  if(s && s.user && s.pass){
+    try{
+      const j = await b4aFetch('/login', { method:'POST', body: JSON.stringify({username:s.user, password:s.pass}) });
+      state.b4aTok = j.sessionToken; return state.b4aTok;
+    }catch(e){
+      if(e.code===101){
+        try{
+          const su = await b4aFetch('/users', { method:'POST', body: JSON.stringify({username:s.user, password:s.pass}) });
+          state.b4aTok = su.sessionToken; return state.b4aTok;
+        }catch(e2){ /* continúa con el último recurso */ }
+      }
+    }
+  }
+  const user = 'edudocs_' + Math.random().toString(36).slice(2,8);
+  const pass = 'Ed-' + Math.random().toString(36).slice(2,12) + '-' + Date.now().toString(36);
+  const j = await b4aFetch('/users', { method:'POST', body: JSON.stringify({username:user, password:pass}) });
+  saveCfgField('b4aService', { user, pass });
+  state.b4aTok = j.sessionToken;
+  toast('Back4App: sesión automática creada para subir archivos','ok');
+  return state.b4aTok;
+}
+async function b4aCreateDoc(doc, file, tok){
+  const body = { nombre:doc.nombre, tipo:doc.tipo||'', tamano:doc.tamano||0, texto:(doc.texto||'').slice(0,MAX_STORE_CHARS), subidoPor:'admin' };
+  let url='';
+  if(file){
+    const safe = (doc.nombre.replace(/[^\w.\-]+/g,'_').slice(-120)) || 'documento';
+    const fh = { 'X-Parse-Application-Id': cfg.b4aApp, 'X-Parse-JavaScript-Key': cfg.b4aJs, 'Content-Type': doc.tipo || 'application/octet-stream' };
+    if(tok) fh['X-Parse-Session-Token'] = tok;
+    const fr = await fetch(B4A_URL + '/files/' + encodeURIComponent(safe), { method:'POST', headers: fh, body: file });
+    const fj = await fr.json().catch(()=>({}));
+    if(!fr.ok){ const er=new Error(fj.error || ('HTTP '+fr.status)); er.code=fj.code; er.status=fr.status; throw er; }
+    if(fj.name && fj.url){ body.archivo = { __type:'File', name:fj.name, url:fj.url }; url = fj.url; }
+  }
+  /* Creación del objeto: primero pública (la clase lo permite); si el servidor
+     la restringe, se reintenta con la sesión. */
+  let oj=null, err1=null;
+  try{ oj = await b4aFetch('/classes/Documento', { method:'POST', body: JSON.stringify(body) }); }
+  catch(e){ err1=e; }
+  if(!oj && tok){
+    try{ oj = await b4aFetch('/classes/Documento', { method:'POST', body: JSON.stringify(body), tok }); err1=null; }
+    catch(e2){ err1 = err1 || e2; }
+  }
+  if(!oj && err1 && err1.code===111){
+    await new Promise(r=>setTimeout(r, 1500));
+    try{ oj = await b4aFetch('/classes/Documento', { method:'POST', body: JSON.stringify(body), ...(tok?{tok}:{}) }); err1=null; }catch(e3){ /* se lanza err1 */ }
+  }
+  if(!oj) throw (err1 || new Error('No se pudo guardar el documento'));
+  return { id: oj.objectId, url: url };
+}
+async function b4aDeleteDoc(id, tok){
+  try{ await b4aFetch('/classes/Documento/' + encodeURIComponent(id), { method:'DELETE' }); }
+  catch(e){ if(!tok) throw e; await b4aFetch('/classes/Documento/' + encodeURIComponent(id), { method:'DELETE', tok }); }
+}
+
+/* ---------- Estado global (píldoras + tarjetas + panel) ---------- */
+function updateStatusUI(){
+  const st = state.status;
+  const setD=(sel,val)=>{ const el=$(sel); if(el) el.dataset.st=val; };
+  const setT=(sel,val)=>{ const el=$(sel); if(el) el.textContent=val; };
+  const setH=(sel,val)=>{ const el=$(sel); if(el) el.innerHTML=val; };
+  const pillP=$('#pillPagina'), pillB=$('#pillB4a'), pillI=$('#pillIa');
+  if(pillP) pillP.dataset.st = st.pagina;
+  if(pillB) pillB.dataset.st = st.b4a;
+  if(pillI) pillI.dataset.st = st.ia;
+  setD('#sdPagina', st.pagina); setT('#bPaginaVal', st.pagina==='ok' ? 'En línea' : (st.pagina==='bad' ? 'Sin conexión' : 'Cargando…'));
+  setT('#bPaginaSub', st.pagina==='ok' ? 'aplicación activa en este navegador' : 'revisa tu conexión a internet');
+  setD('#sdB4a', st.b4a); setT('#bB4aVal', st.b4aMsg); setT('#bB4aSub', st.b4aSub);
+  setD('#sdIa', st.ia);  setT('#bIaVal', st.iaMsg);  setT('#bIaSub', st.iaSub);
+  setD('#stAppDot','ok'); setH('#stAppBody', appInfoHtml());
+  setD('#stB4aDot', st.b4a); setH('#stB4aBody', b4aInfoHtml());
+  setD('#stIaDot', st.ia);   setH('#stIaBody', iaInfoHtml());
+  setD('#stGhDot', state.gh); setH('#stGhBody', state.ghBody);
+}
+function appInfoHtml(){
+  return [
+    '<b>Versión</b> ' + APP_VERSION + ' · <b>Red</b> ' + (navigator.onLine ? 'en línea' : 'sin conexión'),
+    '<b>Documentos</b> ' + state.docs.length + ' en la nube · ' + state.localDocs.length + ' locales',
+    '<b>Chat</b> ' + state.chat.length + ' mensajes guardados · <b>localStorage</b> ≈ ' + fmtBytes(localStorageUsed()),
+    '<b>Sesión admin</b> ' + (state.admin ? 'activa' : 'inactiva'),
+    '<b>Navegador</b> ' + esc(navigator.userAgent.slice(0,80)) + '…'
+  ].join('<br>');
+}
+function b4aInfoHtml(){
+  const st = state.status;
+  return [
+    '<b>Estado</b> ' + esc(st.b4aMsg) + (st.b4aSub ? ' · ' + esc(st.b4aSub) : ''),
+    '<b>App ID</b> ' + esc(maskKey(cfg.b4aApp)) + ' · <b>JS Key</b> ' + esc(maskKey(cfg.b4aJs)),
+    '<b>Servidor</b> parseapi.back4app.com',
+    '<b>Usuario de servicio</b> ' + (cfg.b4aService && cfg.b4aService.user ? esc(cfg.b4aService.user) : 'se creará automáticamente al subir archivos'),
+    '<b>Documentos en la nube</b> ' + (state.docsTotal==null ? '—' : state.docsTotal)
+  ].join('<br>');
+}
+function iaInfoHtml(){
+  const st = state.status;
+  return [
+    '<b>Estado</b> ' + esc(st.iaMsg) + (st.iaSub ? ' · ' + esc(st.iaSub) : ''),
+    '<b>API Key</b> ' + esc(maskKey(cfg.geminiKey)),
+    '<b>Modelo configurado</b> ' + esc(cfg.model||'auto') + (state.runtimeModel && state.runtimeModel!==cfg.model ? ' (en uso: ' + esc(state.runtimeModel) + ')' : ''),
+    '<b>Modelos disponibles</b> ' + (state.iaModels ? state.iaModels.length : '—'),
+    '<b>Temperatura</b> ' + cfg.temp
+  ].join('<br>');
+}
+
+/* ---------- Verificaciones ---------- */
+function setPageStatus(){ state.status.pagina = navigator.onLine ? 'ok' : 'bad'; updateStatusUI(); }
+async function checkB4a(){
+  state.status.b4a='wait'; state.status.b4aMsg='Verificando…'; state.status.b4aSub='';
+  updateStatusUI();
+  try{
+    const t0 = Date.now();
+    const j = await b4aFetch('/classes/Documento?limit=1&count=1');
+    const ms = Date.now()-t0;
+    state.docsTotal = (typeof j.count==='number') ? j.count : null;
+    state.status.b4a='ok'; state.status.b4aMsg='Conectado ('+ms+' ms)';
+    state.status.b4aSub=(state.docsTotal==null?'':'documentos: '+state.docsTotal);
+    updateStatusUI();
+    await loadDocs();
+    if(state.localDocs.length) syncPendientes().catch(()=>{});
+  }catch(e){
+    state.status.b4a='bad'; state.status.b4aMsg='Sin conexión'; state.status.b4aSub=resumirErr(e);
+    updateStatusUI();
+    renderDocs();
+  }
+}
+async function loadDocs(){
+  const j = await b4aFetch('/classes/Documento?limit=200&order=-createdAt');
+  state.docs = (j.results||[]).map(r=>({
+    id:r.objectId, nombre:r.nombre||'documento', tipo:r.tipo||'', tamano:r.tamano||0,
+    texto:r.texto||'', url:(r.archivo && r.archivo.url) || '', fuente:'nube', creado:r.createdAt
+  }));
+  renderDocs();
+}
+async function ghCheck(){
+  state.gh='wait'; state.ghBody='Consultando GitHub…'; updateStatusUI();
+  try{
+    const u=(cfg.ghUser||'').trim(), r=(cfg.ghRepo||'').trim();
+    if(!u || !r) throw new Error('Configura usuario y repositorio en el código (DEFAULTS).');
+    const res = await fetch('https://api.github.com/repos/'+encodeURIComponent(u)+'/'+encodeURIComponent(r), { cache:'no-store' });
+    const j = await res.json().catch(()=>null);
+    if(!res.ok) throw new Error((j && j.message) || ('HTTP '+res.status));
+    const sitio = 'https://'+u+'.github.io/'+r+'/';
+    let sitioSt='sin verificar';
+    try{ const p = await fetch(sitio+'?v='+Date.now(), { cache:'no-store' }); sitioSt = p.ok ? 'en línea' : ('HTTP '+p.status); }
+    catch(e){ sitioSt='sin conexión desde este navegador'; }
+    state.gh = (j.has_pages && sitioSt==='en línea') ? 'ok' : (j.has_pages ? 'warn' : 'warn');
+    state.ghBody = '<b>Repositorio</b> <a href="https://github.com/'+esc(u)+'/'+esc(r)+'" target="_blank" rel="noopener noreferrer">'+esc(j.full_name)+'</a>'+(j.private?' (privado)':' (público)')
+      +'<br><b>Rama</b> '+esc(j.default_branch)+' · <b>Último envío</b> '+fmtFecha(j.pushed_at)
+      +'<br><b>GitHub Pages</b> '+(j.has_pages?'activa':'sin activar')+' · <b>Sitio</b> '+esc(sitioSt)
+      +'<br><b>Publicación</b> sin tokens PAT: reemplaza index.html en el repositorio';
+  }catch(e){
+    state.gh='bad';
+    const m = resumirErr(e);
+    state.ghBody='<b>Error</b> ' + esc(/rate limit/i.test(m)
+      ? 'No se pudo verificar ahora (límite de la API pública de GitHub). Intenta de nuevo en unos minutos.'
+      : m);
+  }
+  updateStatusUI();
+}
+</script>
+<script>
+/* ================================================================
+   Parte 2 · Documentos, subida, admin, Gemini, chat y análisis
+   ================================================================ */
+
+/* ---------- Cola local y sincronización ---------- */
+function loadLocalDocs(){ try{ state.localDocs=JSON.parse(localStorage.getItem(LS.localDocs)||'[]')||[]; }catch(e){ state.localDocs=[]; } }
+function persistLocalDocs(){ try{ localStorage.setItem(LS.localDocs, JSON.stringify(state.localDocs)); }catch(e){ toast('No se pudo guardar la cola local (espacio lleno)','warn'); } }
+function findDoc(id){ return state.docs.find(d=>d.id===id) || state.localDocs.find(d=>d.id===id); }
+function tipoPorExt(ext){
+  const m={pdf:'application/pdf',docx:'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',webp:'image/webp',gif:'image/gif',
+    txt:'text/plain',md:'text/markdown',csv:'text/csv',json:'application/json'};
+  return m[ext] || 'application/octet-stream';
+}
+async function syncPendientes(){
+  if(state.status.b4a!=='ok' || !state.localDocs.length) return;
+  let okN=0, fallos=0;
+  for(const d of [...state.localDocs]){
+    try{
+      let tok=null;
+      try{ tok=await b4aToken(); }catch(e){ /* intento público */ }
+      const r = await b4aCreateDoc({nombre:d.nombre, tipo:d.tipo, tamano:d.tamano, texto:d.texto}, null, tok);
+      const nd = { ...d, id:r.id, url:r.url, fuente:'nube', pendiente:false };
+      state.docs.unshift(nd);
+      state.localDocs = state.localDocs.filter(x=>x.id!==d.id);
+      okN++;
+    }catch(e){ fallos++; break; }
+  }
+  persistLocalDocs(); renderDocs();
+  if(okN) toast('Sincronizados '+okN+' documento(s) con la nube','ok');
+  if(fallos) toast('No se pudieron sincronizar algunos documentos','warn');
+}
+
+/* ---------- Render de documentos ---------- */
+function docItem(d){
+  const ext = ((d.nombre.split('.').pop()||'').toUpperCase()).slice(0,4) || 'DOC';
+  const badge = d.fuente==='nube'
+    ? '<span class="dbadge ok">En la nube</span>'
+    : '<span class="dbadge warn">'+(d.pendiente?'Pendiente':'Local')+'</span>';
+  const acts = [
+    '<button class="mini" data-act="ver"><span>Ver</span></button>',
+    '<button class="mini" data-act="analizar"><span>Analizar</span></button>',
+    '<button class="mini" data-act="preguntar"><span>Preguntar</span></button>',
+    d.url ? '<a class="mini" href="'+esc(d.url)+'" target="_blank" rel="noopener noreferrer" title="Descargar archivo"><span>Descargar</span></a>' : '',
+    state.admin ? '<button class="mini danger" data-act="borrar"><span>Eliminar</span></button>' : ''
+  ].join('');
+  return '<div class="ditem" data-id="'+esc(d.id)+'">'
+    + '<span class="dicon">'+esc(ext)+'</span>'
+    + '<div class="dmain"><div class="dname">'+esc(d.nombre)+'</div>'
+    + '<div class="dmeta">'+badge+'<span>'+fmtBytes(d.tamano)+'</span><span>'+fmtFecha(d.creado)+'</span>'
+    + (d.texto ? '<span>texto listo</span>' : '<span>sin texto</span>') + '</div></div>'
+    + '<div class="dact">'+acts+'</div></div>';
+}
+function renderDocs(){
+  const f = state.filter.trim().toLowerCase();
+  const match = d => !f || (d.nombre||'').toLowerCase().includes(f);
+  const nube = state.docs.filter(match);
+  const local = state.localDocs.filter(match);
+  $('#listaNube').innerHTML = nube.map(docItem).join('');
+  $('#listaLocal').innerHTML = local.map(docItem).join('');
+  $('#hLocal').hidden = !local.length;
+  $('#emptyDocs').hidden = !!(nube.length || local.length);
+  $('#docCount').textContent = nube.length + local.length;
+  $('#btnSync').hidden = !(state.localDocs.length && state.status.b4a==='ok');
+  refreshSelDoc(); renderCtx();
+}
+function renderRecent(){
+  const todos = [...state.docs, ...state.localDocs].slice(0,4);
+  $('#recentList').innerHTML = todos.map(docItem).join('');
+  $('#recentEmpty').hidden = todos.length > 0;
+}
+async function docAction(act, id){
+  const d = findDoc(id);
+  if(!d) return;
+  if(act==='ver'){
+    $('#tDoc').textContent = d.nombre;
+    $('#docViewMeta').textContent = (d.tipo||tipoPorExt((d.nombre.split('.').pop()||'').toLowerCase())) + ' · ' + fmtBytes(d.tamano) + ' · ' + fmtFecha(d.creado) + ' · ' + (d.fuente==='nube'?'en la nube':'local');
+    const t = d.texto || '';
+    $('#docViewBody').innerHTML = t
+      ? mdRender('# Contenido extraído\n\n' + t.slice(0, 12000) + (t.length>12000 ? '\n\n*(…texto truncado para vista previa; la IA analiza hasta '+fmtBytes((d.texto||'').length)+' caracteres…)*' : ''))
+      : mdRender('*(Este documento no tiene texto extraído: es una imagen o un PDF escaneado. La IA lo leerá directamente como imagen o PDF al analizarlo o preguntarle.)*');
+    $('#modalDoc').hidden = false;
+  }
+  else if(act==='analizar'){ showTab('analizar'); $('#selDoc').value = d.id; }
+  else if(act==='preguntar'){ showTab('chat'); state.ctxIds = new Set([d.id]); renderCtx(); }
+  else if(act==='borrar'){
+    if(!state.admin){ toast('Requiere modo administrador','warn'); return; }
+    if(!confirm('¿Eliminar "'+d.nombre+'"?\n(El registro se borrará de Back4App; el archivo puede permanecer en el almacenamiento de Back4App)')) return;
+    try{
+      if(d.fuente==='nube'){ let tok=null; try{ tok=await b4aToken(); }catch(e){} await b4aDeleteDoc(d.id, tok); }
+      state.docs = state.docs.filter(x=>x.id!==d.id);
+      state.localDocs = state.localDocs.filter(x=>x.id!==d.id);
+      delete state.visionMem[d.id];
+      persistLocalDocs(); renderDocs(); renderRecent(); checkB4a();
+      toast('Documento eliminado','ok');
+    }catch(e){ toast('No se pudo eliminar: '+resumirErr(e),'bad'); }
+  }
+}
+
+/* ---------- Modo administrador ---------- */
+function applyAdminUI(){
+  const tabA = $('.tab[data-tab="admin"]');
+  if(tabA) tabA.hidden = !state.admin;
+  $('#btnAdmin').classList.toggle('on', state.admin);
+  $('#dzLock').hidden = state.admin;
+  renderDocs(); renderRecent();
+  if(state.admin) fillAdmin();
+}
+function openLogin(){
+  $('#modalLogin').hidden = false;
+  $('#loginErr').hidden = true;
+  $('#loginPwd').value = '';
+  setTimeout(()=>$('#loginPwd').focus(), 40);
+}
+async function loginAdmin(){
+  const v = $('#loginPwd').value;
+  if(!v) return;
+  const lock = (()=>{ try{ return JSON.parse(localStorage.getItem(LS.lock)||'{}')||{}; }catch(e){ return {}; } })();
+  if(lock.until && Date.now() < lock.until){
+    $('#loginErr').textContent = 'Demasiados intentos. Espera ' + Math.ceil((lock.until-Date.now())/1000) + ' segundos.';
+    $('#loginErr').hidden = false; return;
+  }
+  const btn=$('#btnLogin'); btn.disabled=true;
+  const h = await sha256Hex(v);
+  btn.disabled=false;
+  if(h === ADMIN_HASH){
+    state.admin = true;
+    try{ sessionStorage.setItem(LS.admin,'1'); }catch(e){}
+    localStorage.removeItem(LS.lock);
+    $('#modalLogin').hidden = true;
+    applyAdminUI();
+    toast('Modo administrador activado','ok');
+    showTab('admin');
+  } else {
+    const n = (lock.n||0) + 1;
+    if(n >= 5) localStorage.setItem(LS.lock, JSON.stringify({n:0, until: Date.now()+60000}));
+    else localStorage.setItem(LS.lock, JSON.stringify({n}));
+    $('#loginErr').textContent = 'Contraseña incorrecta' + (n>=5 ? ' · acceso bloqueado 60 segundos' : ' ('+n+'/5)');
+    $('#loginErr').hidden = false;
+  }
+}
+function logout(){
+  state.admin = false;
+  try{ sessionStorage.removeItem(LS.admin); }catch(e){}
+  applyAdminUI();
+  toast('Sesión de administrador cerrada','ok');
+  showTab('inicio');
+}
+
+/* ---------- Carga de bibliotecas con respaldo (CDN) ---------- */
+function loadScript(urls){
+  return new Promise((res, rej)=>{
+    const intento = i=>{
+      if(i >= urls.length){ rej(new Error('No se pudo cargar la biblioteca necesaria (revisa tu conexión)')); return; }
+      const s = document.createElement('script');
+      s.src = urls[i];
+      s.onload = ()=>res();
+      s.onerror = ()=>intento(i+1);
+      document.head.appendChild(s);
+    };
+    intento(0);
+  });
+}
+const PDFJS_SOURCES = [
+  ['https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js','https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'],
+  ['https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js','https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js']
+];
+const MAMMOTH_SOURCES = [
+  ['https://cdn.jsdelivr.net/npm/mammoth@1.9.0/mammoth.browser.min.js'],
+  ['https://unpkg.com/mammoth@1.8.0/mammoth.browser.min.js'],
+  ['https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js']
+];
+async function ensurePdfJs(){
+  if(window.pdfjsLib) return;
+  for(const [lib, worker] of PDFJS_SOURCES){
+    try{ await loadScript([lib]); if(window.pdfjsLib){ window.pdfjsLib.GlobalWorkerOptions.workerSrc = worker; return; } }
+    catch(e){ /* siguiente fuente */ }
+  }
+  throw new Error('No se pudo cargar el lector de PDF. Verifica tu conexión e inténtalo de nuevo.');
+}
+async function ensureMammoth(){
+  if(window.mammoth) return;
+  for(const [lib] of MAMMOTH_SOURCES){
+    try{ await loadScript([lib]); if(window.mammoth) return; }catch(e){}
+  }
+  throw new Error('No se pudo cargar el lector de DOCX. Verifica tu conexión e inténtalo de nuevo.');
+}
+
+/* ---------- Extracción de texto ---------- */
+function abToB64(buf){
+  const u = new Uint8Array(buf);
+  let s = '';
+  const CH = 0x8000;
+  for(let i=0; i<u.length; i+=CH) s += String.fromCharCode.apply(null, u.subarray(i, i+CH));
+  return btoa(s);
+}
+async function pdfTexto(buf){
+  await ensurePdfJs();
+  const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise;
+  const maxPag = Math.min(pdf.numPages, 400);
+  let out = '';
+  for(let i=1; i<=maxPag; i++){
+    const page = await pdf.getPage(i);
+    const tc = await page.getTextContent();
+    const piezas = [];
+    for(const it of tc.items){
+      if(typeof it.str !== 'string') continue;
+      if(it.hasEOL) piezas.push('\n');
+      piezas.push(it.str);
+    }
+    out += piezas.join('') + '\n\n';
+    if(out.length > MAX_STORE_CHARS) break;
+  }
+  return out;
+}
+async function extractText(file, ext){
+  const esTexto = ['txt','md','csv','json','log','xml','srt'].includes(ext) || /^text\//.test(file.type||'') || file.type==='application/json';
+  if(esTexto) return { texto: await file.text(), vision: null };
+  if(ext === 'pdf'){
+    const buf = await file.arrayBuffer();
+    let texto = '';
+    try{ texto = await pdfTexto(buf); }
+    catch(e){ texto = ''; }
+    if(texto.trim().length >= 80 && buf.byteLength <= MAX_FILE_MB*1048576){
+      return { texto, vision: null };
+    }
+    if(buf.byteLength <= MAX_VISION_MB*1048576){
+      return { texto: texto || '', vision: { mime:'application/pdf', data: abToB64(buf) } };
+    }
+    return { texto: texto || '', vision: null };
+  }
+  if(ext === 'docx'){
+    await ensureMammoth();
+    const r = await window.mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() });
+    return { texto: (r && r.value) || '', vision: null };
+  }
+  const esImg = ['png','jpg','jpeg','webp','gif'].includes(ext) || /^image\//.test(file.type||'');
+  if(esImg){
+    const buf = await file.arrayBuffer();
+    if(buf.byteLength > MAX_VISION_MB*1048576) return { texto:'(imagen sin texto)', vision:null };
+    return { texto:'(imagen: la IA la leerá directamente)', vision:{ mime: file.type || ('image/'+ext), data: abToB64(buf) } };
+  }
+  if(['doc','xls','xlsx','ppt','pptx','pages','odt','ods'].includes(ext))
+    throw new Error('Formato "'+ext+'" no soportado. Conviértelo a PDF, DOCX, TXT o CSV.');
+  throw new Error('Formato no soportado: .'+ext);
+}
+
+/* ---------- Procesado y subida de archivos ---------- */
+function rowSet(row, st, txt){
+  const sp = row.querySelector('.st');
+  if(sp){ sp.className = 'st st-'+st; sp.textContent = txt; }
+}
+async function procesarFiles(files){
+  if(!state.admin){ toast('La subida requiere modo administrador','warn'); openLogin(); return; }
+  if(!files || !files.length) return;
+  const log = $('#uplog'); log.hidden = false;
+  for(const f of files){
+    const row = document.createElement('div');
+    row.className = 'uprow';
+    row.innerHTML = '<b>'+esc(f.name)+'</b><span class="st st-wait">En cola…</span>';
+    log.appendChild(row);
+    await procesarArchivo(f, row);
+  }
+  persistLocalDocs(); renderDocs(); renderRecent(); checkB4a();
+}
+async function procesarArchivo(file, row){
+  let doc=null, ex=null;
+  try{
+    rowSet(row,'wait','Leyendo y extrayendo texto…');
+    if(file.size > MAX_FILE_MB*1048576) throw new Error('El archivo supera '+MAX_FILE_MB+' MB.');
+    const ext = (file.name.split('.').pop()||'').toLowerCase();
+    ex = await extractText(file, ext);
+    const idPrevio = 'loc_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+    doc = {
+      id:idPrevio, nombre:file.name, tipo:file.type || tipoPorExt(ext), tamano:file.size,
+      texto:(ex.texto||'').slice(0, MAX_STORE_CHARS), fuente:'local', pendiente:true,
+      creado:new Date().toISOString()
+    };
+    if(ex.vision) state.visionMem[idPrevio] = ex.vision;
+    rowSet(row,'wait','Guardando en Back4App…');
+    let tok=null;
+    try{ tok = await b4aToken(); }catch(e){ /* intento público */ }
+    try{
+      const r = await b4aCreateDoc(doc, file, tok);
+      doc.id=r.id; doc.url=r.url; doc.fuente='nube'; doc.pendiente=false;
+      rowSet(row,'ok','Guardado en Back4App');
+    }catch(e1){
+      if(e1.code===130 || /public is disabled/i.test(e1.message||'')){
+        rowSet(row,'wait','Creando sesión automática en Back4App…');
+        const tok2 = await b4aToken(true);
+        const r = await b4aCreateDoc(doc, file, tok2);
+        doc.id=r.id; doc.url=r.url; doc.fuente='nube'; doc.pendiente=false;
+        rowSet(row,'ok','Guardado en Back4App (con sesión automática)');
+      } else { throw e1; }
+    }
+    if(doc.fuente==='nube'){
+      if(ex.vision){ delete state.visionMem[idPrevio]; state.visionMem[doc.id]=ex.vision; }
+      state.docs.unshift(doc);
+      toast('Documento subido: '+file.name,'ok');
+    }
+  }catch(e1){
+    if(doc){ state.localDocs.unshift(doc); }
+    rowSet(row,'bad','Sin conexión con la nube · guardado local (pendiente)');
+    toast('No se pudo subir "'+file.name+'": '+resumirErr(e1)+' — quedó guardado en este dispositivo.','warn');
+  }
+}
+
+/* ---------- Gemini ---------- */
+function apiKey(){ return (cfg.geminiKey||'').trim(); }
+function gemHeaders(){ return { 'Content-Type':'application/json', 'x-goog-api-key': apiKey() }; }
+function gErr(res, j){
+  const msg = (j && j.error && j.error.message) || ('HTTP '+res.status);
+  const e = new Error(msg);
+  e.status = res.status;
+  e.retryModel = res.status===404 || res.status===410 || /not found|unsupported|no longer available/i.test(msg);
+  const sug = msg.match(/models\/([A-Za-z0-9._\-]+)/);
+  if(sug) e.suggested = sug[1];
+  return e;
+}
+function gBody(contents, sys){
+  const b = { contents, generationConfig:{ temperature: Number(cfg.temp)||0.4, maxOutputTokens: 4096 } };
+  if(sys) b.systemInstruction = { parts:[{ text: sys }] };
+  return b;
+}
+async function geminiStream(model, contents, sys, onDelta, signal){
+  const res = await fetch(GEMINI_URL+'/models/'+encodeURIComponent(model)+':streamGenerateContent?alt=sse',
+    { method:'POST', headers: gemHeaders(), signal, body: JSON.stringify(gBody(contents, sys)) });
+  if(!res.ok){ const j = await res.json().catch(()=>null); throw gErr(res, j); }
+  const reader = res.body.getReader();
+  const dec = new TextDecoder();
+  let buf='', full='';
+  for(;;){
+    const r = await reader.read();
+    if(r.done) break;
+    buf += dec.decode(r.value, { stream:true });
+    let ix;
+    while((ix = buf.indexOf('\n')) >= 0){
+      const line = buf.slice(0, ix).trim();
+      buf = buf.slice(ix+1);
+      if(!line.startsWith('data:')) continue;
+      const p = line.slice(5).trim();
+      if(!p) continue;
+      try{
+        const j = JSON.parse(p);
+        const t = (((j.candidates||[])[0]||{}).content||{}).parts || [];
+        const frag = t.map(x=>x.text||'').join('');
+        if(frag){ full += frag; if(onDelta) onDelta(frag); }
+      }catch(e){ /* fragmento incompleto */ }
+    }
+  }
+  if(!full.trim()) throw new Error('La IA devolvió una respuesta vacía');
+  return full;
+}
+async function geminiOnce(model, contents, sys, signal){
+  const res = await fetch(GEMINI_URL+'/models/'+encodeURIComponent(model)+':generateContent',
+    { method:'POST', headers: gemHeaders(), signal, body: JSON.stringify(gBody(contents, sys)) });
+  const j = await res.json().catch(()=>null);
+  if(!res.ok) throw gErr(res, j);
+  const parts = (((j.candidates||[])[0]||{}).content||{}).parts || [];
+  const t = parts.map(x=>x.text||'').join('');
+  if(!t.trim()) throw new Error('La IA devolvió una respuesta vacía');
+  return t;
+}
+function resolveRuntimeModel(){
+  if(state.runtimeModel) return state.runtimeModel;
+  if(cfg.model && cfg.model!=='auto' && (!state.iaModels || state.iaModels.includes(cfg.model))) return cfg.model;
+  if(state.iaModels){ for(const m of MODEL_FALLBACKS){ if(state.iaModels.includes(m)) return m; } }
+  return (cfg.model && cfg.model!=='auto') ? cfg.model : MODEL_FALLBACKS[0];
+}
+async function geminiCall(contents, sys, opts={}){
+  const { stream=false, onDelta=null, signal=null } = opts;
+  if(!apiKey()) throw new Error('Falta la API Key de Gemini. Configúrala en el panel de administración.');
+  const cola = [];
+  const enCola = new Set();
+  const push = m=>{ if(m && !enCola.has(m)){ enCola.add(m); cola.push(m); } };
+  push(resolveRuntimeModel());
+  MODEL_FALLBACKS.forEach(push);
+  let last=null, probados=0;
+  while(cola.length && probados < 8){
+    const m = cola.shift();
+    if(state.iaModels && !state.iaModels.includes(m)) continue;
+    probados++;
+    try{
+      const r = stream
+        ? await geminiStream(m, contents, sys, onDelta, signal)
+        : await geminiOnce(m, contents, sys, signal);
+      state.runtimeModel = m;
+      state.status.ia='ok'; state.status.iaMsg='En línea'; state.status.iaSub='modelo: '+m;
+      updateStatusUI();
+      return r;
+    }catch(e){
+      last = e;
+      if(e.name==='AbortError') throw e;
+      if(e.suggested) push(e.suggested);
+      if(e.retryModel) continue;
+      throw e;
+    }
+  }
+  throw last || new Error('No hay un modelo de IA disponible');
+}
+async function pingGemini(){
+  state.status.ia='wait'; state.status.iaMsg='Verificando…'; state.status.iaSub='';
+  updateStatusUI();
+  if(!apiKey()){
+    state.status.ia='bad'; state.status.iaMsg='Falta API Key'; state.status.iaSub='configúrala en el panel Admin';
+    updateStatusUI(); return;
+  }
+  try{
+    const t0 = Date.now();
+    const res = await fetch(GEMINI_URL+'/models?pageSize=200', { headers:{ 'x-goog-api-key': apiKey() } });
+    const j = await res.json().catch(()=>null);
+    if(!res.ok) throw gErr(res, j);
+    state.iaModels = ((j.models||[]))
+      .filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent'))
+      .map(m=>m.name.replace(/^models\//,''));
+    state.iaMs = Date.now()-t0;
+    const rt = resolveRuntimeModel();
+    state.status.ia='ok';
+    state.status.iaMsg='En línea ('+state.iaMs+' ms)';
+    state.status.iaSub='modelo: '+rt+(cfg.model && cfg.model!=='auto' && cfg.model!==rt ? ' · respaldo (no se encontró '+cfg.model+')' : '');
+  }catch(e){
+    if(/location is not supported|FAILED_PRECONDITION/i.test(e.message||'')){
+      state.status.ia='warn'; state.status.iaMsg='Bloqueada por ubicación';
+    } else if(e.status===400 || e.status===401 || e.status===403){
+      state.status.ia='bad'; state.status.iaMsg='Clave rechazada';
+    } else {
+      state.status.ia='bad'; state.status.iaMsg='Sin conexión';
+    }
+    state.status.iaSub=resumirErr(e);
+  }
+  updateStatusUI();
+}
+function amigableErr(e){
+  const m = (e && e.message) || String(e);
+  if(/location is not supported/i.test(m)) return 'La API de Gemini no está disponible desde la ubicación de esta conexión. Abre el sitio desde tu navegador y red habituales.';
+  if(/API key not valid|API_KEY_INVALID/i.test(m)) return 'La clave de la API fue rechazada. Revísala en el panel de administración.';
+  if(e && (e.status===429 || /quota|RESOURCE_EXHAUSTED/i.test(m))) return 'Se alcanzó el límite de uso de la IA. Espera unos minutos e intenta de nuevo.';
+  if(/Failed to fetch|NetworkError/i.test(m)) return 'Sin conexión con el servicio de IA. Verifica tu internet.';
+  return m.length>320 ? m.slice(0,320)+'…' : m;
+}
+
+/* ---------- Contexto de documentos ---------- */
+async function ensureVision(d){
+  if(!d || state.visionMem[d.id]) return;
+  const isImg = /^image\//.test(d.tipo||'');
+  const isPdfScan = /pdf/i.test((d.tipo||'')+' '+d.nombre) && (d.texto||'').trim().length < 80;
+  if(!isImg && !isPdfScan) return;
+  if(!d.url) return;
+  try{
+    const res = await fetch(d.url);
+    if(!res.ok) return;
+    const buf = await res.arrayBuffer();
+    if(buf.byteLength > MAX_VISION_MB*1048576) return;
+    state.visionMem[d.id] = { mime: isImg ? (d.tipo||'image/png') : 'application/pdf', data: abToB64(buf) };
+  }catch(e){ /* sin visión: se usa solo el texto */ }
+}
+function docIdsSelected(){
+  if(state.ctxIds) return [...state.ctxIds];
+  return state.docs.map(d=>d.id);
+}
+function ctxPartsTexto(ids){
+  const parts = [];
+  let budget = Number(cfg.maxCtx)||180000;
+  for(const id of ids){
+    const d = findDoc(id);
+    if(!d || !d.texto) continue;
+    const t = d.texto.slice(0, Math.max(0, budget));
+    budget -= t.length;
+    parts.push({ text:'\n\n===== DOCUMENTO: '+d.nombre+' =====\n'+t + (t.length < d.texto.length ? '\n[...texto truncado por límite de contexto...]' : '') });
+  }
+  return parts;
+}
+async function ctxPartsVision(ids){
+  const parts = [];
+  let n = 0;
+  for(const id of ids){
+    if(n >= 3) break;
+    const d = findDoc(id);
+    if(!d) continue;
+    await ensureVision(d);
+    const v = state.visionMem[d.id];
+    if(v){ parts.push({ inline_data:{ mime_type:v.mime, data:v.data } }); n++; }
+  }
+  return parts;
+}
+function sysBase(){
+  return 'Eres el asistente académico de la escuela "'+(cfg.school||'Mi Escuela')+'". Ayudas a docentes y alumnos a revisar, analizar y comprender documentos escolares (reglamentos, planes de estudio, circulares, tareas, evaluaciones). Reglas: responde SIEMPRE en español claro; usa markdown con viñetas y negritas cuando ayude; sé conciso pero completo; cuando uses información de un documento, menciona su nombre entre corchetes, por ejemplo [Reglamento.pdf]; NO inventes datos, nombres, fechas ni cifras: si algo no aparece en los documentos, dilo con franqueza.';
+}
+
+/* ---------- Markdown (render seguro) ---------- */
+function mdInline(s){
+  return s
+    .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
+    .replace(/(^|[\s(])\*([^*\n]+)\*/g, '$1<i>$2</i>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+}
+function mdRender(src){
+  const lineas = String(src||'').replace(/\r\n?/g,'\n').split('\n');
+  let out='', ul=false, pre=false, tb=false;
+  const closeUl=()=>{ if(ul){ out+='</ul>'; ul=false; } };
+  const closeTb=()=>{ if(tb){ out+='</tbody></table>'; tb=false; } };
+  for(const raw of lineas){
+    if(/^\s*```/.test(raw)){
+      closeTb(); closeUl();
+      out += pre ? '</pre>' : '<pre class="code">';
+      pre = !pre;
+      continue;
+    }
+    if(pre){ out += esc(raw)+'\n'; continue; }
+    const ln = esc(raw);
+    if(/^\s*\|.*\|\s*$/.test(ln)){
+      const celdas = ln.trim().slice(1,-1).split('|');
+      if(celdas.every(c=>/^\s*:?-{3,}:?\s*$/.test(c))) continue;
+      if(!tb){ closeUl(); out+='<table><tbody>'; tb=true; }
+      out += '<tr>'+celdas.map(c=>'<td>'+mdInline(c.trim())+'</td>').join('')+'</tr>';
+      continue;
+    }
+    closeTb();
+    if(/^\s*(-{3,}|\*{3,})\s*$/.test(ln)){ closeUl(); out+='<hr>'; continue; }
+    const h = ln.match(/^(#{1,4})\s+(.*)$/);
+    if(h){ closeUl(); const lv=Math.min(h[1].length+1,5); out+='<h'+lv+'>'+mdInline(h[2])+'</h'+lv+'>'; continue; }
+    const li = ln.match(/^\s*(?:[-*•]|\d+[.)])\s+(.*)$/);
+    if(li){ if(!ul){ out+='<ul>'; ul=true; } out+='<li>'+mdInline(li[1])+'</li>'; continue; }
+    closeUl();
+    if(ln.trim()==='') continue;
+    out += '<p>'+mdInline(ln)+'</p>';
+  }
+  closeUl(); closeTb();
+  if(pre) out += '</pre>';
+  return out;
+}
+
+/* ---------- Chat ---------- */
+const SUGS = [
+  'Resume los documentos',
+  '¿Qué fechas o plazos importantes hay?',
+  'Explica el contenido en palabras simples',
+  'Hazme 5 preguntas de repaso'
+];
+function loadChat(){ try{ state.chat = JSON.parse(localStorage.getItem(LS.chat)||'[]')||[]; }catch(e){ state.chat=[]; } }
+function saveChat(){ try{ localStorage.setItem(LS.chat, JSON.stringify(state.chat.slice(-40))); }catch(e){} }
+function msgHtml(m, i){
+  const cls = m.role==='user' ? 'user' : (m.err ? 'ia err' : 'ia');
+  const body = m.role==='user' ? esc(m.text) : (m.done===false ? esc(m.text)+'<span class="cursor"></span>' : mdRender(m.text));
+  const copiar = (m.role!=='user' && m.done===true && m.text) ? '<button class="mcopy" data-mi="'+i+'" title="Copiar respuesta">Copiar</button>' : '';
+  return '<div class="msg '+cls+'"><div class="bubble">'+body+copiar+'</div></div>';
+}
+function renderChat(){
+  const box = $('#chatBox');
+  box.innerHTML = state.chat.map(msgHtml).join('');
+  box.scrollTop = box.scrollHeight;
+  renderSugs();
+}
+function bubbleAppend(delta){
+  const box = $('#chatBox');
+  const bubbles = box.querySelectorAll('.msg.ia .bubble');
+  const last = bubbles[bubbles.length-1];
+  if(last){ last.textContent += delta; box.scrollTop = box.scrollHeight; }
+}
+function ctxLabel(){
+  return !state.ctxIds ? 'todos los documentos' : (state.ctxIds.size ? state.ctxIds.size+' documento(s)' : 'ninguno');
+}
+function renderCtx(){
+  const sum = $('#ctxSummary');
+  if(sum) sum.textContent = ctxLabel();
+  const el = $('#ctxList');
+  if(!el) return;
+  if(!state.docs.length){ el.innerHTML = '<div class="ctxnone">No hay documentos en la nube todavía.</div>'; return; }
+  el.innerHTML = '<label class="ctxrow"><input type="checkbox" id="ctxAll" '+(state.ctxIds===null?'checked':'')+'><span><b>Todos los documentos</b></span></label>'
+    + state.docs.map(d=>'<label class="ctxrow"><input type="checkbox" data-cid="'+esc(d.id)+'" '+((state.ctxIds===null)||state.ctxIds.has(d.id)?'checked':'')+'><span>'+esc(d.nombre)+'</span></label>').join('');
+}
+function renderSugs(){
+  const el = $('#sugs');
+  if(!el) return;
+  if(state.chat.length){ el.hidden = true; el.innerHTML=''; return; }
+  el.hidden = false;
+  el.innerHTML = SUGS.map(s=>'<button class="sug">'+esc(s)+'</button>').join('');
+}
+function setBusy(b){
+  state.busy = b;
+  $('#btnStop').hidden = !b;
+  $('#btnSend').hidden = b;
+  $$('.anabtn').forEach(x=>x.disabled = b);
+}
+async function sendMsg(){
+  if(state.busy) return;
+  if(!apiKey()){ toast('Falta la API Key de Gemini. Configúrala en el panel Admin.','warn'); return; }
+  const ta = $('#chatInput');
+  const q = ta.value.trim();
+  if(!q) return;
+  ta.value=''; ta.style.height='auto';
+  state.chat.push({ role:'user', text:q });
+  state.chat.push({ role:'ia', text:'', done:false });
+  renderChat();
+  setBusy(true);
+  const ctrl = new AbortController();
+  state.abort = ctrl;
+  try{
+    const ids = docIdsSelected();
+    const vparts = await ctxPartsVision(ids);
+    const tparts = ctxPartsTexto(ids);
+    const historial = state.chat.filter(m=>m.done!==false && m.text).slice(-9,-1)
+      .map(m=>({ role: m.role==='user' ? 'user' : 'model', parts:[{ text:m.text }] }));
+    const contents = [...historial, { role:'user', parts:[...vparts, ...tparts, { text:q }] }];
+    const sys = sysBase() + (ids.length ? '\n\nTienes acceso al contenido de los documentos seleccionados como contexto, entre los marcadores "===== DOCUMENTO".' : '\n\nNo hay documentos cargados: puedes responder con conocimiento general, dejando claro cuando algo no proviene de los documentos.');
+    const full = await geminiCall(contents, sys, { stream:true, onDelta:bubbleAppend, signal:ctrl.signal });
+    state.chat[state.chat.length-1] = { role:'ia', text:full, done:true };
+  }catch(e){
+    if(e.name==='AbortError'){
+      state.chat[state.chat.length-1] = { role:'ia', text:(state.chat[state.chat.length-1].text||'')+'\n\n*(respuesta detenida)*', done:true };
+    } else {
+      state.chat[state.chat.length-1] = { role:'ia', text:'**Error:** '+amigableErr(e), err:true, done:true };
+    }
+  }finally{
+    setBusy(false);
+    saveChat(); renderChat();
+  }
+}
+
+/* ---------- Análisis ---------- */
+const ANALISIS = {
+  resumen:   { t:'Resumen ejecutivo', p:'Elabora un resumen ejecutivo del documento: propósito, contenido esencial y conclusiones, en 4 a 6 párrafos breves.' },
+  claves:    { t:'Puntos clave', p:'Extrae los puntos clave del documento: datos, fechas, cifras, obligaciones y temas importantes, en una lista con viñetas ordenada por relevancia.' },
+  academico: { t:'Análisis académico', p:'Analiza el documento con enfoque pedagógico: objetivos de aprendizaje, temas centrales, nivel escolar sugerido, conceptos que requieren refuerzo y 3 actividades sugeridas para clase.' },
+  cuestionario:{ t:'Cuestionario', p:'Genera un cuestionario de repaso con 5 preguntas de opción múltiple (4 opciones cada una) y 3 preguntas abiertas. Al final agrega una sección "Respuestas" con la opción correcta y una justificación breve para cada pregunta.' },
+  ideas:     { t:'Mapa de ideas', p:'Crea un esquema jerárquico en viñetas de las ideas principales y subideas del documento, usando sangrías para los niveles.' }
+};
+function refreshSelDoc(){
+  const sel = $('#selDoc');
+  if(!sel) return;
+  const prev = sel.value;
+  const todos = [...state.docs, ...state.localDocs];
+  sel.innerHTML = todos.length
+    ? todos.map(d=>'<option value="'+esc(d.id)+'">'+esc(d.nombre)+'</option>').join('')
+    : '<option value="">— sin documentos —</option>';
+  if(prev && todos.some(d=>d.id===prev)) sel.value = prev;
+  const hay = todos.length>0;
+  $('#anaEmpty').hidden = hay;
+  $('#anabtns').style.opacity = hay ? '1' : '.5';
+  $$('.anabtn').forEach(b=>b.disabled = !hay || state.busy);
+}
+async function runAnalysis(tipo){
+  if(state.busy) return;
+  const id = $('#selDoc').value;
+  const d = findDoc(id);
+  if(!d){ toast('Selecciona un documento (sube alguno primero)','warn'); return; }
+  if(!apiKey()){ toast('Falta la API Key de Gemini. Configúrala en el panel Admin.','warn'); return; }
+  const a = ANALISIS[tipo];
+  $('#anaWrap').hidden = false;
+  $('#anaOut').innerHTML = '<span class="spin"></span> Analizando "'+esc(d.nombre)+'"…';
+  $('#anaMeta').textContent = a.t + ' · ' + d.nombre;
+  setBusy(true);
+  const ctrl = new AbortController();
+  state.abort = ctrl;
+  try{
+    const vparts = await ctxPartsVision([id]);
+    const tparts = ctxPartsTexto([id]);
+    const contents = [{ role:'user', parts:[...vparts, ...tparts, { text: a.p + '\n\nDocumento: ' + d.nombre }] }];
+    const sys = sysBase() + '\n\nResponde con markdown claro y estructurado, basado únicamente en el documento proporcionado.';
+    const full = await geminiCall(contents, sys, { signal: ctrl.signal });
+    state.lastAna = { text: full, meta: a.t + ' · ' + d.nombre + ' · ' + new Date().toLocaleTimeString('es-MX') + ' · modelo: ' + (state.runtimeModel||'') };
+    $('#anaOut').innerHTML = mdRender(full);
+    $('#anaMeta').textContent = state.lastAna.meta;
+  }catch(e){
+    const msg = e.name==='AbortError' ? '*Análisis detenido por el usuario.*' : '**Error:** '+amigableErr(e);
+    $('#anaOut').innerHTML = mdRender(msg);
+  }finally{
+    setBusy(false);
+  }
+}
+
+/* ---------- Panel admin: formulario y mantenimiento ---------- */
+function fillAdmin(){
+  $('#cfgSchool').value = cfg.school || '';
+  $('#cfgModel').value  = cfg.model || '';
+  $('#cfgB4aApp').value = cfg.b4aApp || '';
+  $('#cfgB4aJs').value  = cfg.b4aJs || '';
+  $('#cfgGemini').value = cfg.geminiKey || '';
+  $('#cfgMaxCtx').value = cfg.maxCtx || 180000;
+  $('#cfgTemp').value   = cfg.temp; $('#cfgTempVal').textContent = cfg.temp;
+  updateStatusUI();
+}
+function guardarConfig(){
+  cfg.school   = $('#cfgSchool').value.trim() || 'Mi Escuela';
+  cfg.model    = $('#cfgModel').value.trim() || 'auto';
+  cfg.b4aApp   = $('#cfgB4aApp').value.trim();
+  cfg.b4aJs    = $('#cfgB4aJs').value.trim();
+  cfg.geminiKey= $('#cfgGemini').value.trim();
+  cfg.maxCtx   = Math.min(900000, Math.max(20000, Number($('#cfgMaxCtx').value)||180000));
+  cfg.temp     = Number($('#cfgTemp').value)||0.4;
+  saveCfg();
+  state.b4aTok=null; state.iaModels=null; state.runtimeModel=null;
+  $('#brandSchool').textContent = cfg.school;
+  $('#fSchool').textContent = cfg.school;
+  toast('Configuración guardada en este navegador','ok');
+  updateStatusUI();
+  checkB4a().catch(()=>{});
+  pingGemini().catch(()=>{});
+}
+function restaurarConfig(){
+  if(!confirm('¿Restaurar los valores de fábrica? Se conservarán los documentos.')) return;
+  cfg = { ...DEFAULTS };
+  saveCfg();
+  fillAdmin();
+  $('#brandSchool').textContent = cfg.school;
+  $('#fSchool').textContent = cfg.school;
+  state.b4aTok=null; state.iaModels=null; state.runtimeModel=null;
+  toast('Configuración restaurada','ok');
+  checkB4a().catch(()=>{});
+  pingGemini().catch(()=>{});
+}
+function logTo(sel, txt){
+  const el = $(sel);
+  if(!el) return;
+  el.hidden = false;
+  el.textContent = '['+new Date().toLocaleTimeString('es-MX')+'] '+txt+'\n'+el.textContent;
+}
+async function initSchema(){
+  logTo('#b4aLog','Inicializando esquema (prueba de escritura y lectura)…');
+  try{
+    const t0=Date.now();
+    const oj = await b4aFetch('/classes/Documento', { method:'POST', body: JSON.stringify({ nombre:'__esquema__', texto:'inicialización', tipo:'text/plain', tamano:0, subidoPor:'sistema' }) });
+    await b4aFetch('/classes/Documento/'+oj.objectId, { method:'DELETE' });
+    logTo('#b4aLog','Listo: la clase Documento existe y acepta escritura/lectura ('+(Date.now()-t0)+' ms).');
+    toast('Esquema de Back4App verificado','ok');
+    checkB4a().catch(()=>{});
+  }catch(e){
+    logTo('#b4aLog','Error: '+resumirErr(e));
+    toast('No se pudo inicializar el esquema: '+resumirErr(e),'bad');
+  }
+}
+function diagExport(){
+  const d = {
+    fecha: new Date().toISOString(),
+    version: APP_VERSION,
+    config: {
+      school:cfg.school, model:cfg.model, temp:cfg.temp, maxCtx:cfg.maxCtx,
+      b4aApp:maskKey(cfg.b4aApp), b4aJs:maskKey(cfg.b4aJs), geminiKey:maskKey(cfg.geminiKey),
+      ghUser:cfg.ghUser, ghRepo:cfg.ghRepo
+    },
+    estado: {
+      pagina:state.status.pagina, b4a:state.status.b4a, ia:state.status.ia, github:state.gh,
+      modeloEnUso:state.runtimeModel, modelosDisponibles: state.iaModels? state.iaModels.length : null,
+      detalle:state.status
+    },
+    datos: { docsNube:state.docs.length, docsLocales:state.localDocs.length, mensajesChat:state.chat.length, totalEnBack4App:state.docsTotal },
+    navegador: navigator.userAgent
+  };
+  const blob = new Blob([JSON.stringify(d,null,2)], { type:'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'edudocs-diagnostico.json';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+  toast('Diagnóstico exportado (claves enmascaradas)','ok');
+}
+
+/* ---------- Vinculación de eventos ---------- */
+function bind(){
+  $('#btnTheme').addEventListener('click', ()=>applyTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
+
+  $('#btnAdmin').addEventListener('click', ()=>{ if(state.admin) showTab('admin'); else openLogin(); });
+  $('#btnIrLogin').addEventListener('click', e=>{ e.stopPropagation(); openLogin(); });
+  $('#btnLogin').addEventListener('click', loginAdmin);
+  $('#loginPwd').addEventListener('keydown', e=>{ if(e.key==='Enter') loginAdmin(); });
+  $('#btnLogout').addEventListener('click', logout);
+
+  $$('.overlay').forEach(ov=>{
+    ov.addEventListener('click', e=>{ if(e.target===ov) ov.hidden=true; });
+    ov.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click', ()=>{ ov.hidden=true; }));
+  });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') $$('.overlay').forEach(ov=>ov.hidden=true); });
+
+  $$('.tab').forEach(b=>b.addEventListener('click', ()=>showTab(b.dataset.tab)));
+  document.addEventListener('click', e=>{
+    const g = e.target.closest('[data-goto]');
+    if(g) showTab(g.dataset.goto);
+  });
+
+  $('#pillPagina').addEventListener('click', ()=>{ setPageStatus(); });
+  $('#pillB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
+  $('#pillIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
+  $('#btnChkB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
+  $('#btnChkIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
+  $('#heroSubir').addEventListener('click', ()=>{ showTab('docs'); if(!state.admin) openLogin(); });
+  $('#heroAnalizar').addEventListener('click', ()=>showTab('analizar'));
+
+  const dz=$('#dz'), fi=$('#fileInput'), fo=$('#folderInput');
+  dz.addEventListener('click', e=>{
+    if(e.target.closest('button') || e.target.closest('a') || e.target.closest('input')) return;
+    if(!state.admin){ openLogin(); return; }
+    fi.click();
+  });
+  dz.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); if(state.admin) fi.click(); else openLogin(); } });
+  ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); if(!state.admin) return; dz.classList.add('drag'); }));
+  ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev, e=>{ e.preventDefault(); dz.classList.remove('drag'); }));
+  dz.addEventListener('drop', e=>{ const fs=Array.from((e.dataTransfer && e.dataTransfer.files)||[]); if(fs.length) procesarFiles(fs); });
+  document.addEventListener('dragover', e=>e.preventDefault());
+  document.addEventListener('drop', e=>e.preventDefault());
+  $('#btnFiles').addEventListener('click', e=>{ e.stopPropagation(); if(!state.admin){ openLogin(); return; } fi.click(); });
+  $('#btnFolder').addEventListener('click', e=>{ e.stopPropagation(); if(!state.admin){ openLogin(); return; } fo.click(); });
+  fi.addEventListener('change', ()=>{ const fs=Array.from(fi.files||[]); if(fs.length) procesarFiles(fs); fi.value=''; });
+  fo.addEventListener('change', ()=>{ const fs=Array.from(fo.files||[]); if(fs.length) procesarFiles(fs); fo.value=''; });
+  $('#btnSync').addEventListener('click', ()=>syncPendientes().catch(()=>{}));
+  $('#docFilter').addEventListener('input', e=>{ state.filter=e.target.value; renderDocs(); });
+  $('#btnCheckB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
+
+  ['listaNube','listaLocal','recentList'].forEach(id=>{
+    $('#'+id).addEventListener('click', e=>{
+      const item = e.target.closest('.ditem');
+      if(!item) return;
+      const act = e.target.closest('[data-act]');
+      if(!act) return;
+      docAction(act.dataset.act, item.dataset.id);
+    });
+  });
+
+  $$('.anabtn').forEach(b=>b.addEventListener('click', ()=>runAnalysis(b.dataset.ana)));
+  $('#btnAnaCopy').addEventListener('click', ()=>{ if(state.lastAna) copyText(state.lastAna.text); else toast('Aún no hay resultado que copiar','warn'); });
+
+  $('#btnSend').addEventListener('click', sendMsg);
+  $('#btnStop').addEventListener('click', ()=>{ if(state.abort) state.abort.abort(); });
+  const ta=$('#chatInput');
+  ta.addEventListener('input', ()=>{ ta.style.height='auto'; ta.style.height=Math.min(180, ta.scrollHeight)+'px'; });
+  ta.addEventListener('keydown', e=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendMsg(); } });
+  $('#btnClearChat').addEventListener('click', ()=>{ state.chat=[]; saveChat(); renderChat(); });
+  $('#chatBox').addEventListener('click', e=>{
+    const c = e.target.closest('.mcopy');
+    if(!c) return;
+    const i = Number(c.dataset.mi);
+    if(state.chat[i] && state.chat[i].text) copyText(state.chat[i].text);
+  });
+  $('#ctxList').addEventListener('change', e=>{
+    if(e.target.id==='ctxAll'){ state.ctxIds = e.target.checked ? null : new Set(state.docs.map(d=>d.id)); renderCtx(); return; }
+    const id=e.target.dataset.cid;
+    if(!id) return;
+    if(state.ctxIds===null) state.ctxIds=new Set(state.docs.map(d=>d.id));
+    if(e.target.checked) state.ctxIds.add(id); else state.ctxIds.delete(id);
+    renderCtx();
+  });
+  $('#sugs').addEventListener('click', e=>{
+    const b=e.target.closest('.sug');
+    if(!b) return;
+    $('#chatInput').value = b.textContent;
+    sendMsg();
+  });
+
+  $('#btnSaveCfg').addEventListener('click', guardarConfig);
+  $('#btnResetCfg').addEventListener('click', restaurarConfig);
+  $('#cfgTemp').addEventListener('input', e=>{ $('#cfgTempVal').textContent = e.target.value; });
+  $('#btnTestApp').addEventListener('click', ()=>{ setPageStatus(); updateStatusUI(); toast('Información actualizada','ok'); });
+  $('#btnTestB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
+  $('#btnTestIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
+  $('#btnTestGh').addEventListener('click', ()=>ghCheck().catch(()=>{}));
+  $('#btnInitSchema').addEventListener('click', initSchema);
+  $('#btnReloadDocs').addEventListener('click', async ()=>{ await checkB4a().catch(()=>{}); toast('Documentos recargados','ok'); });
+  $('#btnDiag').addEventListener('click', diagExport);
+  $('#btnCopyEmbed').addEventListener('click', ()=>copyText($('#embedCode').value));
+
+  window.addEventListener('online', ()=>{ setPageStatus(); checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); });
+  window.addEventListener('offline', ()=>{ setPageStatus(); });
+}
+
+/* ---------- Arranque ---------- */
+function boot(){
+  loadCfg();
+  loadLocalDocs();
+  loadChat();
+  let th = null;
+  try{ th = localStorage.getItem(LS.theme); }catch(e){}
+  if(!th){ th = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'; }
+  applyTheme(th);
+  if(EMBED) document.body.classList.add('embed');
+  $('#brandSchool').textContent = cfg.school || 'Mi Escuela';
+  $('#fSchool').textContent = cfg.school || 'Mi Escuela';
+  $('#vchip').textContent = 'v'+APP_VERSION.split('.').slice(0,2).join('.');
+  try{
+    const base = location.origin + location.pathname;
+    $('#embedCode').value = '<iframe src="'+base+'?embed=1" width="100%" height="720" style="border:0;border-radius:12px" loading="lazy" title="EduDocs IA"></iframe>';
+  }catch(e){ $('#embedCode').value = 'Abre la app publicada para generar el código de inserción.'; }
+  try{ if(sessionStorage.getItem(LS.admin)==='1') state.admin=true; }catch(e){}
+  bind();
+  applyAdminUI();
+  showTab('inicio');
+  renderChat();
+  setPageStatus();
+  refreshSelDoc();
+  checkB4a().catch(()=>{});
+  pingGemini().catch(()=>{});
+  ghCheck().catch(()=>{});
+  setInterval(()=>{
+    if(navigator.onLine){ checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); }
+  }, 5*60*1000);
+}
+document.addEventListener('DOMContentLoaded', boot);
+</script>
+</body>
+</html>
