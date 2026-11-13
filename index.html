@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<!-- EduDocsIA v3.2 · archivo único · backend: Back4App · IA dual: Gemini + Kimi (Moonshot AI) · hosting: GitHub Pages -->
+<!-- EduDocsIA v3.3 · archivo único · backend: Back4App · IA: Gemini · hosting: GitHub Pages -->
 <html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="EduDocs IA · Escuela Ometecuhtli - Revisor, analizador y chat de documentos escolares con IA dual (Gemini + Kimi). Sube por arrastrar y soltar, guarda en la nube y pregunta a tus documentos.">
+<meta name="description" content="EduDocs IA · Escuela Ometecuhtli - Revisor, analizador y chat de documentos escolares con IA Gemini. Sube por arrastrar y soltar, guarda en la nube y pregunta a tus documentos.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#0d8a7d" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0c1518" media="(prefers-color-scheme: dark)">
-<title>EduDocs IA · Ometecuhtli · Documentos y Chat con IA dual</title>
+<title>EduDocs IA · Ometecuhtli · Documentos y Chat con IA</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230d8a7d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 2v6h6'/%3E%3Cpath d='M9 15l2 2 4-4'/%3E%3C/svg%3E">
 <style>
 /* ================= Base y variables ================= */
@@ -324,7 +324,6 @@ body.embed main{min-height:0}
       <button class="pill" id="pillPagina" data-st="wait" title="Estado de la página y tu conexión"><span class="dot"></span><span class="plbl">Página</span></button>
       <button class="pill" id="pillB4a" data-st="wait" title="Estado de Back4App (clic para probar)"><span class="dot"></span><span class="plbl">Back4App</span></button>
       <button class="pill" id="pillIa" data-st="wait" title="Estado de la IA Gemini (clic para probar)"><span class="dot"></span><span class="plbl">IA Gemini</span></button>
-      <button class="pill" id="pillKimi" data-st="wait" title="Estado de Kimi (Moonshot AI) · clic para probar"><span class="dot"></span><span class="plbl">IA Kimi</span></button>
     </div>
     <button class="iconbtn" id="btnTheme" title="Cambiar tema claro / oscuro" aria-label="Cambiar tema">
       <svg id="icoMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
@@ -344,7 +343,7 @@ body.embed main{min-height:0}
     <div class="hero-l">
       <span class="kicker">Plataforma escolar · <span id="brandSchool">Ometecuhtli</span></span>
       <h1>Tus documentos escolares,<br>revisados y entendidos con IA</h1>
-      <p>Sube reglamentos, planes de estudio, circulares o tareas con arrastrar y soltar. Dos inteligencias artificiales (Gemini y Kimi) trabajan de forma complementaria: transcriben el contenido completo a Markdown, lo analizan y responden tus preguntas al instante.</p>
+      <p>Sube reglamentos, planes de estudio, circulares o tareas con arrastrar y soltar. La inteligencia artificial Gemini transcribe el contenido completo a Markdown, lo analiza y responde tus preguntas al instante.</p>
       <div class="ctas">
         <button class="btn main" id="heroSubir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>Subir documentos</button>
         <button class="btn line" id="heroAnalizar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analizar con IA</button>
@@ -365,18 +364,13 @@ body.embed main{min-height:0}
         <div class="sinfo"><small>IA Gemini</small><strong id="bIaVal">Verificando…</strong><em id="bIaSub">análisis y chat</em></div>
         <button class="sbtn" id="btnChkIa">Probar</button>
       </div>
-      <div class="scard">
-        <span class="sdot" id="sdKimi" data-st="wait"></span>
-        <div class="sinfo"><small>IA Kimi · Moonshot AI</small><strong id="bKimiVal">Verificando…</strong><em id="bKimiSub">transcripción y respaldo</em></div>
-        <button class="sbtn" id="btnChkKimi">Probar</button>
-      </div>
     </div>
   </div>
 
   <div class="sectitle"><h2>Qué puedes hacer</h2></div>
   <div class="grid4">
     <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></span><b>Arrastra y suelta</b><span>Sube PDF, DOCX, TXT, CSV o imágenes desde tu computadora o carpeta completa.</span></div>
-    <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg></span><b>Transcripción y análisis con IA dual</b><span>Al subir, la IA transcribe el documento completo a Markdown y genera resúmenes, cuestionarios y más.</span></div>
+    <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg></span><b>Transcripción y análisis con IA</b><span>Al subir, la IA transcribe el documento completo a Markdown y genera resúmenes, cuestionarios y más.</span></div>
     <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></span><b>Chat con tus documentos</b><span>Pregunta en lenguaje natural; la IA responde citando el documento de origen.</span></div>
     <div class="card feat"><span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><b>Sin trucos raros</b><span>La subida se configura sola en Back4App y el chat se guarda solo en tu navegador.</span></div>
   </div>
@@ -408,7 +402,7 @@ body.embed main{min-height:0}
       <div class="dzlock" id="dzLock"><div class="inner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><div><div><strong>Requiere modo administrador</strong></div><span class="hint">Ingresa la contraseña para poder subir documentos.</span></div><button class="mini" id="btnIrLogin"><span>Ingresar</span></button></div></div>
       <span class="dzic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></span>
       <b>Arrastra tus documentos aquí</b>
-      <p class="hint">o haz clic para seleccionarlos · PDF, DOCX, TXT, MD, CSV, JSON o imágenes · máx. 25 MB por archivo · se guardan en Back4App<br>Al subir, la IA (Gemini + Kimi) transcribe el contenido completo a un archivo <b>Markdown (.md)</b> y lo guarda automáticamente en Back4App para consultarlo desde la aplicación.</p>
+      <p class="hint">o haz clic para seleccionarlos · PDF, DOCX, TXT, MD, CSV, JSON o imágenes · máx. 25 MB por archivo · se guardan en Back4App<br>Al subir, la IA (Gemini) transcribe el contenido completo a un archivo <b>Markdown (.md)</b> y lo guarda automáticamente en Back4App para consultarlo desde la aplicación.</p>
       <div class="dzacts">
         <button class="btn soft" id="btnFiles"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Elegir archivos</button>
         <button class="mini" id="btnFolder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Elegir carpeta</button>
@@ -435,14 +429,10 @@ body.embed main{min-height:0}
 <section id="sec-analizar" class="sec" role="tabpanel" hidden>
   <div class="card">
     <h2 style="font-size:17px">Análisis con IA</h2>
-    <p class="hint" style="margin:4px 0 0">Elige un documento y un tipo de análisis. La IA lo procesa con Gemini y Kimi (modo complementario) y devuelve el resultado en español.</p>
+    <p class="hint" style="margin:4px 0 0">Elige un documento y un tipo de análisis. La IA lo procesa con Gemini y devuelve el resultado en español.</p>
     <div style="margin-top:14px">
       <label class="lbl" for="selDoc">Documento</label>
       <select id="selDoc" class="in"></select>
-    </div>
-    <div style="margin-top:10px">
-      <label class="lbl" for="anaMode">Motor de IA</label>
-      <select id="anaMode" class="in modosel"><option value="auto">Auto · complementario (Gemini + Kimi)</option><option value="gemini">Solo Gemini</option><option value="kimi">Solo Kimi (Moonshot AI)</option></select>
     </div>
     <div class="empty sm" id="anaEmpty" style="margin-top:12px"><strong>Sin documentos</strong><span>Sube documentos (modo admin) para analizarlos aquí.</span></div>
     <div class="anabtns" id="anabtns">
@@ -465,10 +455,6 @@ body.embed main{min-height:0}
     <div class="card ctxpanel">
       <h3 style="font-size:14.5px">Contexto del chat</h3>
       <p class="hint" style="margin:4px 0 0">La IA responderá con base en: <b id="ctxSummary">todos los documentos</b></p>
-      <div style="margin-top:10px">
-        <label class="lbl" for="chatMode">Motor de IA</label>
-        <select id="chatMode" class="in modosel"><option value="auto">Auto · complementario (Gemini + Kimi)</option><option value="gemini">Solo Gemini</option><option value="kimi">Solo Kimi (Moonshot AI)</option></select>
-      </div>
       <div class="ctxlist" id="ctxList"></div>
       <div style="margin-top:10px"><button class="mini danger" id="btnClearChat"><span>Borrar conversación</span></button></div>
     </div>
@@ -507,10 +493,6 @@ body.embed main{min-height:0}
       <div class="body" id="stIaBody"></div>
     </div>
     <div class="statcard">
-      <div class="stat-top"><span class="sdot" id="stKimiDot" data-st="wait"></span><h3>Kimi · Moonshot AI (IA)</h3><button class="mini" id="btnTestKimi"><span>Probar</span></button></div>
-      <div class="body" id="stKimiBody"></div>
-    </div>
-    <div class="statcard">
       <div class="stat-top"><span class="sdot" id="stGhDot" data-st="wait"></span><h3>GitHub Pages</h3><button class="mini" id="btnTestGh"><span>Verificar</span></button></div>
       <div class="body" id="stGhBody">Consultando…</div>
       <div class="acts"><a class="mini" id="btnOpenRepo" href="https://github.com/argos4all/Ometecuhtli-Normatividad-IA" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg><span>Ver repositorio</span></a></div>
@@ -526,12 +508,9 @@ body.embed main{min-height:0}
       </div>
       <div><label class="lbl" for="cfgMaxCtx">Límite de contexto (caracteres)</label><input id="cfgMaxCtx" class="in mono" type="number" min="20000" max="900000" step="10000"></div>
       <div><label class="lbl" for="cfgTemp">Temperatura · <span id="cfgTempVal">0.4</span></label><input id="cfgTemp" type="range" min="0" max="1" step="0.1" style="width:100%;accent-color:var(--pri)"></div>
-      <div><label class="lbl" for="cfgAiMode">Modo de IA</label><select id="cfgAiMode" class="in"><option value="auto">Auto · complementario (Gemini + Kimi)</option><option value="gemini">Solo Gemini</option><option value="kimi">Solo Kimi (Moonshot AI)</option></select></div>
       <div><label class="lbl" for="cfgB4aApp">Back4App · App ID</label><input id="cfgB4aApp" class="in mono" spellcheck="false"></div>
       <div><label class="lbl" for="cfgB4aJs">Back4App · JavaScript Key</label><input id="cfgB4aJs" class="in mono" spellcheck="false"></div>
       <div style="grid-column:1/-1"><label class="lbl" for="cfgGemini">Gemini · API Key</label><input id="cfgGemini" class="in mono" spellcheck="false"></div>
-      <div style="grid-column:1/-1"><label class="lbl" for="cfgKimi">Kimi (Moonshot AI) · API Key</label><input id="cfgKimi" class="in mono" spellcheck="false"></div>
-      <div style="grid-column:1/-1"><label class="lbl" for="cfgRelay">Kimi · Relay de CORS (opcional, respaldo)</label><input id="cfgRelay" class="in mono" placeholder="https://…workers.dev" spellcheck="false"><p class="hint" style="margin:3px 0 0">Solo si tu red bloquea Moonshot: un worker propio que acepte el destino <code>api.moonshot.ai</code> (formato <code>https://worker.dev?url=…</code>). El worker actual de la escuela solo admite Z.ai; Moonshot funciona sin relay.</p></div>
       <div class="chkrow"><input type="checkbox" id="cfgTranscribir"><label for="cfgTranscribir"><b>Transcripción automática al subir</b>: la IA extrae y transcribe el documento de principio a fin (párrafos, tablas en Markdown, jerarquías y enlaces) y guarda el archivo .md resultante en Back4App.</label></div>
       <div class="chkrow"><input type="checkbox" id="cfgChkLinks"><label for="cfgChkLinks"><b>Verificación de enlaces</b>: tras transcribir, la IA revisa y corrige las URLs del documento (requiere una llamada adicional).</label></div>
     </div>
@@ -553,11 +532,10 @@ body.embed main{min-height:0}
   <div class="card">
     <ul class="guia">
       <li><b>Back4App · subida de archivos:</b> si el servidor responde error 130 ("File upload by public is disabled"), la aplicación inicia sesión con un usuario de servicio y reintenta la subida de forma automática; no necesitas hacer nada.</li>
-      <li><b>Transcripción a Markdown:</b> al subir un archivo se ejecuta una regla de extracción integral (párrafos, tablas, jerarquías, enlaces) con Gemini y Kimi en modo complementario; el resultado .md queda guardado en Back4App y visible con el botón "Ver". Los fragmentos ilegibles se marcan como [texto no legible].</li>
+      <li><b>Transcripción a Markdown:</b> al subir un archivo se ejecuta una regla de extracción integral (párrafos, tablas, jerarquías, enlaces) con Gemini; el resultado .md queda guardado en Back4App y visible con el botón "Ver". Los fragmentos ilegibles se marcan como [texto no legible].</li>
       <li><b>Back4App · almacenamiento:</b> al eliminar un documento se borra el registro; el archivo puede permanecer en el almacenamiento de Back4App (su borrado definitivo requiere la Master Key desde el dashboard).</li>
       <li><b>Gemini:</b> la clave viaja en el código público de GitHub Pages. Recomendación: en Google AI Studio restringe la clave al sitio <code>https://argos4all.github.io</code> y rótala si sospechas fuga; luego actualízala en Configuración sin tocar el código.</li>
-      <li><b>Kimi · Moonshot AI:</b> al iniciar, la app consulta el catálogo de Moonshot y arma una cadena automática con los modelos de chat disponibles (hoy <code>kimi-k3.1-pro</code> y luego <code>kimi-k3</code>, con contexto de hasta 1 millón de tokens y modo de razonamiento). Las llamadas salen directas al navegador (api.moonshot.ai permite CORS). Si la red bloquea Moonshot, puedes configurar un relay en Configuración; si la cuenta se queda sin saldo o hay fallo, Gemini cubre todas las tareas de forma automática.</li>
-      <li><b>Gemini:</b> si ves "User location is not supported", la red actual bloquea la API de Google; abre el sitio desde tu navegador y red habituales (Kimi tomará el turno automáticamente).</li>
+      <li><b>Gemini:</b> si ves "User location is not supported", la red actual bloquea la API de Google; abre el sitio desde tu navegador y red habituales.</li>
       <li><b>Acceso admin:</b> la contraseña se verifica localmente con hash SHA-256; nunca se envía a ningún servidor. Tras 5 intentos fallidos, el acceso se bloquea 60 segundos.</li>
       <li><b>Privacidad:</b> los documentos se guardan en Back4App y el historial del chat en este navegador. La aplicación no usa analítica ni rastreo.</li>
     </ul>
@@ -567,8 +545,8 @@ body.embed main{min-height:0}
 </div></main>
 
 <footer class="app"><div class="wrap">
-  <span>EduDocs IA · Documentos escolares con IA dual para <b id="fSchool">Ometecuhtli</b></span>
-  <span>IA: Gemini + Kimi (Moonshot AI) · Datos: Back4App · Frontend: GitHub Pages</span>
+  <span>EduDocs IA · Documentos escolares con IA para <b id="fSchool">Ometecuhtli</b></span>
+  <span>IA: Gemini · Datos: Back4App · Frontend: GitHub Pages</span>
 </div></footer>
 
 <!-- Modal: login admin -->
@@ -600,13 +578,13 @@ body.embed main{min-height:0}
 <script>
 'use strict';
 /* ================================================================
-   EduDocs IA v3.2 — Documentos escolares con IA dual (archivo único)
-   Backend: Back4App (Parse REST) · IA: Gemini + Kimi (Moonshot AI) · Frontend: GitHub Pages
+   EduDocs IA v3.3 — Documentos escolares con IA (archivo único)
+   Backend: Back4App (Parse REST) · IA: Gemini · Frontend: GitHub Pages
    Transcripción integral a Markdown al subir, con guardado automático en Back4App
    ================================================================ */
 
 /* ---------- Constantes ---------- */
-const APP_VERSION = '3.2.0';
+const APP_VERSION = '3.3.0';
 const LS = {
   cfg:'edudocs2_cfg', localDocs:'edudocs2_local_docs', chat:'edudocs2_chat',
   theme:'edudocs2_theme', lock:'edudocs2_lock', admin:'edudocs2_admin_sess'
@@ -614,38 +592,6 @@ const LS = {
 const ADMIN_HASH = '26851fcd3b5ccdfe4654d7ff65b20e630a2fab2b322454a9705732ae0040b8e7';
 const B4A_URL = 'https://parseapi.back4app.com';
 const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta';
-const KIMI_URL = 'https://api.moonshot.ai/v1/chat/completions';
-const KIMI_MODELS_URL = 'https://api.moonshot.ai/v1/models';
-function kimiTransportes(){
-  const t = [KIMI_URL]; /* api.moonshot.ai permite CORS directo desde el navegador (verificado) */
-  const relay = String(cfg.kimiRelay||'').trim();
-  if(relay) t.push(relay + (relay.includes('?') ? '&' : '?') + 'url=' + encodeURIComponent(KIMI_URL)); /* respaldo si la red bloquea Moonshot */
-  return t;
-}
-const KIMI_MODELS = ['kimi-k3.1-pro', 'kimi-k3'];
-function esModeloChatKimi(id){ return !/embed|ocr|retriever|rerank|speech|audio|tts|asr|video|image|drawing|translate|vision/i.test(id); }
-const PRIORIDAD_KIMI = [ /^kimi-k3\./, /^kimi-k3$/, /^kimi-latest$/, /^kimi-k2/, /^moonshot-v1-128k/, /^moonshot-v1-32k/, /^moonshot-v1-8k/ ];
-async function kimiModelosDisponibles(){
-  if(state.kimiCatalogo) return state.kimiCatalogo;
-  const H = { 'Authorization':'Bearer ' + kimiKey() };
-  let r = null, lastE = null;
-  for(const dest of kimiTransportes()){
-    try{ r = await fetch(dest, { headers:H }); break; }
-    catch(e){ if(e && e.name === 'AbortError') throw e; lastE = e; r = null; }
-  }
-  if(!r){ const er = new Error('Kimi (Moonshot AI) no es alcanzable desde esta red (' + ((lastE && lastE.message) || 'fallo de red') + ')'); er.cors = true; throw er; }
-  if(!r.ok){ const j = await r.json().catch(()=>null); throw kimiErr(r, j); }
-  const j = await r.json();
-  const ids = (j.data||[]).map(m=>String(m.id||'')).filter(esModeloChatKimi);
-  const pr = id => { for(let i=0;i<PRIORIDAD_KIMI.length;i++){ if(PRIORIDAD_KIMI[i].test(id)) return i; } return PRIORIDAD_KIMI.length; };
-  const orden = ids.slice().sort((a,b)=> pr(a)-pr(b) || b.localeCompare(a));
-  const lista = Array.from(new Set(orden)).slice(0, 8);
-  state.kimiCatalogo = lista.length ? lista.concat(KIMI_MODELS.filter(m=>!lista.includes(m))) : KIMI_MODELS.slice();
-  return state.kimiCatalogo;
-}
-async function cadenaKimi(){
-  try{ return await kimiModelosDisponibles(); }catch(e){ return KIMI_MODELS.slice(); }
-}
 const MAX_TRANSCRIPCION = 500000;
 const TRANSC_VISION_MAX_PAG = 40;
 const TRANSC_CHUNK = 9000;
@@ -658,8 +604,7 @@ const DEFAULTS = {
   b4aApp:'TCm0bdqC4FKjIb63OHPI8tDbIXlGHlzDL3Audz2K',
   b4aJs:'oBQP9UXQ45NGwdnJE5AbZIvBLWBILyEc4dHQWRjB',
   geminiKey:'AQ.Ab8RN6JoWWCB6QeMvnyhn6Ei-LMeo1PS2yhNXFq70P18j0Osdw',
-  kimiKey:'c2stMkUzV0Y3Zkp3Y2h6SWU4MDVVeTFobmZsaVdXOW9jcmwwWDRUc2hZSUVjbDhwOGVh', kimiRelay:'', /* kimiKey codificada en Base64: evita la detección y revocación automática de claves en el repositorio público; se decodifica en runtime */
-  model:'gemini-3.5-flash-lite', aiMode:'auto',
+  model:'gemini-3.5-flash-lite',
   transcribir:true, chkLinks:true,
   temp:0.4, maxCtx:180000,
   ghUser:'argos4all', ghRepo:'Ometecuhtli-Normatividad-IA', ghBranch:'main',
@@ -672,9 +617,9 @@ let cfg = { ...DEFAULTS };
 const state = {
   admin:false, docs:[], localDocs:[], visionMem:{}, chat:[],
   filter:'', ctxIds:null, abort:null, busy:false,
-  status:{ pagina:'wait', b4a:'wait', b4aMsg:'Verificando…', b4aSub:'', ia:'wait', iaMsg:'Verificando…', iaSub:'', kimi:'wait', kimiMsg:'Verificando…', kimiSub:'' }, kimiCatalogo:null,
-  docsTotal:null, b4aTok:null, iaModels:null, iaMs:null, runtimeModel:null, kimiMs:null, runtimeKimi:null, kimiVia:null,
-  geminiOff:0, kimiOff:0,
+  status:{ pagina:'wait', b4a:'wait', b4aMsg:'Verificando…', b4aSub:'', ia:'wait', iaMsg:'Verificando…', iaSub:'' },
+  docsTotal:null, b4aTok:null, iaModels:null, iaMs:null, runtimeModel:null,
+  geminiOff:0,
   gh:'wait', ghBody:'Consultando…', lastAna:null
 };
 
@@ -710,7 +655,7 @@ function maskKey(k){ k=(k||'').trim(); return k? k.slice(0,7)+'…'+k.slice(-4) 
 function localStorageUsed(){ let t=0; for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); t += ((localStorage.getItem(k)||'').length + k.length)*2; } return t; }
 
 /* ---------- Configuración ---------- */
-function loadCfg(){ let c={}; try{ c=JSON.parse(localStorage.getItem(LS.cfg)||'{}')||{}; }catch(e){} cfg={ ...DEFAULTS, ...c }; if(!cfg.b4aService) cfg.b4aService={...DEFAULTS.b4aService}; if(!cfg.school || cfg.school==='Mi'+' Escuela') cfg.school='Ometecuhtli'; delete cfg.lunaRelay; delete cfg.zaiKey; delete cfg.openaiKey; }
+function loadCfg(){ let c={}; try{ c=JSON.parse(localStorage.getItem(LS.cfg)||'{}')||{}; }catch(e){} cfg={ ...DEFAULTS, ...c }; if(!cfg.b4aService) cfg.b4aService={...DEFAULTS.b4aService}; if(!cfg.school || cfg.school==='Mi'+' Escuela') cfg.school='Ometecuhtli'; delete cfg.lunaRelay; delete cfg.zaiKey; delete cfg.openaiKey; delete cfg.kimiKey; delete cfg.kimiRelay; delete cfg.aiMode; }
 function saveCfg(){ try{ localStorage.setItem(LS.cfg, JSON.stringify(cfg)); }catch(e){ toast('No se pudo guardar la configuración local','warn'); } }
 function saveCfgField(k,v){ cfg[k]=v; saveCfg(); }
 
@@ -820,12 +765,9 @@ function updateStatusUI(){
   setT('#bPaginaSub', st.pagina==='ok' ? 'aplicación activa en este navegador' : 'revisa tu conexión a internet');
   setD('#sdB4a', st.b4a); setT('#bB4aVal', st.b4aMsg); setT('#bB4aSub', st.b4aSub);
   setD('#sdIa', st.ia);  setT('#bIaVal', st.iaMsg);  setT('#bIaSub', st.iaSub);
-  const pillG=$('#pillKimi'); if(pillG) pillG.dataset.st = st.kimi;
-  setD('#sdKimi', st.kimi); setT('#bKimiVal', st.kimiMsg); setT('#bKimiSub', st.kimiSub);
   setD('#stAppDot','ok'); setH('#stAppBody', appInfoHtml());
   setD('#stB4aDot', st.b4a); setH('#stB4aBody', b4aInfoHtml());
   setD('#stIaDot', st.ia);   setH('#stIaBody', iaInfoHtml());
-  setD('#stKimiDot', st.kimi); setH('#stKimiBody', kimiInfoHtml());
   setD('#stGhDot', state.gh); setH('#stGhBody', state.ghBody);
 }
 function appInfoHtml(){
@@ -855,20 +797,6 @@ function iaInfoHtml(){
     '<b>Modelo configurado</b> ' + esc(cfg.model||'auto') + (state.runtimeModel && state.runtimeModel!==cfg.model ? ' (en uso: ' + esc(state.runtimeModel) + ')' : ''),
     '<b>Modelos disponibles</b> ' + (state.iaModels ? state.iaModels.length : '—'),
     '<b>Temperatura</b> ' + cfg.temp
-  ].join('<br>');
-}
-function etiquetaModo(){
-  return cfg.aiMode==='gemini' ? 'Solo Gemini' : (cfg.aiMode==='kimi' ? 'Solo Kimi (Moonshot AI)' : 'Auto · complementario (Gemini + Kimi)');
-}
-function kimiInfoHtml(){
-  const st = state.status;
-  return [
-    '<b>Estado</b> ' + esc(st.kimiMsg) + (st.kimiSub ? ' · ' + esc(st.kimiSub) : ''),
-    '<b>API Key Moonshot</b> ' + esc(maskKey(kimiKey())),
-    '<b>Modelo en uso</b> ' + (state.runtimeKimi || '—') + ' · <b>Cadena</b> ' + (state.kimiCatalogo || KIMI_MODELS).join(' → '),
-    '<b>Transporte</b> ' + (state.kimiVia || 'directo') + ' · respaldo: relay de CORS (opcional)',
-    '<b>Latencia</b> ' + (state.kimiMs==null ? '—' : state.kimiMs + ' ms'),
-    '<b>Modo</b> ' + etiquetaModo()
   ].join('<br>');
 }
 
@@ -1393,10 +1321,6 @@ async function pingGemini(){
 }
 function amigableErr(e){
   const m = (e && e.message) || String(e);
-  if(e && e.cors) return 'Kimi (Moonshot AI) no es alcanzable desde esta red. El sistema continúa con Gemini (modo complementario); revisa la píldora Kimi en el encabezado.';
-  if(e && e.sinSaldo) return 'La cuenta de Kimi (Moonshot AI) no tiene saldo disponible. Recarga créditos en platform.moonshot.ai; mientras tanto Gemini cubre todas las tareas.';
-  if(e && e.region) return 'Moonshot AI no está disponible en la región de esta conexión. El sistema continúa con Gemini (modo complementario).';
-  if(e && (e.status===401 || e.status===403) && /moonshot|kimi/i.test(m)) return 'La clave de Kimi (Moonshot AI) fue rechazada. Revísala en el panel de administración.';
   if(/location is not supported/i.test(m)) return 'La API de Gemini no está disponible desde la ubicación de esta conexión. Abre el sitio desde tu navegador y red habituales.';
   if(/API key not valid|API_KEY_INVALID/i.test(m)) return 'La clave de la API fue rechazada. Revísala en el panel de administración.';
   if(e && (e.status===429 || /quota|RESOURCE_EXHAUSTED/i.test(m))) return 'Se alcanzó el límite de uso de la IA. Espera unos minutos e intenta de nuevo.';
@@ -1552,8 +1476,7 @@ function setBusy(b){
 }
 async function sendMsg(){
   if(state.busy) return;
-  if(cfg.aiMode!=='kimi' && !apiKey()){ toast('Falta la API Key de Gemini. Configúrala en el panel Admin o cambia el motor a Kimi.','warn'); return; }
-  if(cfg.aiMode==='kimi' && !kimiKey()){ toast('Falta la API Key de Kimi (Moonshot AI). Configúrala en el panel Admin.','warn'); return; }
+  if(!apiKey()){ toast('Falta la API Key de Gemini. Configúrala en el panel Admin.','warn'); return; }
   const ta = $('#chatInput');
   const q = ta.value.trim();
   if(!q) return;
@@ -1614,8 +1537,7 @@ async function runAnalysis(tipo){
   const id = $('#selDoc').value;
   const d = findDoc(id);
   if(!d){ toast('Selecciona un documento (sube alguno primero)','warn'); return; }
-  if(cfg.aiMode!=='kimi' && !apiKey()){ toast('Falta la API Key de Gemini. Configúrala en el panel Admin o cambia el motor a Kimi.','warn'); return; }
-  if(cfg.aiMode==='kimi' && !kimiKey()){ toast('Falta la API Key de Kimi (Moonshot AI). Configúrala en el panel Admin.','warn'); return; }
+  if(!apiKey()){ toast('Falta la API Key de Gemini. Configúrala en el panel Admin.','warn'); return; }
   const a = ANALISIS[tipo];
   $('#anaWrap').hidden = false;
   $('#anaOut').innerHTML = '<span class="spin"></span> Analizando "'+esc(d.nombre)+'"…';
@@ -1642,16 +1564,6 @@ async function runAnalysis(tipo){
   }
 }
 
-/* ================================================================
-   IA dual complementaria (Gemini + Kimi · Moonshot AI)
-   ================================================================ */
-function kimiKey(){
-  const k = String(cfg.kimiKey||'').trim();
-  if(!k) return '';
-  if(k.startsWith('sk-')) return k; /* clave en claro (la pega el admin en Configuración) */
-  try{ return atob(k).trim(); }catch(e){ return k; } /* valor codificado por defecto */
-}
-
 const EXTRACT_SYS = [
   'Actúa como un sistema de extracción y transcripción de datos de alta precisión.',
   'Tu tarea es leer de principio a fin el documento y extraer TODA su información de manera íntegra, literal y exhaustiva, transcribiéndola a Markdown.',
@@ -1673,221 +1585,21 @@ const LINKS_SYS = [
   'Devuelve el documento COMPLETO con las correcciones aplicadas, en Markdown, sin comentarios adicionales. Si nada necesita corrección, devuelve el documento exactamente igual.'
 ].join('\n');
 
-function kimiErr(res, j){
-  const er = (j && j.error) || {};
-  const e = new Error(er.message || ('HTTP ' + res.status));
-  e.code = (er.code != null) ? String(er.code) : (er.type || null);
-  e.status = res.status;
-  if(/exceeded_current_quota|insufficient balance|suspended due to/i.test(e.message)) e.sinSaldo = true;
-  return e;
-}
-function kimiBody(model, msgs, o){
-  return { model, messages: msgs, temperature: (o.temp!=null ? o.temp : (Number(cfg.temp)||0.4)), max_tokens: o.maxTokens || 4096, stream: false };
-}
-async function kimiFetch(model, body, signal){
-  const H = { 'Content-Type':'application/json', 'Authorization':'Bearer ' + kimiKey() };
-  let res = null, lastE = null;
-  for(const dest of kimiTransportes()){
-    try{
-      res = await fetch(dest, { method:'POST', headers: H, signal, body: JSON.stringify(body) });
-      state.kimiVia = (dest === KIMI_URL ? 'directo' : 'relay');
-      break;
-    }catch(eRed){
-      if(eRed && eRed.name === 'AbortError') throw eRed;
-      lastE = eRed; res = null;
-    }
-  }
-  if(!res){
-    const er = new Error('Kimi (Moonshot AI) no es alcanzable desde esta red (' + ((lastE && lastE.message) || 'fallo de red') + ')');
-    er.cors = true;
-    throw er;
-  }
-  const j = await res.json().catch(()=>null);
-  if(!res.ok) throw kimiErr(res, j);
-  return j;
-}
-async function kimiOnce(model, msgs, o={}){
-  const j = await kimiFetch(model, kimiBody(model, msgs, o), o.signal);
-  if(j && j.error && !(j.choices||[]).length){
-    const e = new Error(j.error.message || 'Error de Moonshot AI');
-    e.code = (j.error.type || (j.error.code != null ? String(j.error.code) : null));
-    e.status = 200;
-    if(/exceeded_current_quota|insufficient balance|suspended due to/i.test(e.message)) e.sinSaldo = true;
+/* ---------- Llamada a la IA (Gemini) ---------- */
+async function aiCall(o){
+  if(Date.now() < state.geminiOff) throw new Error('La IA está en pausa temporal tras un fallo reciente. Espera unos minutos o revisa la configuración en el panel Admin.');
+  const imgs = o.images||[];
+  try{
+    const parts = imgs.map(im=>({ inline_data:{ mime_type:im.mime, data:im.data } }));
+    parts.push({ text:o.text });
+    const t = await geminiCall([{ role:'user', parts }], o.sys, { stream:o.stream, onDelta:o.onDelta, signal:o.signal, maxTokens:o.maxTokens });
+    return { text:t, engine:'Gemini', model: state.runtimeModel || '' };
+  }catch(e){
+    if(e.name==='AbortError') throw e;
+    if(!e.retryModel && (e.status===400 || e.status===401 || e.status===403 || e.status===429 || /location is not supported|Failed to fetch|NetworkError/i.test(e.message||'')))
+      state.geminiOff = Date.now() + 5*60*1000;
     throw e;
   }
-  const ch = (j.choices||[])[0] || {};
-  const t = String((((ch.message)||{}).content) || '');
-  if(!t.trim()) throw new Error('La IA (Kimi) devolvió una respuesta vacía');
-  return t;
-}
-async function kimiStream(model, msgs, o={}){
-  const body = kimiBody(model, msgs, o);
-  body.stream = true;
-  const H = { 'Content-Type':'application/json', 'Authorization':'Bearer ' + kimiKey() };
-  let res = null, lastE = null;
-  for(const dest of kimiTransportes()){
-    try{
-      res = await fetch(dest, { method:'POST', headers: H, signal:o.signal, body: JSON.stringify(body) });
-      state.kimiVia = (dest === KIMI_URL ? 'directo' : 'relay');
-      break;
-    }catch(e){ if(e && e.name === 'AbortError') throw e; lastE = e; res = null; }
-  }
-  if(!res){ const er = new Error('Kimi (Moonshot AI) no es alcanzable desde esta red (' + ((lastE && lastE.message) || 'fallo de red') + ')'); er.cors = true; throw er; }
-  if(!res.ok){ const j = await res.json().catch(()=>null); throw kimiErr(res, j); }
-  const reader = res.body.getReader();
-  const dec = new TextDecoder();
-  let buf='', full='';
-  for(;;){
-    const r = await reader.read();
-    if(r.done) break;
-    buf += dec.decode(r.value, { stream:true });
-    let ix;
-    while((ix = buf.indexOf('\n')) >= 0){
-      const line = buf.slice(0, ix).trim();
-      buf = buf.slice(ix+1);
-      if(!line.startsWith('data:')) continue;
-      const p = line.slice(5).trim();
-      if(!p || p==='[DONE]') continue;
-      try{
-        const j2 = JSON.parse(p);
-        const d = ((j2.choices||[])[0]||{}).delta || {};
-        /* los modelos kimi-k3 razonan primero (delta.reasoning_content); solo se muestra la respuesta final */
-        const frag = d.content || '';
-        if(frag){ full += frag; if(o.onDelta) o.onDelta(frag); }
-      }catch(e){ /* fragmento incompleto */ }
-    }
-  }
-  if(!full.trim()) throw new Error('La IA (Kimi) devolvió una respuesta vacía');
-  return full;
-}
-function buildKimiMsgs(o){
-  const msgs = [];
-  if(o.sys) msgs.push({ role:'system', content:o.sys });
-  if(o.history && o.history.length){
-    for(const h of o.history) msgs.push({ role: h.role==='user' ? 'user' : 'assistant', content: h.text || h.content || '' });
-  }
-  const imgs = (o.images||[]).filter(i=>/^image\//i.test(i.mime||''));
-  if(imgs.length){
-    const content = imgs.map(i=>({ type:'image_url', image_url:{ url:'data:'+(i.mime||'image/jpeg')+';base64,'+i.data } }));
-    content.push({ type:'text', text:o.text });
-    msgs.push({ role:'user', content });
-  } else {
-    msgs.push({ role:'user', content:o.text });
-  }
-  return msgs;
-}
-async function kimiCall(o){
-  if(!kimiKey()) throw new Error('Falta la clave de Kimi (Moonshot AI). Configúrala en el panel de administración.');
-  const msgs = buildKimiMsgs(o);
-  const cadena = await cadenaKimi();
-  let last=null, notaModelo=null;
-  for(const m of cadena){
-    try{
-      const t = o.stream ? await kimiStream(m, msgs, o) : await kimiOnce(m, msgs, o);
-      state.runtimeKimi = m;
-      state.status.kimi='ok'; state.status.kimiMsg='En línea'; state.status.kimiSub='modelo: '+m;
-      updateStatusUI();
-      return { text:t, model:m };
-    }catch(e){
-      last = e;
-      if(e.name==='AbortError') throw e;
-      if(e.sinSaldo || e.cors || e.status===401 || e.status===403) throw e; /* sin saldo o sin acceso afecta a toda la cuenta: no reintentar otros modelos */
-      if(e.status===404 || e.code==='model_not_found' || e.status===503){ notaModelo='modelo no disponible: '+m; continue; }
-      if(e.status===429){ notaModelo='límite de uso de Moonshot'; continue; }
-      if(e.status===400 && /imagen|image|vision|model/i.test(e.message||'')){ notaModelo='modelo inadecuado para esta tarea: '+m; continue; }
-      throw e;
-    }
-  }
-  if(notaModelo){
-    state.status.kimi='warn'; state.status.kimiMsg='Kimi no disponible'; state.status.kimiSub=notaModelo;
-    updateStatusUI();
-  }
-  throw last || new Error('Ningún modelo de Kimi disponible');
-}
-async function pingKimi(){
-  state.status.kimi='wait'; state.status.kimiMsg='Verificando…'; state.status.kimiSub=''; updateStatusUI();
-  if(!kimiKey()){
-    state.status.kimi='bad'; state.status.kimiMsg='Falta clave Kimi'; state.status.kimiSub='configúrala en el panel Admin';
-    updateStatusUI(); return;
-  }
-  let nota=null;
-  const cadena = await cadenaKimi();
-  for(const m of cadena){
-    try{
-      const t0 = Date.now();
-      await kimiOnce(m, [{ role:'user', content:'Responde únicamente: ok' }], { maxTokens: 2048, temp: 0.1 });
-      state.kimiMs = Date.now()-t0;
-      state.runtimeKimi = m;
-      state.status.kimi='ok';
-      state.status.kimiMsg='En línea ('+state.kimiMs+' ms)';
-      state.status.kimiSub='modelo: '+m+(m!==cadena[0] && nota ? ' · respaldo ('+nota+')' : '');
-      updateStatusUI();
-      return;
-    }catch(e){
-      if(e.cors){
-        state.status.kimi='warn';
-        state.status.kimiMsg='Kimi no alcanzable desde esta red';
-        state.status.kimiSub='la app continuará con Gemini (modo complementario)';
-        updateStatusUI();
-        return;
-      }
-      if(e.sinSaldo){
-        state.status.kimi='warn';
-        state.status.kimiMsg='Sin saldo en la cuenta';
-        state.status.kimiSub='recarga créditos en platform.moonshot.ai · Gemini sigue cubriendo todo';
-        updateStatusUI();
-        return;
-      }
-      if(e.status===401 || e.status===403){
-        state.status.kimi='bad'; state.status.kimiMsg='Clave rechazada'; state.status.kimiSub=resumirErr(e);
-        updateStatusUI(); return;
-      }
-      if(e.status===404 || e.code==='model_not_found'){ nota='modelo no disponible: '+m; continue; }
-      if(e.status===429){ nota='límite de uso de Moonshot'; continue; }
-      state.status.kimi='bad'; state.status.kimiMsg='Sin conexión'; state.status.kimiSub=resumirErr(e);
-      updateStatusUI(); return;
-    }
-  }
-  state.status.kimi='warn'; state.status.kimiMsg='Kimi no disponible'; state.status.kimiSub=nota||'revisa la cuenta de Moonshot para usar Kimi';
-  updateStatusUI();
-}
-
-/* ---------- Router de IA complementario ---------- */
-async function aiCall(o){
-  const imgs = o.images||[];
-  const hayPdf = imgs.some(i=>/pdf/i.test(i.mime||''));
-  let orden;
-  if(cfg.aiMode==='gemini') orden=['gemini'];
-  else if(cfg.aiMode==='kimi') orden=['kimi'];
-  else orden=['gemini','kimi'];
-  if(hayPdf) orden = orden.filter(x=>x!=='kimi');
-  orden = orden.filter(eng => Date.now() >= (eng==='gemini' ? state.geminiOff : state.kimiOff));
-  if(!orden.length) throw new Error('Las IA están en pausa temporal tras un fallo reciente. Espera unos minutos o revisa la configuración en el panel Admin.');
-  let last=null;
-  for(let i=0;i<orden.length;i++){
-    const eng = orden[i];
-    const otra = i < orden.length-1;
-    try{
-      if(eng==='gemini'){
-        const parts = imgs.map(im=>({ inline_data:{ mime_type:im.mime, data:im.data } }));
-        parts.push({ text:o.text });
-        const t = await geminiCall([{ role:'user', parts }], o.sys, { stream:o.stream, onDelta:o.onDelta, signal:o.signal, maxTokens:o.maxTokens });
-        return { text:t, engine:'Gemini', model: state.runtimeModel || '' };
-      } else {
-        const r = await kimiCall(o);
-        return { text:r.text, engine:'Kimi', model:r.model };
-      }
-    }catch(e){
-      if(e.name==='AbortError') throw e;
-      last = e;
-      if(eng==='gemini' && !e.retryModel && (e.status===400 || e.status===401 || e.status===403 || e.status===429 || /location is not supported|Failed to fetch|NetworkError/i.test(e.message||'')))
-        state.geminiOff = Date.now() + 5*60*1000;
-      if(eng==='kimi' && (e.status===401 || e.status===403 || e.sinSaldo || /Failed to fetch|NetworkError/i.test(e.message||'')))
-        state.kimiOff = Date.now() + 5*60*1000;
-      toast('IA '+(eng==='gemini'?'Gemini':'Kimi')+' no disponible para esta tarea: '+resumirErr(e)+(otra ? ' · continuando con la otra IA…' : ''), 'warn');
-    }
-  }
-  throw last || new Error('Ninguna IA disponible');
 }
 
 /* ================================================================
@@ -1967,7 +1679,7 @@ function cabeceraMd(d, o){
     '---',
     'titulo: ' + d.nombre.replace(/\.[^.]+$/, ''),
     'origen: ' + d.nombre + ' · ' + (d.tipo || tipoPorExt(extDe(d.nombre))) + ' · ' + fmtBytes(d.tamano),
-    'transcripcion: integral generada por IA (Gemini + Kimi de Moonshot AI, modo complementario)',
+    'transcripcion: integral generada por IA (Gemini)',
     'fecha: ' + new Date().toLocaleString('es-MX')
   ];
   if(o.paginas) l.push('paginas: ' + o.paginas);
@@ -2090,7 +1802,7 @@ async function transcribirDoc(d, row, extra){
         partes.push('[fragmento '+(k+1)+' no transcrito por error de IA: '+resumirErr(eF)+']');
       }
     }
-    if(fallosIA >= fragmentos.length) throw new Error('Ninguna IA pudo transcribir el documento');
+    if(fallosIA >= fragmentos.length) throw new Error('La IA no pudo transcribir el documento');
 
     if(modoVision && ext==='pdf' && pdfObj.numPages > TRANSC_VISION_MAX_PAG){
       partes.push('\n\n[Documento de '+pdfObj.numPages+' páginas: la transcripción visual automatizada cubre las primeras '+TRANSC_VISION_MAX_PAG+'. Sube el resto en archivos separados para completarla.]');
@@ -2147,23 +1859,16 @@ async function transcribirDoc(d, row, extra){
 }
 
 /* ---------- Panel admin: formulario y mantenimiento ---------- */
-function syncAiModeUI(){
-  ['#chatMode','#anaMode','#cfgAiMode'].forEach(sel=>{ const el=$(sel); if(el) el.value = cfg.aiMode || 'auto'; });
-}
 function fillAdmin(){
   $('#cfgSchool').value = cfg.school || '';
   $('#cfgModel').value  = cfg.model || '';
   $('#cfgB4aApp').value = cfg.b4aApp || '';
   $('#cfgB4aJs').value  = cfg.b4aJs || '';
   $('#cfgGemini').value = cfg.geminiKey || '';
-  $('#cfgKimi').value   = kimiKey() || '';
-  $('#cfgRelay').value  = cfg.kimiRelay || '';
   $('#cfgMaxCtx').value = cfg.maxCtx || 180000;
   $('#cfgTemp').value   = cfg.temp; $('#cfgTempVal').textContent = cfg.temp;
-  $('#cfgAiMode').value = cfg.aiMode || 'auto';
   $('#cfgTranscribir').checked = cfg.transcribir !== false;
   $('#cfgChkLinks').checked = cfg.chkLinks !== false;
-  syncAiModeUI();
   updateStatusUI();
 }
 function guardarConfig(){
@@ -2172,23 +1877,18 @@ function guardarConfig(){
   cfg.b4aApp   = $('#cfgB4aApp').value.trim();
   cfg.b4aJs    = $('#cfgB4aJs').value.trim();
   cfg.geminiKey= $('#cfgGemini').value.trim();
-  cfg.kimiKey  = $('#cfgKimi').value.trim();
-  cfg.kimiRelay= $('#cfgRelay').value.trim();
-  cfg.aiMode   = $('#cfgAiMode').value || 'auto';
   cfg.transcribir = $('#cfgTranscribir').checked;
   cfg.chkLinks    = $('#cfgChkLinks').checked;
   cfg.maxCtx   = Math.min(900000, Math.max(20000, Number($('#cfgMaxCtx').value)||180000));
   cfg.temp     = Number($('#cfgTemp').value)||0.4;
   saveCfg();
-  state.b4aTok=null; state.iaModels=null; state.runtimeModel=null; state.geminiOff=0; state.kimiOff=0; state.kimiCatalogo=null;
+  state.b4aTok=null; state.iaModels=null; state.runtimeModel=null; state.geminiOff=0;
   $('#brandSchool').textContent = cfg.school;
   $('#fSchool').textContent = cfg.school;
   toast('Configuración guardada en este navegador','ok');
   updateStatusUI();
-  syncAiModeUI();
   checkB4a().catch(()=>{});
   pingGemini().catch(()=>{});
-  pingKimi().catch(()=>{});
 }
 function restaurarConfig(){
   if(!confirm('¿Restaurar los valores de fábrica? Se conservarán los documentos.')) return;
@@ -2197,12 +1897,10 @@ function restaurarConfig(){
   fillAdmin();
   $('#brandSchool').textContent = cfg.school;
   $('#fSchool').textContent = cfg.school;
-  state.b4aTok=null; state.iaModels=null; state.runtimeModel=null; state.kimiCatalogo=null; state.kimiOff=0;
+  state.b4aTok=null; state.iaModels=null; state.runtimeModel=null;
   toast('Configuración restaurada','ok');
-  syncAiModeUI();
   checkB4a().catch(()=>{});
   pingGemini().catch(()=>{});
-  pingKimi().catch(()=>{});
 }
 function logTo(sel, txt){
   const el = $(sel);
@@ -2230,14 +1928,13 @@ function diagExport(){
     version: APP_VERSION,
     config: {
       school:cfg.school, model:cfg.model, temp:cfg.temp, maxCtx:cfg.maxCtx,
-      b4aApp:maskKey(cfg.b4aApp), b4aJs:maskKey(cfg.b4aJs), geminiKey:maskKey(cfg.geminiKey), kimiKey:maskKey(cfg.kimiKey), kimiRelay:(cfg.kimiRelay||'(sin relay)'),
-      aiMode:cfg.aiMode, transcribir:cfg.transcribir!==false, chkLinks:cfg.chkLinks!==false,
+      b4aApp:maskKey(cfg.b4aApp), b4aJs:maskKey(cfg.b4aJs), geminiKey:maskKey(cfg.geminiKey),
+      transcribir:cfg.transcribir!==false, chkLinks:cfg.chkLinks!==false,
       ghUser:cfg.ghUser, ghRepo:cfg.ghRepo
     },
     estado: {
-      pagina:state.status.pagina, b4a:state.status.b4a, ia:state.status.ia, kimi:state.status.kimi, github:state.gh,
+      pagina:state.status.pagina, b4a:state.status.b4a, ia:state.status.ia, github:state.gh,
       modeloEnUso:state.runtimeModel, modelosDisponibles: state.iaModels? state.iaModels.length : null,
-      kimiEnUso:state.runtimeKimi,
       detalle:state.status
     },
     datos: { docsNube:state.docs.length, docsLocales:state.localDocs.length, mensajesChat:state.chat.length, totalEnBack4App:state.docsTotal },
@@ -2277,10 +1974,8 @@ function bind(){
   $('#pillPagina').addEventListener('click', ()=>{ setPageStatus(); });
   $('#pillB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
   $('#pillIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
-  $('#pillKimi').addEventListener('click', ()=>pingKimi().catch(()=>{}));
   $('#btnChkB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
   $('#btnChkIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
-  $('#btnChkKimi').addEventListener('click', ()=>pingKimi().catch(()=>{}));
   $('#heroSubir').addEventListener('click', ()=>{ showTab('docs'); if(!state.admin) openLogin(); });
   $('#heroAnalizar').addEventListener('click', ()=>showTab('analizar'));
 
@@ -2344,10 +2039,6 @@ function bind(){
     sendMsg();
   });
 
-  ['#chatMode','#anaMode','#cfgAiMode'].forEach(sel=>{
-    const el = $(sel);
-    if(el) el.addEventListener('change', ()=>{ cfg.aiMode = el.value; saveCfg(); syncAiModeUI(); });
-  });
   $('#cfgTranscribir').addEventListener('change', e=>{ cfg.transcribir = e.target.checked; saveCfg(); });
   $('#cfgChkLinks').addEventListener('change', e=>{ cfg.chkLinks = e.target.checked; saveCfg(); });
   $('#btnSaveCfg').addEventListener('click', guardarConfig);
@@ -2356,14 +2047,13 @@ function bind(){
   $('#btnTestApp').addEventListener('click', ()=>{ setPageStatus(); updateStatusUI(); toast('Información actualizada','ok'); });
   $('#btnTestB4a').addEventListener('click', ()=>checkB4a().catch(()=>{}));
   $('#btnTestIa').addEventListener('click', ()=>pingGemini().catch(()=>{}));
-  $('#btnTestKimi').addEventListener('click', ()=>pingKimi().catch(()=>{}));
   $('#btnTestGh').addEventListener('click', ()=>ghCheck().catch(()=>{}));
   $('#btnInitSchema').addEventListener('click', initSchema);
   $('#btnReloadDocs').addEventListener('click', async ()=>{ await checkB4a().catch(()=>{}); toast('Documentos recargados','ok'); });
   $('#btnDiag').addEventListener('click', diagExport);
   $('#btnCopyEmbed').addEventListener('click', ()=>copyText($('#embedCode').value));
 
-  window.addEventListener('online', ()=>{ setPageStatus(); checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); pingKimi().catch(()=>{}); });
+  window.addEventListener('online', ()=>{ setPageStatus(); checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); });
   window.addEventListener('offline', ()=>{ setPageStatus(); });
 }
 
@@ -2391,13 +2081,11 @@ function boot(){
   renderChat();
   setPageStatus();
   refreshSelDoc();
-  syncAiModeUI();
   checkB4a().catch(()=>{});
   pingGemini().catch(()=>{});
-  pingKimi().catch(()=>{});
   ghCheck().catch(()=>{});
   setInterval(()=>{
-    if(navigator.onLine){ checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); pingKimi().catch(()=>{}); }
+    if(navigator.onLine){ checkB4a().catch(()=>{}); pingGemini().catch(()=>{}); }
   }, 5*60*1000);
 }
 document.addEventListener('DOMContentLoaded', boot);
